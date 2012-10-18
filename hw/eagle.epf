@@ -352,12 +352,18 @@ UsedLibrary="/home/texzk/openrobots/Eagle/lbr/texas-instruments.lbr"
 UsedLibrary="/home/texzk/openrobots/Eagle/lbr/tyco.lbr"
 
 [Win_1]
+Type="Control Panel"
+Loc="468 211 1067 610"
+State=1
+Number=0
+
+[Win_2]
 Type="Schematic Editor"
 Loc="0 0 625 737"
 State=2
 Number=1
 File="R2P_GW_module.sch"
-View="237.565 67.6987 292.074 104.787"
+View="0.131125 129.792 135.767 222.08"
 WireWidths=" 0 0.3048 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0.4064 0.1524"
 PadDiameters=" 0.254 0.3048 0.4064 0.6096 0.8128 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0"
 PadDrills=" 0.5 0.6 0.7 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 2 2.2 2.8 3.2 0.8"
@@ -389,16 +395,16 @@ ArcDirection=0
 AddLevel=2
 PadsSameType=0
 Layer=91
-Views=" 1: 237.565 67.6987 292.074 104.787"
+Views=" 1: 0.131125 129.792 135.767 222.08"
 Sheet=1
 
-[Win_2]
+[Win_3]
 Type="Board Editor"
 Loc="630 0 1275 737"
 State=1
 Number=2
 File="R2P_GW_module.brd"
-View="-10.5706 -4.63002 55.6767 62.5475"
+View="-10.1859 1.55619 45.0202 57.5375"
 WireWidths=" 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 1.27 1.016 0.6096 0 0.2032 0.254 0.4064 0.508"
 PadDiameters=" 1.016 1.27 1.4224 1.6764 1.778 1.9304 2.1844 2.54 3.81 6.4516 0.254 0.3048 0.4064 0.6096 0.508 0"
 PadDrills=" 0.5 0.6 0.7 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 2 2.2 2.8 3.2 0.8"
@@ -430,12 +436,6 @@ ArcDirection=0
 AddLevel=2
 PadsSameType=0
 Layer=16
-
-[Win_3]
-Type="Control Panel"
-Loc="468 211 1067 610"
-State=1
-Number=0
 
 [Desktop]
 Screen="1280 800"
