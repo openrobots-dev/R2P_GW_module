@@ -5767,7 +5767,7 @@
 					</Pin>
 				</Function>
 			</SubMode>
-			<SubMode Available="true" Mapped="false" Name="JTAG(4-pin)">
+			<SubMode Available="true" Mapped="true" Name="JTAG(4-pin)">
 				<Function Name="SYS_JTCK-SWCLK">
 					<Pin Name="PA14" RemapNumber="0">
 						<Bloc Name="b0_SYS_JTAG(4-pin)"/>
@@ -5789,7 +5789,7 @@
 					</Pin>
 				</Function>
 			</SubMode>
-			<SubMode Available="true" Mapped="true" Name="JTAG(5-pin)">
+			<SubMode Available="true" Mapped="false" Name="JTAG(5-pin)">
 				<Function Name="SYS_JTCK-SWCLK">
 					<Pin Name="PA14" RemapNumber="0">
 						<Bloc Name="b0_SYS_JTAG(5-pin)"/>
@@ -6151,7 +6151,7 @@
 		</Function>
 		<Function IOQualifier="" Mapped="false" Name="IOs"/>
 	</Pin>
-	<Pin Mapped="false" Name="PC3" Position="18">
+	<Pin Mapped="true" Name="PC3" Position="18">
 		<Function Mapped="false" Name="SPI2_MOSI" PeripheralName="SPI2">
 			<Bloc Mapped="false" Name="b0_SPI2_Full-Duplex-Master" RemapNumber="0"/>
 			<Bloc Mapped="false" Name="b0_SPI2_Full-Duplex-Slave" RemapNumber="0"/>
@@ -6189,7 +6189,7 @@
 		<Function Mapped="false" Name="OTG_HS_FS_ULPI_NXT" PeripheralName="OTG_HS_FS">
 			<Bloc Mapped="false" Name="b0_OTG_HS_FS_ULPI" RemapNumber="0"/>
 		</Function>
-		<Function IOQualifier="" Mapped="false" Name="IOs"/>
+		<Function IOQualifier="Output_Push-Pull" Mapped="true" Name="IOs"/>
 	</Pin>
 	<Pin Mapped="false" Name="VDD_12" Position="19" SpecialType="Power"/>
 	<Pin Mapped="false" Name="VSSA" Position="20" SpecialType="Power"/>
@@ -7606,8 +7606,8 @@
 	<Pin Mapped="true" Name="PA13" Position="72">
 		<Function Mapped="true" Name="SYS_JTMS-SWDIO" PeripheralName="SYS">
 			<Bloc Mapped="false" Name="b0_SYS_Serial-Wire" RemapNumber="0"/>
-			<Bloc Mapped="false" Name="b0_SYS_JTAG(4-pin)" RemapNumber="0"/>
-			<Bloc Mapped="true" Name="b0_SYS_JTAG(5-pin)" RemapNumber="0"/>
+			<Bloc Mapped="true" Name="b0_SYS_JTAG(4-pin)" RemapNumber="0"/>
+			<Bloc Mapped="false" Name="b0_SYS_JTAG(5-pin)" RemapNumber="0"/>
 		</Function>
 		<Function IOQualifier="" Mapped="false" Name="IOs"/>
 	</Pin>
@@ -7617,8 +7617,8 @@
 	<Pin Mapped="true" Name="PA14" Position="76">
 		<Function Mapped="true" Name="SYS_JTCK-SWCLK" PeripheralName="SYS">
 			<Bloc Mapped="false" Name="b0_SYS_Serial-Wire" RemapNumber="0"/>
-			<Bloc Mapped="false" Name="b0_SYS_JTAG(4-pin)" RemapNumber="0"/>
-			<Bloc Mapped="true" Name="b0_SYS_JTAG(5-pin)" RemapNumber="0"/>
+			<Bloc Mapped="true" Name="b0_SYS_JTAG(4-pin)" RemapNumber="0"/>
+			<Bloc Mapped="false" Name="b0_SYS_JTAG(5-pin)" RemapNumber="0"/>
 		</Function>
 		<Function IOQualifier="" Mapped="false" Name="IOs"/>
 	</Pin>
@@ -7666,12 +7666,12 @@
 			<Bloc Mapped="false" Name="b2_TIM2_Activate-External-clock" RemapNumber="2"/>
 		</Function>
 		<Function Mapped="true" Name="SYS_JTDI" PeripheralName="SYS">
-			<Bloc Mapped="false" Name="b0_SYS_JTAG(4-pin)" RemapNumber="0"/>
-			<Bloc Mapped="true" Name="b0_SYS_JTAG(5-pin)" RemapNumber="0"/>
+			<Bloc Mapped="true" Name="b0_SYS_JTAG(4-pin)" RemapNumber="0"/>
+			<Bloc Mapped="false" Name="b0_SYS_JTAG(5-pin)" RemapNumber="0"/>
 		</Function>
 		<Function IOQualifier="" Mapped="false" Name="IOs"/>
 	</Pin>
-	<Pin Mapped="false" Name="PC10" Position="78">
+	<Pin Mapped="true" Name="PC10" Position="78">
 		<Function Mapped="false" Name="SPI3_SCK" PeripheralName="SPI3">
 			<Bloc Mapped="false" Name="b0_SPI3_Full-Duplex-Master" RemapNumber="0"/>
 			<Bloc Mapped="false" Name="b0_SPI3_Full-Duplex-Slave" RemapNumber="0"/>
@@ -7721,9 +7721,9 @@
 			<Bloc Mapped="false" Name="b0_DCMI_Slave-10-bits-External-Synchro" RemapNumber="0"/>
 			<Bloc Mapped="false" Name="b0_DCMI_Slave-12-bits-External-Synchro" RemapNumber="0"/>
 		</Function>
-		<Function IOQualifier="" Mapped="false" Name="IOs"/>
+		<Function IOQualifier="Output_Push-Pull" Mapped="true" Name="IOs"/>
 	</Pin>
-	<Pin Mapped="false" Name="PC11" Position="79">
+	<Pin Mapped="true" Name="PC11" Position="79">
 		<Function Mapped="false" Name="SPI3_MISO" PeripheralName="SPI3">
 			<Bloc Mapped="false" Name="b0_SPI3_Full-Duplex-Master" RemapNumber="0"/>
 			<Bloc Mapped="false" Name="b0_SPI3_Full-Duplex-Slave" RemapNumber="0"/>
@@ -7769,7 +7769,7 @@
 			<Bloc Mapped="false" Name="b1_DCMI_Slave-10-bits-External-Synchro" RemapNumber="1"/>
 			<Bloc Mapped="false" Name="b1_DCMI_Slave-12-bits-External-Synchro" RemapNumber="1"/>
 		</Function>
-		<Function IOQualifier="" Mapped="false" Name="IOs"/>
+		<Function IOQualifier="Output_Push-Pull" Mapped="true" Name="IOs"/>
 	</Pin>
 	<Pin Mapped="false" Name="PC12" Position="80">
 		<Function Mapped="false" Name="SPI3_MOSI" PeripheralName="SPI3">
@@ -7973,13 +7973,13 @@
 			<Bloc Mapped="false" Name="b1_TIM2_Xor-Hall-Sensor" RemapNumber="1"/>
 		</Function>
 		<Function Mapped="true" Name="SYS_JTDO-SWO" PeripheralName="SYS">
-			<Bloc Mapped="false" Name="b0_SYS_JTAG(4-pin)" RemapNumber="0"/>
-			<Bloc Mapped="true" Name="b0_SYS_JTAG(5-pin)" RemapNumber="0"/>
+			<Bloc Mapped="true" Name="b0_SYS_JTAG(4-pin)" RemapNumber="0"/>
+			<Bloc Mapped="false" Name="b0_SYS_JTAG(5-pin)" RemapNumber="0"/>
 			<Bloc Mapped="false" Name="b0_SYS_Trace-Asynchro_SW" RemapNumber="0"/>
 		</Function>
 		<Function IOQualifier="" Mapped="false" Name="IOs"/>
 	</Pin>
-	<Pin Mapped="true" Name="PB4" Position="90">
+	<Pin Mapped="false" Name="PB4" Position="90">
 		<Function Mapped="false" Name="SPI1_MISO" PeripheralName="SPI1">
 			<Bloc Mapped="false" Name="b1_SPI1_Full-Duplex-Master" RemapNumber="1"/>
 			<Bloc Mapped="false" Name="b1_SPI1_Full-Duplex-Slave" RemapNumber="1"/>
@@ -8009,8 +8009,8 @@
 			<Bloc Mapped="false" Name="b2_TIM3_Encoder-Interface" RemapNumber="2"/>
 			<Bloc Mapped="false" Name="b2_TIM3_Xor-Hall-Sensor" RemapNumber="2"/>
 		</Function>
-		<Function Mapped="true" Name="SYS_JTRST" PeripheralName="SYS">
-			<Bloc Mapped="true" Name="b0_SYS_JTAG(5-pin)" RemapNumber="0"/>
+		<Function Mapped="false" Name="SYS_JTRST" PeripheralName="SYS">
+			<Bloc Mapped="false" Name="b0_SYS_JTAG(5-pin)" RemapNumber="0"/>
 		</Function>
 		<Function IOQualifier="" Mapped="false" Name="IOs"/>
 	</Pin>
@@ -8145,7 +8145,7 @@
 		<Function IOQualifier="" Mapped="false" Name="IOs"/>
 	</Pin>
 	<Pin Mapped="false" Name="BOOT0" Position="94"/>
-	<Pin Mapped="false" Name="PB8" Position="95">
+	<Pin Mapped="true" Name="PB8" Position="95">
 		<Function Mapped="false" Name="I2C1_SCL" PeripheralName="I2C1">
 			<Bloc Mapped="false" Name="b1_I2C1_I2C" RemapNumber="1"/>
 			<Bloc Mapped="false" Name="b1_I2C1_SMBus-two-wire-Interface" RemapNumber="1"/>
@@ -8181,9 +8181,9 @@
 			<Bloc Mapped="false" Name="b1_MII_MII" RemapNumber="1"/>
 			<Bloc Mapped="false" Name="b1_MII_MII_Synch" RemapNumber="1"/>
 		</Function>
-		<Function IOQualifier="" Mapped="false" Name="IOs"/>
+		<Function IOQualifier="Output_Push-Pull" Mapped="true" Name="IOs"/>
 	</Pin>
-	<Pin Mapped="false" Name="PB9" Position="96">
+	<Pin Mapped="true" Name="PB9" Position="96">
 		<Function Mapped="false" Name="SPI2_NSS" PeripheralName="SPI2">
 			<Bloc Mapped="false" Name="b1_SPI2_With-NSS" RemapNumber="1"/>
 		</Function>
@@ -8231,7 +8231,7 @@
 			<Bloc Mapped="false" Name="b1_DCMI_Slave-10-bits-External-Synchro" RemapNumber="1"/>
 			<Bloc Mapped="false" Name="b1_DCMI_Slave-12-bits-External-Synchro" RemapNumber="1"/>
 		</Function>
-		<Function IOQualifier="" Mapped="false" Name="IOs"/>
+		<Function IOQualifier="Output_Push-Pull" Mapped="true" Name="IOs"/>
 	</Pin>
 	<Pin Mapped="false" Name="PE0" Position="97">
 		<Function Mapped="false" Name="TIM4_ETR" PeripheralName="TIM4">
