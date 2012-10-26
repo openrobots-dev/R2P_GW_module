@@ -8889,7 +8889,6 @@ Source: RS Component / Phycomp</description>
 <part name="C3" library="rcl" deviceset="C-EU" device="C0805" value="2u2"/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
 <part name="GND10" library="supply1" deviceset="GND" device=""/>
-<part name="C4" library="rcl" deviceset="C-EU" device="C0805" value="1u"/>
 <part name="C8" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
 <part name="GND13" library="supply1" deviceset="GND" device=""/>
 <part name="GND14" library="supply1" deviceset="GND" device=""/>
@@ -8969,6 +8968,7 @@ Source: RS Component / Phycomp</description>
 <part name="R15" library="rcl" deviceset="R-EU_" device="R0603" value="2k2"/>
 <part name="+3V12" library="supply1" deviceset="+3V3" device=""/>
 <part name="C18" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
+<part name="C4" library="rcl" deviceset="C-EU" device="C0603" value="1u"/>
 </parts>
 <sheets>
 <sheet>
@@ -9084,15 +9084,15 @@ Source: RS Component / Phycomp</description>
 <instance part="+3V6" gate="G$1" x="233.68" y="91.44"/>
 <instance part="R3" gate="G$1" x="223.52" y="76.2" rot="R180"/>
 <instance part="R4" gate="G$1" x="185.42" y="35.56" rot="R90"/>
-<instance part="GND8" gate="1" x="264.16" y="20.32"/>
+<instance part="GND8" gate="1" x="264.16" y="15.24"/>
 <instance part="P+1" gate="1" x="88.9" y="43.18"/>
 <instance part="P+2" gate="1" x="129.54" y="43.18"/>
 <instance part="C1" gate="G$1" x="261.62" y="83.82"/>
 <instance part="X1" gate="-1" x="256.54" y="33.02" smashed="yes">
 <attribute name="NAME" x="256.032" y="33.782" size="1.524" layer="95" rot="R180"/>
-<attribute name="VALUE" x="256.54" y="13.589" size="1.778" layer="96"/>
+<attribute name="VALUE" x="250.571" y="15.24" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="X1" gate="-2" x="256.54" y="30.48"/>
+<instance part="X1" gate="-2" x="256.54" y="20.32"/>
 <instance part="X1" gate="-3" x="256.54" y="27.94"/>
 <instance part="X1" gate="-4" x="256.54" y="25.4"/>
 <instance part="U1" gate="IO" x="78.74" y="187.96"/>
@@ -9105,7 +9105,6 @@ Source: RS Component / Phycomp</description>
 <instance part="C3" gate="G$1" x="312.42" y="58.42"/>
 <instance part="GND3" gate="1" x="312.42" y="50.8"/>
 <instance part="GND10" gate="1" x="320.04" y="50.8"/>
-<instance part="C4" gate="G$1" x="365.76" y="78.74"/>
 <instance part="C8" gate="G$1" x="373.38" y="78.74"/>
 <instance part="GND13" gate="1" x="365.76" y="71.12"/>
 <instance part="GND14" gate="1" x="373.38" y="71.12"/>
@@ -9188,7 +9187,7 @@ Source: RS Component / Phycomp</description>
 <instance part="R2" gate="G$1" x="101.6" y="142.24"/>
 <instance part="GND39" gate="1" x="106.68" y="137.16"/>
 <instance part="X2" gate="X" x="99.06" y="81.28"/>
-<instance part="P+3" gate="1" x="264.16" y="40.64"/>
+<instance part="P+3" gate="1" x="264.16" y="43.18"/>
 <instance part="P+4" gate="1" x="185.42" y="45.72"/>
 <instance part="OSC1" gate="G$1" x="203.2" y="81.28"/>
 <instance part="R11" gate="G$1" x="78.74" y="86.36"/>
@@ -9198,6 +9197,7 @@ Source: RS Component / Phycomp</description>
 <instance part="R15" gate="G$1" x="101.6" y="162.56" rot="R90"/>
 <instance part="+3V12" gate="G$1" x="101.6" y="172.72"/>
 <instance part="C18" gate="G$1" x="269.24" y="83.82"/>
+<instance part="C4" gate="G$1" x="365.76" y="78.74"/>
 </instances>
 <busses>
 </busses>
@@ -9307,8 +9307,8 @@ Source: RS Component / Phycomp</description>
 <pinref part="OSC1" gate="G$1" pin="GND"/>
 </segment>
 <segment>
-<wire x1="261.62" y1="30.48" x2="264.16" y2="30.48" width="0.1524" layer="91"/>
-<wire x1="264.16" y1="30.48" x2="264.16" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="261.62" y1="20.32" x2="264.16" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="264.16" y1="20.32" x2="264.16" y2="17.78" width="0.1524" layer="91"/>
 <pinref part="GND8" gate="1" pin="GND"/>
 <pinref part="X1" gate="-2" pin="S"/>
 </segment>
@@ -9341,10 +9341,6 @@ Source: RS Component / Phycomp</description>
 <segment>
 <pinref part="C2" gate="G$1" pin="2"/>
 <pinref part="GND10" gate="1" pin="GND"/>
-</segment>
-<segment>
-<pinref part="C4" gate="G$1" pin="2"/>
-<pinref part="GND13" gate="1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="C8" gate="G$1" pin="2"/>
@@ -9529,6 +9525,10 @@ Source: RS Component / Phycomp</description>
 <segment>
 <pinref part="GND32" gate="1" pin="GND"/>
 <pinref part="C18" gate="G$1" pin="2"/>
+</segment>
+<segment>
+<pinref part="GND13" gate="1" pin="GND"/>
+<pinref part="C4" gate="G$1" pin="2"/>
 </segment>
 </net>
 <net name="+3V3" class="0">
@@ -10070,7 +10070,7 @@ Source: RS Component / Phycomp</description>
 </segment>
 <segment>
 <wire x1="261.62" y1="33.02" x2="264.16" y2="33.02" width="0.1524" layer="91"/>
-<wire x1="264.16" y1="33.02" x2="264.16" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="264.16" y1="33.02" x2="264.16" y2="40.64" width="0.1524" layer="91"/>
 <pinref part="X1" gate="-1" pin="S"/>
 <pinref part="P+3" gate="1" pin="+5V"/>
 </segment>
@@ -10118,11 +10118,11 @@ Source: RS Component / Phycomp</description>
 <wire x1="358.14" y1="83.82" x2="365.76" y2="83.82" width="0.1524" layer="91"/>
 <wire x1="365.76" y1="83.82" x2="373.38" y2="83.82" width="0.1524" layer="91"/>
 <wire x1="373.38" y1="83.82" x2="373.38" y2="81.28" width="0.1524" layer="91"/>
-<pinref part="C4" gate="G$1" pin="1"/>
 <wire x1="365.76" y1="83.82" x2="365.76" y2="81.28" width="0.1524" layer="91"/>
 <junction x="365.76" y="83.82"/>
 <pinref part="R5" gate="G$1" pin="1"/>
 <junction x="373.38" y="83.82"/>
+<pinref part="C4" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$8" class="0">
