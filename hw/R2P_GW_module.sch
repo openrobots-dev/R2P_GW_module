@@ -8936,7 +8936,7 @@ Source: RS Component / Phycomp</description>
 <part name="+3V20" library="supply1" deviceset="+3V3" device=""/>
 <part name="RN3" library="resistor-dil" deviceset="4R-N" device="CAT16" value="51"/>
 <part name="RN4" library="resistor-dil" deviceset="4R-N" device="CAT16" value="2k2"/>
-<part name="R12" library="rcl" deviceset="R-EU_" device="R0603" value="100k"/>
+<part name="R12" library="rcl" deviceset="R-EU_" device="R0603" value="2k2"/>
 <part name="GND29" library="supply1" deviceset="GND" device=""/>
 <part name="RN5" library="resistor-dil" deviceset="4R-N" device="CAT16" value="51"/>
 <part name="R13" library="rcl" deviceset="R-EU_" device="R0603" value="1k5"/>
