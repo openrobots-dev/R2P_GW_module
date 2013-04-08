@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -60,7 +60,7 @@
  *          and generally faster.
  */
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define CH_TIME_QUANTUM                 20
+#define CH_TIME_QUANTUM                 10
 #endif
 
 /**
@@ -361,7 +361,7 @@
  * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_SYSTEM_STATE_CHECK) || defined(__DOXYGEN__)
-#define CH_DBG_SYSTEM_STATE_CHECK       TRUE
+#define CH_DBG_SYSTEM_STATE_CHECK       FALSE
 #endif
 
 /**
@@ -372,7 +372,7 @@
  * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_ENABLE_CHECKS) || defined(__DOXYGEN__)
-#define CH_DBG_ENABLE_CHECKS            TRUE
+#define CH_DBG_ENABLE_CHECKS            1/*TRUE*/
 #endif
 
 /**
@@ -384,7 +384,7 @@
  * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_ENABLE_ASSERTS) || defined(__DOXYGEN__)
-#define CH_DBG_ENABLE_ASSERTS           TRUE
+#define CH_DBG_ENABLE_ASSERTS           1/*TRUE*/
 #endif
 
 /**
@@ -395,7 +395,7 @@
  * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_ENABLE_TRACE) || defined(__DOXYGEN__)
-#define CH_DBG_ENABLE_TRACE             TRUE
+#define CH_DBG_ENABLE_TRACE             1/*TRUE*/
 #endif
 
 /**
@@ -409,7 +409,7 @@
  *          @p panic_msg variable set to @p NULL.
  */
 #if !defined(CH_DBG_ENABLE_STACK_CHECK) || defined(__DOXYGEN__)
-#define CH_DBG_ENABLE_STACK_CHECK       TRUE
+#define CH_DBG_ENABLE_STACK_CHECK       1/*TRUE*/
 #endif
 
 /**
@@ -421,7 +421,7 @@
  * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_FILL_THREADS) || defined(__DOXYGEN__)
-#define CH_DBG_FILL_THREADS             FALSE
+#define CH_DBG_FILL_THREADS             TRUE
 #endif
 
 /**
@@ -459,7 +459,7 @@
  * @brief   Threads initialization hook.
  * @details User initialization code added to the @p chThdInit() API.
  *
- * @note    It is invoked from within @p chThdInit() and implicitly from all
+ * @note    It is invoked from within @p chThdInit() and implicitily from all
  *          the threads creation APIs.
  */
 #if !defined(THREAD_EXT_INIT_HOOK) || defined(__DOXYGEN__)
