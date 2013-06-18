@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.3">
+<eagle version="6.4">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -117,10 +117,10 @@
 <wire x1="0" y1="60" x2="0" y2="0" width="0" layer="20"/>
 <hole x="4" y="20" drill="3.2"/>
 <hole x="36" y="20" drill="3.2"/>
-<dimension x1="0" y1="0" x2="40" y2="0" x3="20" y3="-7.5" layer="47"/>
+<dimension x1="0" y1="0" x2="40" y2="0" x3="20" y3="-7.5" textsize="3.5" layer="47"/>
 <hole x="4" y="56" drill="3.2"/>
-<dimension x1="40" y1="0" x2="40" y2="40" x3="45" y3="20" layer="47"/>
-<dimension x1="40" y1="0" x2="40" y2="60" x3="50" y3="30" layer="47"/>
+<dimension x1="40" y1="0" x2="40" y2="40" x3="45" y3="20" textsize="3.5" layer="47"/>
+<dimension x1="40" y1="0" x2="40" y2="60" x3="50" y3="30" textsize="3.5" layer="47"/>
 </plain>
 <libraries>
 <library name="maxim">
@@ -1544,6 +1544,12 @@ design rules under a new name.</description>
 <via x="10.5" y="22.5" extent="1-16" drill="0.3" shape="octagon"/>
 <via x="20.5" y="30" extent="1-16" drill="0.3" shape="octagon"/>
 <via x="6" y="48.3" extent="1-16" drill="0.3" shape="octagon"/>
+<via x="31" y="58.5" extent="1-16" drill="0.3" shape="octagon"/>
+<via x="27.5" y="39.5" extent="1-16" drill="0.3" shape="octagon"/>
+<via x="30.5" y="39.5" extent="1-16" drill="0.3" shape="octagon"/>
+<via x="22.5" y="20" extent="1-16" drill="0.3" shape="octagon"/>
+<via x="11.3" y="44" extent="1-16" drill="0.3" shape="octagon"/>
+<via x="11.3" y="46.1" extent="1-16" drill="0.3" shape="octagon"/>
 </signal>
 <signal name="+3V3">
 <contactref element="LED4" pad="A"/>
@@ -2719,9 +2725,6 @@ design rules under a new name.</description>
 <via x="3" y="32.5" extent="1-16" drill="0.3" shape="octagon"/>
 <wire x1="2.9" y1="31.35" x2="3" y2="31.45" width="0.2032" layer="1"/>
 <wire x1="3" y1="31.45" x2="3" y2="32.5" width="0.2032" layer="1"/>
-</signal>
-<signal name="N$13">
-<via x="31" y="58.5" extent="1-16" drill="0.3" shape="octagon"/>
 </signal>
 </signals>
 </board>
