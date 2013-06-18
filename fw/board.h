@@ -32,6 +32,15 @@
 #define BOARD_NAME                  "R2P_GW"
 
 /*
+ * IO pins assignments.
+ */
+#define LED_GPIO				GPIOC
+#define LED1					10
+#define LED2					11
+
+#define SERIAL_DRIVER           SD1
+
+/*
  * Ethernet PHY type.
  */
 #define BOARD_PHY_ID                MII_DP83848I_ID
