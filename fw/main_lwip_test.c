@@ -5,6 +5,10 @@
 #include "chprintf.h"
 #include "lwipthread.h"
 
+#include "lwip/opt.h"
+#include "lwip/arch.h"
+#include "lwip/api.h"
+
 /*===========================================================================*/
 /* Command line related.                                                     */
 /*===========================================================================*/
@@ -43,7 +47,7 @@ static void cmd_threads(BaseSequentialStream *chp, int argc, char *argv[]) {
 				(uint32_t) (tp->p_refs - 1), states[tp->p_state],
 				(uint32_t) tp->p_time);
 		tp = chRegNextThread(tp);
-	} while (tp != NULL );
+	} while (tp != NULL);
 }
 
 static const ShellCommand commands[] = { { "mem", cmd_mem }, { "threads",
@@ -51,7 +55,6 @@ static const ShellCommand commands[] = { { "mem", cmd_mem }, { "threads",
 
 static const ShellConfig shell_cfg = { (BaseSequentialStream *) &SERIAL_DRIVER,
 		commands };
-
 
 /*===========================================================================*/
 /* Application threads.                                                      */
@@ -73,6 +76,72 @@ static msg_t Thread1(void *arg) {
 	return 0;
 }
 
+/*
+ * TCP connection handler thread.
+ */
+static msg_t conn_thread(void *arg) {
+	struct netconn * conn = (struct netconn *) arg;
+	struct netbuf *inbuf;
+	char *buf;
+	u16_t buflen;
+	err_t err;
+
+	chRegSetThreadName("conn");
+
+	while (TRUE) {
+		err = netconn_recv(conn, &inbuf);
+
+		if (err == ERR_OK) {
+			netbuf_data(inbuf, (void **) &buf, &buflen);
+//			netconn_write(conn, &buf, buflen, NETCONN_NOCOPY);
+			netconn_write(conn, "hello world!", sizeof("hello world!") - 1, NETCONN_NOCOPY);
+			netbuf_delete(inbuf);
+		}
+	}
+
+	netconn_close(conn);
+	netconn_delete(conn);
+
+
+	return RDY_OK;
+}
+
+/*
+ * TCP server thread.
+ */
+static msg_t server_thread(void *arg) {
+	uint16_t port = *((uint16_t *) arg);
+	struct netconn *conn, *newconn;
+	Thread *conntp = NULL;
+	err_t err;
+
+	chRegSetThreadName("server");
+
+	/* Create a new TCP connection handle */
+	conn = netconn_new(NETCONN_TCP);
+	LWIP_ERROR("TCP server: invalid conn", (conn != NULL), return RDY_RESET;);
+
+	/* Bind to port 80 (HTTP) with default IP address */
+	netconn_bind(conn, NULL, port);
+
+	/* Put the connection into LISTEN state */
+	netconn_listen(conn);
+
+	while (TRUE) {
+		err = netconn_accept(conn, &newconn);
+		if (err != ERR_OK)
+			continue;
+
+		if (!(conntp = chThdCreateFromHeap(NULL, 8192, NORMALPRIO, conn_thread,
+				newconn))) {
+			chprintf((BaseSequentialStream *) &SERIAL_DRIVER,
+					"conn_thread()\r\n");
+		}
+
+		chThdWait(conntp);
+	}
+	return RDY_OK;
+}
 
 /*
  * Application entry point.
@@ -111,6 +180,12 @@ int main(void) {
 	/* Creates the LWIP thread (it changes priority internally).*/
 	chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE),
 			NORMALPRIO + 1, lwip_thread, NULL);
+
+	/*
+	 * Creates the server thread.
+	 */
+	uint16_t port = 80;
+	chThdCreateFromHeap(NULL, 1024, NORMALPRIO, server_thread, &port);
 
 	/*
 	 * Normal main() thread activity, in this demo it does nothing except
