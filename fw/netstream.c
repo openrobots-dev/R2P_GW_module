@@ -43,49 +43,57 @@
 
  */
 
-static size_t writes(void *ip, const uint8_t *bp, size_t n) {
+static size_t write(void *ip, const uint8_t *bp, size_t n) {
 	NetStream *sp = ip;
 
 	return netconn_write_partly(sp->conn, bp, n, NETCONN_COPY, NULL);
 }
 
-static size_t reads(void *ip, uint8_t *bp, size_t n) {
+static size_t read(void *ip, uint8_t *bp, size_t n) {
 	NetStream *sp = ip;
 	struct netbuf *inbuf;
-	uint8_t *buf;
-	u16_t buflen;
 	err_t err;
+	size_t w ;
 
-	if (!chIQIsEmptyI(&sp->iqueue))
-		return chIQGetTimeout(&sp->iqueue, TIME_IMMEDIATE);
-
-	err = netconn_recv(sp->conn, &inbuf);
-
-	if (err != ERR_OK) {
-		return 0;
+	/* Check if there is still data from last packet. */
+	if (sp->in_offset == 0) {
+		/* Wait for new packet. */
+		do {
+			err = netconn_recv(sp->conn, &inbuf);
+		} while (err != ERR_OK);
 	}
 
-	netbuf_data(inbuf, (void **) &buf, &buflen);
-	while (buflen--) {
-		if (chIQPutI(&sp->iqueue, (uint8_t) buf++) < Q_OK) {
-			break;
-		}
+	chSysLock();
+	w = netbuf_copy_partial(inbuf, bp, n, sp->in_offset);
+	sp->in_offset += w;
+	if (sp->in_offset >= netbuf_len(inbuf)) {
+		netbuf_free(inbuf);
+		sp->in_offset = 0;
 	}
+	chSysUnlock();
 
-	return chIQGetTimeout(&sp->iqueue, TIME_IMMEDIATE);
+	/*
+	 netbuf_data(inbuf, (void **) &buf, &buflen);
+	 while (n-- && buflen--) {
+	 *bp++ = *buf++;
+	 w++;
+	 }
+	 */
+
+	return w;
 }
 
 static msg_t put(void *ip, uint8_t b) {
-	return (writes(ip, &b, 1) == 1 ? Q_OK : Q_RESET);
+	return (write(ip, &b, 1) == 1 ? Q_OK : Q_RESET);
 }
 
 static msg_t get(void *ip) {
 	uint8_t b;
 
-	return (reads(ip, &b, 1) == 1 ? b : Q_RESET);
+	return (read(ip, &b, 1) == 1 ? b : Q_RESET);
 }
 
-static const struct NetStreamVMT vmt = { writes, reads, put, get };
+static const struct NetStreamVMT vmt = { write, read, put, get };
 
 uint8_t buffer[64];
 
@@ -93,6 +101,5 @@ void nsObjectInit(NetStream *sp, struct netconn * conn) {
 
 	sp->vmt = &vmt;
 	sp->conn = conn;
-
-	chIQInit(&sp->iqueue, buffer, sizeof(buffer), NULL, sp);
+	sp->in_offset = 0;
 }

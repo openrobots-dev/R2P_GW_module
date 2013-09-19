@@ -6,7 +6,7 @@
 #define _net_stream_data \
   _base_sequential_stream_data \
   struct netconn * conn; \
-  InputQueue iqueue;
+  size_t in_offset;
 
 struct NetStreamVMT {
 	_base_sequential_stream_methods

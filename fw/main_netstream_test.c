@@ -74,35 +74,6 @@ static msg_t Thread1(void *arg) {
 	return 0;
 }
 
-/*
- * TCP connection handler thread.
- */
-static msg_t conn_thread(void *arg) {
-	struct netconn * conn = (struct netconn *) arg;
-	NetStream ns;
-	uint8_t buffer[64];
-	uint16_t n;
-
-	chRegSetThreadName("conn");
-	nsObjectInit(&ns, conn);
-
-	while (TRUE) {
-
-		n = chnRead(&ns, buffer, sizeof(buffer) - 1);
-		buffer[n] = '\0';
-
-		if (n) {
-			chprintf((BaseSequentialStream *) &ns, "%d: %s\n", chTimeNow(), buffer);
-//			netbuf_delete(inbuf);
-		}
-	}
-
-	netconn_close(conn);
-	netconn_delete(conn);
-
-	return RDY_OK;
-}
-
 NetStream ns;
 ShellConfig net_shell_cfg = { (BaseSequentialStream *) &ns, commands };
 
@@ -128,11 +99,7 @@ static msg_t server_thread(void *arg) {
 	/* Create a new TCP connection handle */
 	conn = netconn_new(NETCONN_TCP);
 	LWIP_ERROR("TCP server: invalid conn", (conn != NULL), return RDY_RESET;);
-
-	/* Bind to port 80 (HTTP) with default IP address */
 	netconn_bind(conn, NULL, port);
-
-	/* Put the connection into LISTEN state */
 	netconn_listen(conn);
 
 	while (TRUE) {
@@ -141,16 +108,6 @@ static msg_t server_thread(void *arg) {
 			continue;
 
 		net_shell(newconn);
-		/*
-		 Thread *conntp = NULL;
-		 if (!(conntp = chThdCreateFromHeap(NULL, 8192, NORMALPRIO, conn_thread,
-		 newconn))) {
-		 chprintf((BaseSequentialStream *) &SERIAL_DRIVER,
-		 "conn_thread()\r\n");
-		 }
-
-		 chThdWait(conntp);
-		 */
 	}
 	return RDY_OK;
 }
@@ -195,7 +152,7 @@ int main(void) {
 	/*
 	 * Creates the server thread.
 	 */
-	uint16_t port = 80;
+	uint16_t port = 23;
 	chThdCreateFromHeap(NULL, 1024, NORMALPRIO, server_thread, &port);
 
 	/*
