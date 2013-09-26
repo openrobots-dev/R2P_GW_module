@@ -24,4 +24,26 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>RTCAN</name>
+			<type>2</type>
+			<location>/home/tino/workspace/openrobots/RTCAN</location>
+		</link>
+		<link>
+			<name>lwip</name>
+			<type>2</type>
+			<location>/home/tino/workspace/openrobots/ChibiOS-git/ext/lwip/src</location>
+		</link>
+		<link>
+			<name>os</name>
+			<type>2</type>
+			<location>/home/tino/workspace/openrobots/ChibiOS-git/os</location>
+		</link>
+		<link>
+			<name>r2p</name>
+			<type>2</type>
+			<location>/home/tino/workspace/openrobots/Middleware_v2/r2p</location>
+		</link>
+	</linkedResources>
 </projectDescription>

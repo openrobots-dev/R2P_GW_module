@@ -34,7 +34,11 @@
 /*
  * IO pins assignments.
  */
-#define LED_GPIO				GPIOC
+#define LED12_GPIO				GPIOC
+#define LED1					10
+#define LED2					11
+
+#define LED34_GPIO				GPIOD
 #define LED1					10
 #define LED2					11
 

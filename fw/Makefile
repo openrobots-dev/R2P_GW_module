@@ -15,7 +15,7 @@ endif
 
 # C++ specific options here (added to USE_OPT).
 ifeq ($(USE_CPPOPT),)
-  USE_CPPOPT = -fno-rtti
+  USE_CPPOPT = -fno-rtti -fno-exceptions -fno-threadsafe-statics
 endif
 
 # Enable this if you want the linker to remove unused code and data
@@ -52,6 +52,18 @@ ifeq ($(USE_FWLIB),)
   USE_FWLIB = no
 endif
 
+ifeq ($(R2P_USE_DEBUGTRANSPORT),)
+  R2P_USE_DEBUGTRANSPORT = yes
+endif
+
+ifeq ($(R2P_USE_RTCANTRANSPORT),)
+  R2P_USE_RTCANTRANSPORT = yes
+endif
+
+ifeq ($(R2P_USE_BOOTLOADER),)
+  R2P_USE_BOOTLOADER = no
+endif
+
 #
 # Architecture or project specific options
 ##############################################################################
@@ -64,13 +76,17 @@ endif
 PROJECT = ch
 
 # Imported source files and paths
-CHIBIOS = ../../ChibiOS
+include ./paths.mk
 include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
 include $(CHIBIOS)/os/hal/hal.mk
 include $(CHIBIOS)/os/ports/GCC/ARMCMx/STM32F4xx/port.mk
 include $(CHIBIOS)/os/kernel/kernel.mk
 include $(CHIBIOS)/test/test.mk
 include $(CHIBIOS)/os/various/lwip_bindings/lwip.mk
+include $(RTCAN)/platforms/STM32/platform.mk
+include $(RTCAN)/RTCAN.mk
+include $(R2P)/r2p.mk
+include $(R2P)/port/chibios/port.mk
 
 # Define linker script file here
 LDSCRIPT= $(PORTLD)/STM32F407xG.ld
@@ -89,13 +105,16 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/shell.c \
        $(CHIBIOS)/os/various/syscalls.c \
        $(LWSRC) \
+       $(RTCANSRC) \
+       $(RTCANPLATFORMSRC) \
        board.c \
-       netstream.c \
-       main.c
+       netstream.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CPPSRC =
+CPPSRC = $(R2PSRC) \
+         chnew.cpp \
+         main.cpp
 
 # C sources to be compiled in ARM mode regardless of the global setting.
 # NOTE: Mixing ARM and THUMB mode enables the -mthumb-interwork compiler
@@ -124,7 +143,8 @@ INCDIR = $(PORTINC) $(KERNINC) $(TESTINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) $(LWINC) \
          $(CHIBIOS)/os/various \
          $(CHIBIOS)/os/various/cpp_wrappers \
-         ./
+         $(RTCANINC) $(RTCANPLATFORMINC) \
+         $(R2PINC)
 
 #
 # Project, sources and paths
@@ -195,7 +215,7 @@ DLIBS =
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS =
+UDEFS = -DR2P_USE_BOOTLOADER=0
 
 # Define ASM defines here
 UADEFS =
@@ -204,7 +224,7 @@ UADEFS =
 UINCDIR =
 
 # List the user directory to look for the libraries here
-ULIBDIR =
+ULIBDIR = -lm
 
 # List all user libraries here
 ULIBS =

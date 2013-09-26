@@ -1,5 +1,5 @@
 #include "netstream.h"
-#include "lwip/api.h"
+#include <lwip/api.h>
 
 #include "ch.h"
 #include "hal.h"
@@ -7,7 +7,7 @@
 static size_t write(void *ip, const uint8_t *bp, size_t n) {
    NetStream *sp = ip;
 
-   return netconn_write_partly(sp->conn, bp, n, NETCONN_COPY, NULL);
+   return (netconn_write_partly(sp->conn, bp, n, NETCONN_COPY, NULL) == ERR_OK ? n : 0);
 }
 
 static size_t read(void *ip, uint8_t *bp, size_t n) {
@@ -48,7 +48,39 @@ static msg_t get(void *ip) {
    return (read(ip, &b, 1) == 1 ? b : Q_RESET);
 }
 
-static const struct NetStreamVMT vmt = { write, read, put, get };
+/* Channel put method with timeout specification.*/
+static msg_t putt(void *ip, uint8_t b, systime_t time) {
+
+	(void)time;
+
+	return put(ip, b);
+}
+
+/* Channel get method with timeout specification.*/
+static msg_t gett(void *ip, systime_t time) {
+
+	(void)time;
+
+	return get(ip);
+}
+/* Channel write method with timeout specification.*/
+static size_t writet(void *ip, const uint8_t *bp, size_t n, systime_t time) {
+
+	(void)time;
+
+	return write(ip, bp, n);
+
+}
+/* Channel read method with timeout specification.*/
+static size_t readt(void *ip, uint8_t *bp, size_t n, systime_t time) {
+
+	(void)time;
+
+	return read(ip, bp, n);
+
+}
+
+static const struct NetStreamVMT vmt = { write, read, put, get, putt, gett, writet, readt };
 
 void nsObjectInit(NetStream *sp) {
 
