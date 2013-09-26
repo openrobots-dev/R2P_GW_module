@@ -278,8 +278,8 @@ int main(void) {
 
 	r2p::Thread::set_priority(r2p::Thread::NORMAL);
 
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 2, ledpub_node, (void*) "led");
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, ledsub_node, (void*) "led");
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 2, ledpub_node, (void*) "leds");
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, ledsub_node, (void*) "leds");
 
 	/*
 	 * Normal main() thread activity, in this demo it does nothing except
