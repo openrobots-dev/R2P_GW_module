@@ -215,7 +215,7 @@ DLIBS =
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS = -DR2P_USE_BOOTLOADER=0
+UDEFS = -DR2P_USE_BOOTLOADER=0 -DRTCAN_ISMASTER
 
 # Define ASM defines here
 UADEFS =

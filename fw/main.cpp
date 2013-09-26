@@ -1,5 +1,6 @@
 #include "ch.h"
 #include "hal.h"
+#include "rtcan.h"
 
 #include "shell.h"
 #include "chprintf.h"
@@ -50,8 +51,7 @@ static char netdbgtra_namebuf[64];
 
 // Debug transport
 
-//static r2p::DebugTransport dbgtra(reinterpret_cast<BaseChannel *>(&SERIAL_DRIVER), dbgtra_namebuf);
-//static r2p::DebugTransport dbgtra(reinterpret_cast<BaseSequentialStream *>(&SD1), dbgtra_namebuf);
+static r2p::DebugTransport dbgtra(reinterpret_cast<BaseChannel *>(&SERIAL_DRIVER), dbgtra_namebuf);
 
 static WORKING_AREA(wa_rx_dbgtra, 1024);
 static WORKING_AREA(wa_tx_dbgtra, 1024);
@@ -59,48 +59,10 @@ static WORKING_AREA(wa_tx_dbgtra, 1024);
 static WORKING_AREA(wa_rx_netdbgtra, 1024);
 static WORKING_AREA(wa_tx_netdbgtra, 1024);
 
-/*===========================================================================*/
-/* Command line related.                                                     */
-/*===========================================================================*/
+// RTCAN transport
+static r2p::RTCANTransport rtcantra(RTCAND1);
 
-#define SHELL_WA_SIZE   THD_WA_SIZE(4096)
-#define TEST_WA_SIZE    THD_WA_SIZE(1024)
-
-static void cmd_mem(BaseSequentialStream *chp, int argc, char *argv[]) {
-	size_t n, size;
-
-	(void) argv;
-	if (argc > 0) {
-		chprintf(chp, "Usage: mem\r\n");
-		return;
-	}
-	n = chHeapStatus(NULL, &size);
-	chprintf(chp, "core free memory : %u bytes\r\n", chCoreStatus());
-	chprintf(chp, "heap fragments   : %u\r\n", n);
-	chprintf(chp, "heap free total  : %u bytes\r\n", size);
-}
-
-static void cmd_threads(BaseSequentialStream *chp, int argc, char *argv[]) {
-	static const char *states[] = { THD_STATE_NAMES };
-	Thread *tp;
-
-	(void) argv;
-	if (argc > 0) {
-		chprintf(chp, "Usage: threads\r\n");
-		return;
-	}
-	chprintf(chp, "    addr    stack prio refs     state time\r\n");
-	tp = chRegFirstThread();
-	do {
-		chprintf(chp, "%.8lx %.8lx %4lu %4lu %9s %lu\r\n", (uint32_t) tp, (uint32_t) tp->p_ctx.r13,
-				(uint32_t) tp->p_prio, (uint32_t) (tp->p_refs - 1), states[tp->p_state], (uint32_t) tp->p_time);
-		tp = chRegNextThread(tp);
-	} while (tp != NULL);
-}
-
-static const ShellCommand commands[] = { { "mem", cmd_mem }, { "threads", cmd_threads }, { NULL, NULL } };
-
-static const ShellConfig shell_cfg = { (BaseSequentialStream *) &SERIAL_DRIVER, commands };
+RTCANConfig rtcan_config = { 1000000, 100, 60 };
 
 /*===========================================================================*/
 /* Application threads.                                                      */
@@ -116,24 +78,29 @@ struct LedMsg: public r2p::Message {
  * Led publisher node
  */
 static msg_t ledpub_node(void *arg) {
-	r2p::Node node("led");
+	r2p::Node node("ledpub");
 	r2p::Publisher<LedMsg> led_pub;
+	char * tnp = (char *) arg;
 	systime_t time = chTimeNow();
 	const uint16_t period = 500;
 	uint32_t toggle = 0;
+	uint32_t cnt = 0;
 
-	node.advertise(led_pub, "led");
+	(void)arg;
+
+	chRegSetThreadName("ledpub");
+	node.advertise(led_pub, tnp);
 
 	for (;;) {
 		LedMsg *msgp;
 		if (led_pub.alloc(msgp)) {
-			msgp->led = 1;
+			msgp->led = 2;
 			msgp->value = toggle;
 			if (!led_pub.publish(*msgp)) {
 				chSysHalt();
-			} else {
-				toggle ^= 1;
 			}
+			toggle ^= 1;
+			cnt++;
 		}
 
 		time += MS2ST(period);
@@ -146,65 +113,31 @@ static msg_t ledpub_node(void *arg) {
  * Led subscriber node
  */
 
-unsigned led2gpio(unsigned led_id) {
-
-    switch (led_id) {
-    case 0: return LED1;
-    case 1: return LED2;
-    case 2: return LED3;
-    case 3: return LED4;
-    }
-    R2P_ASSERT(false && "unreachable code");
-    return 0;
-}
-
-unsigned led2pin(unsigned led_id) {
-
-    switch (led_id) {
-    case 0: return LED1;
-    case 1: return LED2;
-    case 2: return LED3;
-    case 3: return LED4;
-    }
-    R2P_ASSERT(false && "unreachable code");
-    return 0;
-}
-
 bool callback(const LedMsg &msg) {
-	if (msg.value) {
-		palClearPad(LED_GPIO, msg.led);
-	} else {
-		palSetPad(LED_GPIO, msg.led);
-	}
+
+	palWritePad((GPIO_TypeDef *)led2gpio(msg.led), led2pin(msg.led), msg.value);
+
 	return true;
 }
 
-msg_t LedSub(void * arg) {
+msg_t ledsub_node(void * arg) {
 	LedMsg sub_msgbuf[5], *sub_queue[5];
-	r2p::Node node("LedSub");
+	r2p::Node node("ledpub");
     r2p::Subscriber<LedMsg> sub(sub_queue, 5, callback);
-	char * tn = (char *) arg;
-	LedMsg * msg;
+	char * tnp = (char *) arg;
 
-	chRegSetThreadName("SubThd");
+	chRegSetThreadName("ledsub");
 
-	node.subscribe(sub, tn, sub_msgbuf);
-
-	int cnt = sizeof(sub);
+	node.subscribe(sub, tnp, sub_msgbuf);
 
 	for (;;) {
 		node.spin(1000);
-		if (sub.fetch(msg)) {
-			sub.release(*msg);
-			cnt++;
-			palClearPad(TEST_GPIO, TEST1);
-		}
 	}
 	return CH_SUCCESS;
 }
 
 /*
- * Red LED blinker thread, times are in milliseconds.
+ * RTCAN LED blinker thread, times are in milliseconds.
  */
 static WORKING_AREA(waThread1, 128);
 static msg_t Thread1(void *arg) {
@@ -212,9 +145,35 @@ static msg_t Thread1(void *arg) {
 	(void) arg;
 
 	chRegSetThreadName("blinker");
+
 	while (TRUE) {
-		palTogglePad(LED_GPIO, LED1);
-		chThdSleepMilliseconds(500);
+		switch (RTCAND1.state) {
+			case RTCAN_MASTER:
+				palClearPad(LED12_GPIO, LED1);
+				chThdSleepMilliseconds(200);
+				palSetPad(LED12_GPIO, LED1);
+				chThdSleepMilliseconds(100);
+				palClearPad(LED12_GPIO, LED1);
+				chThdSleepMilliseconds(200);
+				palSetPad(LED12_GPIO, LED1);
+				chThdSleepMilliseconds(500);
+				break;
+			case RTCAN_SYNCING:
+				palTogglePad(LED12_GPIO, LED1);
+				chThdSleepMilliseconds(100);
+				break;
+			case RTCAN_SLAVE:
+				palTogglePad(LED12_GPIO, LED1);
+				chThdSleepMilliseconds(500);
+				break;
+			case RTCAN_ERROR:
+				palTogglePad(LED34_GPIO, LED4);
+				chThdSleepMilliseconds(200);
+				break;
+			default:
+				chThdSleepMilliseconds(100);
+				break;
+			}
 	}
 	return 0;
 }
@@ -294,10 +253,6 @@ int main(void) {
 	sdStart(&SERIAL_DRIVER, NULL);
 
 	/*
-	 * Shell manager initialization.
-	 */
-//	shellInit();
-	/*
 	 * Creates the blinker thread.
 	 */
 	chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
@@ -315,27 +270,22 @@ int main(void) {
 
 	r2p::Thread::set_priority(r2p::Thread::HIGHEST);
 	r2p::Middleware::instance.initialize(wa_info, sizeof(wa_info), r2p::Thread::IDLE);
-/*
+
 	dbgtra.initialize(wa_rx_dbgtra, sizeof(wa_rx_dbgtra), r2p::Thread::LOWEST + 11, wa_tx_dbgtra, sizeof(wa_tx_dbgtra),
 			r2p::Thread::LOWEST + 10);
-*/
+
+	rtcantra.initialize(rtcan_config);
+
 	r2p::Thread::set_priority(r2p::Thread::NORMAL);
 
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, ledpub_node, NULL);
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 2, ledpub_node, (void*) "led");
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, ledsub_node, (void*) "led");
 
 	/*
 	 * Normal main() thread activity, in this demo it does nothing except
 	 * sleeping in a loop and check the button state.
 	 */
 	while (TRUE) {
-		/*
-		 if (!shelltp)
-		 shelltp = shellCreate(&shell_cfg, SHELL_WA_SIZE, NORMALPRIO - 1);
-		 else if (chThdTerminated(shelltp)) {
-		 chThdRelease(shelltp);
-		 shelltp = NULL;
-		 }
-		 */
 		chThdSleepMilliseconds(500);
 	}
 }

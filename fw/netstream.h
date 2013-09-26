@@ -27,6 +27,7 @@ extern "C" {
 #endif
 void nsObjectInit(NetStream *sp);
 void nsStart(NetStream *sp, struct netconn * conn);
+void nsStop(NetStream *sp);
 #ifdef __cplusplus
 }
 #endif
