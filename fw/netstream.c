@@ -12,12 +12,11 @@ static size_t write(void *ip, const uint8_t *bp, size_t n) {
 
 	if (err != ERR_OK) {
 		/* Connection closed (or any other errors). */
-		nsStop(sp);
-
-		return Q_RESET;
+//		return Q_RESET;
+		return 0;
 	}
 
-	return (netconn_write_partly(sp->conn, bp, n, NETCONN_COPY, NULL) == ERR_OK ? n : 0);
+	return n;
 }
 
 static size_t read(void *ip, uint8_t *bp, size_t n) {
@@ -32,9 +31,8 @@ static size_t read(void *ip, uint8_t *bp, size_t n) {
 		err = netconn_recv(sp->conn, &sp->inbuf);
 		if (err != ERR_OK) {
 			/* Connection closed (or any other errors). */
-			nsStop(sp);
-
-			return Q_RESET;
+//			return Q_RESET;
+			return 0;
 		}
 	}
 
@@ -53,13 +51,15 @@ static size_t read(void *ip, uint8_t *bp, size_t n) {
 }
 
 static msg_t put(void *ip, uint8_t b) {
-	return (write(ip, &b, 1) == 1 ? Q_OK : Q_RESET);
+//	return (write(ip, &b, 1) == 1 ? Q_OK : Q_RESET);
+	return (write(ip, &b, 1));
 }
 
 static msg_t get(void *ip) {
 	uint8_t b;
 
-	return (read(ip, &b, 1) == 1 ? b : Q_RESET);
+//	return (read(ip, &b, 1) == 1 ? b : Q_RESET);
+	return (read(ip, &b, 1));
 }
 
 /* Channel put method with timeout specification.*/
@@ -111,8 +111,8 @@ void nsStart(NetStream *sp, struct netconn * conn) {
 }
 
 void nsStop(NetStream *sp) {
+	sp->conn = NULL;
 	netconn_close(sp->conn);
 	netconn_delete(sp->conn);
-	sp->conn = NULL;
 }
 

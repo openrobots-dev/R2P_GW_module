@@ -108,13 +108,12 @@ CSRC = $(PORTSRC) \
        $(RTCANSRC) \
        $(RTCANPLATFORMSRC) \
        board.c \
-       netstream.c
+       netstream.c \
+       main.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
-CPPSRC = $(R2PSRC) \
-         chnew.cpp \
-         main.cpp
+CPPSRC =
 
 # C sources to be compiled in ARM mode regardless of the global setting.
 # NOTE: Mixing ARM and THUMB mode enables the -mthumb-interwork compiler
