@@ -51,7 +51,7 @@ static char netdbgtra_namebuf[64];
 
 // Debug transport
 
-static r2p::DebugTransport dbgtra(reinterpret_cast<BaseChannel *>(&SERIAL_DRIVER), dbgtra_namebuf);
+static r2p::DebugTransport dbgtra("dbg", reinterpret_cast<BaseChannel *>(&SERIAL_DRIVER), dbgtra_namebuf);
 
 static WORKING_AREA(wa_rx_dbgtra, 1024);
 static WORKING_AREA(wa_tx_dbgtra, 1024);
@@ -211,7 +211,7 @@ static msg_t server_thread(void *arg) {
 			nsStart(nsp, newconn);
 
 			// Debug transport
-			static r2p::DebugTransport netdbgtra(reinterpret_cast<BaseChannel *>(nsp), netdbgtra_namebuf);
+			static r2p::DebugTransport netdbgtra("netdbg", reinterpret_cast<BaseChannel *>(nsp), netdbgtra_namebuf);
 
 			r2p::Thread::set_priority(r2p::Thread::HIGHEST);
 
