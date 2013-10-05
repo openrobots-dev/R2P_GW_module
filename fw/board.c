@@ -115,11 +115,13 @@ void * led2gpio(unsigned led_id) {
 
 	switch (led_id) {
 	case 1:
+		return LED1_GPIO;
 	case 2:
-		return LED12_GPIO;
+		return LED2_GPIO;
 	case 3:
+		return LED3_GPIO;
 	case 4:
-		return LED34_GPIO;
+		return LED4_GPIO;
 	}
 
 	return 0;
