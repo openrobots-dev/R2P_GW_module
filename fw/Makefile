@@ -113,6 +113,7 @@ CSRC = $(PORTSRC) \
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
 CPPSRC = $(R2PSRC) \
+         $(R2PNODES)/led.cpp \
          chnew.cpp \
          main.cpp
 
@@ -215,7 +216,7 @@ DLIBS =
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS = -DR2P_USE_BOOTLOADER=0 #-DRTCAN_ISMASTER
+UDEFS = -DR2P_USE_BOOTLOADER=0 -DR2P_MESSAGE_TRACKS_SOURCE=1 #-DRTCAN_ISMASTER
 
 # Define ASM defines here
 UADEFS =

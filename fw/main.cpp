@@ -23,6 +23,8 @@
 #include "r2p/transport/DebugTransport.hpp"
 #include "r2p/transport/RTCANTransport.hpp"
 
+#include "r2p/node/led.hpp"
+
 extern "C" {
 void *__dso_handle;
 void __cxa_pure_virtual() {
@@ -68,115 +70,6 @@ RTCANConfig rtcan_config = { 1000000, 100, 60 };
 /* Application threads.                                                      */
 /*===========================================================================*/
 
-struct LedMsg: public r2p::Message {
-	uint32_t led;
-	uint32_t value;
-	uint32_t cnt;
-} R2P_PACKED;
-
-/*
- * Led publisher node
- */
-static msg_t ledpub_node(void *arg) {
-	r2p::Node node("ledpub");
-	r2p::Publisher<LedMsg> led_pub;
-	char * tnp = (char *) arg;
-	systime_t time = chTimeNow();
-	const uint16_t period = 500;
-	uint32_t toggle = 0;
-	uint32_t cnt = 0;
-
-	(void)arg;
-
-	chRegSetThreadName("ledpub");
-	node.advertise(led_pub, tnp);
-
-	for (;;) {
-		LedMsg *msgp;
-		if (led_pub.alloc(msgp)) {
-			msgp->led = 2;
-			msgp->value = toggle;
-			if (!led_pub.publish(*msgp)) {
-				chSysHalt();
-			}
-			toggle ^= 1;
-			cnt++;
-		}
-
-		time += MS2ST(period);
-		chThdSleepUntil(time);
-	}
-	return CH_SUCCESS;
-}
-
-/*
- * Led subscriber node
- */
-
-bool callback(const LedMsg &msg) {
-
-	palWritePad((GPIO_TypeDef *)led2gpio(msg.led), led2pin(msg.led), msg.value);
-
-	return true;
-}
-
-msg_t ledsub_node(void * arg) {
-	LedMsg sub_msgbuf[5], *sub_queue[5];
-	r2p::Node node("ledpub");
-    r2p::Subscriber<LedMsg> sub(sub_queue, 5, callback);
-	char * tnp = (char *) arg;
-
-	chRegSetThreadName("ledsub");
-
-	node.subscribe(sub, tnp, sub_msgbuf);
-
-	for (;;) {
-		node.spin(1000);
-	}
-	return CH_SUCCESS;
-}
-
-/*
- * RTCAN LED blinker thread, times are in milliseconds.
- */
-static WORKING_AREA(waThread1, 128);
-static msg_t Thread1(void *arg) {
-
-	(void) arg;
-
-	chRegSetThreadName("blinker");
-
-	while (TRUE) {
-		switch (RTCAND1.state) {
-			case RTCAN_MASTER:
-				palClearPad(LED12_GPIO, LED1);
-				chThdSleepMilliseconds(200);
-				palSetPad(LED12_GPIO, LED1);
-				chThdSleepMilliseconds(100);
-				palClearPad(LED12_GPIO, LED1);
-				chThdSleepMilliseconds(200);
-				palSetPad(LED12_GPIO, LED1);
-				chThdSleepMilliseconds(500);
-				break;
-			case RTCAN_SYNCING:
-				palTogglePad(LED12_GPIO, LED1);
-				chThdSleepMilliseconds(100);
-				break;
-			case RTCAN_SLAVE:
-				palTogglePad(LED12_GPIO, LED1);
-				chThdSleepMilliseconds(500);
-				break;
-			case RTCAN_ERROR:
-				palTogglePad(LED34_GPIO, LED4);
-				chThdSleepMilliseconds(200);
-				break;
-			default:
-				chThdSleepMilliseconds(100);
-				break;
-			}
-	}
-	return 0;
-}
 /*
  * TCP server thread.
  */
@@ -252,11 +145,6 @@ int main(void) {
 	 */
 	sdStart(&SERIAL_DRIVER, NULL);
 
-	/*
-	 * Creates the blinker thread.
-	 */
-	chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
-
 	/* Make the PHY wake up.*/
 	palSetPad(GPIOC, GPIOC_ETH_NOT_PWRDN);
 
@@ -271,6 +159,8 @@ int main(void) {
 	r2p::Thread::set_priority(r2p::Thread::HIGHEST);
 	r2p::Middleware::instance.initialize(wa_info, sizeof(wa_info), r2p::Thread::IDLE);
 
+	chThdSleepMilliseconds(100);
+
 	dbgtra.initialize(wa_rx_dbgtra, sizeof(wa_rx_dbgtra), r2p::Thread::LOWEST + 11, wa_tx_dbgtra, sizeof(wa_tx_dbgtra),
 			r2p::Thread::LOWEST + 10);
 
@@ -278,14 +168,15 @@ int main(void) {
 
 	r2p::Thread::set_priority(r2p::Thread::NORMAL);
 
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 2, ledpub_node, (void*) "leds");
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, ledsub_node, (void*) "leds");
+	uint8_t led = 3;
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledpub_node, (void *)&led);
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledsub_node, NULL);
 
 	/*
 	 * Normal main() thread activity, in this demo it does nothing except
 	 * sleeping in a loop and check the button state.
 	 */
 	while (TRUE) {
-		chThdSleepMilliseconds(500);
+		r2p::Thread::sleep(r2p::Time::ms(500));
 	}
 }

@@ -34,12 +34,14 @@
 /*
  * IO pins assignments.
  */
-#define LED12_GPIO				GPIOC
+#define LED1_GPIO				GPIOC
 #define LED1					10
+#define LED2_GPIO				GPIOC
 #define LED2					11
 
-#define LED34_GPIO				GPIOB
+#define LED3_GPIO				GPIOB
 #define LED3					8
+#define LED4_GPIO				GPIOB
 #define LED4					9
 
 #define SERIAL_DRIVER           SD1
@@ -1309,8 +1311,6 @@
 extern "C" {
 #endif
   void boardInit(void);
-  void * led2gpio(unsigned led_id);
-  unsigned led2pin(unsigned led_id);
 #ifdef __cplusplus
 }
 #endif

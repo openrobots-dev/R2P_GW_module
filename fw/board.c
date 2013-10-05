@@ -110,33 +110,3 @@ bool_t mmc_lld_is_write_protected(MMCDriver *mmcp) {
  */
 void boardInit(void) {
 }
-
-void * led2gpio(unsigned led_id) {
-
-	switch (led_id) {
-	case 1:
-	case 2:
-		return LED12_GPIO;
-	case 3:
-	case 4:
-		return LED34_GPIO;
-	}
-
-	return 0;
-}
-
-unsigned led2pin(unsigned led_id) {
-
-	switch (led_id) {
-	case 1:
-		return LED1;
-	case 2:
-		return LED2;
-	case 3:
-		return LED3;
-	case 4:
-		return LED4;
-	}
-
-	return 0;
-}
