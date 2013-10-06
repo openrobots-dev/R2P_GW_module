@@ -95,11 +95,10 @@ static msg_t server_thread(void *arg) {
 		if (err != ERR_OK)
 			continue;
 
-		/* Dynamic allocation to allow multiple shell instances. */
+		/* Dynamic allocation to allow multiple instances. */
 		NetStream * nsp = (NetStream *) chHeapAlloc(NULL, sizeof(NetStream));
-		ShellConfig * shell_cfgp = (ShellConfig *) chHeapAlloc(NULL, sizeof(ShellConfig));
 
-		if (nsp && shell_cfgp) {
+		if (nsp) {
 			nsObjectInit(nsp);
 			nsStart(nsp, newconn);
 
@@ -112,13 +111,6 @@ static msg_t server_thread(void *arg) {
 					sizeof(wa_tx_netdbgtra), r2p::Thread::LOWEST + 10);
 
 			r2p::Thread::set_priority(r2p::Thread::NORMAL);
-
-			/*
-			 shell_cfgp->sc_channel = (BaseSequentialStream *) nsp;
-			 shell_cfgp->sc_commands = commands;
-
-			 shellCreate(shell_cfgp, SHELL_WA_SIZE, NORMALPRIO - 1);
-			 */
 		}
 	}
 	return RDY_OK;
@@ -164,11 +156,13 @@ int main(void) {
 	dbgtra.initialize(wa_rx_dbgtra, sizeof(wa_rx_dbgtra), r2p::Thread::LOWEST + 11, wa_tx_dbgtra, sizeof(wa_tx_dbgtra),
 			r2p::Thread::LOWEST + 10);
 
-	rtcantra.initialize(rtcan_config);
+//	rtcantra.initialize(rtcan_config);
 
 	r2p::Thread::set_priority(r2p::Thread::NORMAL);
 
-	uint8_t led = 3;
+	chThdSleepMilliseconds(100);
+
+	uint8_t led = 1;
 	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledpub_node, (void *)&led);
 	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledsub_node, NULL);
 

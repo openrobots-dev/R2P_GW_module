@@ -17,7 +17,7 @@ static size_t write(void *ip, const uint8_t *bp, size_t n) {
 		return Q_RESET;
 	}
 
-	return (netconn_write_partly(sp->conn, bp, n, NETCONN_COPY, NULL) == ERR_OK ? n : 0);
+	return (err == ERR_OK ? n : 0);
 }
 
 static size_t read(void *ip, uint8_t *bp, size_t n) {
