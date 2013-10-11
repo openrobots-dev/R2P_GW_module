@@ -50,7 +50,7 @@
 
 /** @brief IP Gateway. */
 #if !defined(LWIP_GATEWAY) || defined(__DOXYGEN__)
-#define LWIP_GATEWAY(p)                 IP4_ADDR(p, 10, 0, 0, 1)
+#define LWIP_GATEWAY(p)                 IP4_ADDR(p, 10, 0, 0, 11)
 #endif
 
 /** @brief IP netmask. */
@@ -62,6 +62,13 @@
 #if !defined(LWIP_THREAD_STACK_SIZE) || defined(__DOXYGEN__)
 #define LWIP_THREAD_STACK_SIZE          4096
 #endif
+
+#define LWIP_ETHADDR_0 0xaa
+#define LWIP_ETHADDR_1 0xbb
+#define LWIP_ETHADDR_2 0xcc
+#define LWIP_ETHADDR_3 0xdd
+#define LWIP_ETHADDR_4 0xee
+#define LWIP_ETHADDR_5 0xff
 
 /*
    -----------------------------------------------

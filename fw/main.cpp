@@ -25,6 +25,10 @@
 
 #include "r2p/node/led.hpp"
 
+#include <urosBase.h>
+#include <urosUser.h>
+#include <urosNode.h>
+
 extern "C" {
 void *__dso_handle;
 void __cxa_pure_virtual() {
@@ -48,19 +52,6 @@ static WORKING_AREA(wa_info, 1024);
 
 r2p::Middleware r2p::Middleware::instance("GW_0", "BOOT_GW_0");
 
-static char dbgtra_namebuf[64];
-static char netdbgtra_namebuf[64];
-
-// Debug transport
-
-static r2p::DebugTransport dbgtra("dbg", reinterpret_cast<BaseChannel *>(&SERIAL_DRIVER), dbgtra_namebuf);
-
-static WORKING_AREA(wa_rx_dbgtra, 1024);
-static WORKING_AREA(wa_tx_dbgtra, 1024);
-
-static WORKING_AREA(wa_rx_netdbgtra, 1024);
-static WORKING_AREA(wa_tx_netdbgtra, 1024);
-
 // RTCAN transport
 static r2p::RTCANTransport rtcantra(RTCAND1);
 
@@ -69,52 +60,6 @@ RTCANConfig rtcan_config = { 1000000, 100, 60 };
 /*===========================================================================*/
 /* Application threads.                                                      */
 /*===========================================================================*/
-
-/*
- * TCP server thread.
- */
-static msg_t server_thread(void *arg) {
-	uint16_t port = *((uint16_t *) arg);
-	struct netconn *conn, *newconn;
-	err_t err;
-
-	chRegSetThreadName("server");
-
-	/* Create a new TCP connection handle */
-	conn = netconn_new(NETCONN_TCP);
-	LWIP_ERROR("TCP server: invalid conn", (conn != NULL), return RDY_RESET;);
-
-	/* Bind to a port. */
-	netconn_bind(conn, NULL, port);
-
-	/* Listen for connections. */
-	netconn_listen(conn);
-
-	while (TRUE) {
-		err = netconn_accept(conn, &newconn);
-		if (err != ERR_OK)
-			continue;
-
-		/* Dynamic allocation to allow multiple instances. */
-		NetStream * nsp = (NetStream *) chHeapAlloc(NULL, sizeof(NetStream));
-
-		if (nsp) {
-			nsObjectInit(nsp);
-			nsStart(nsp, newconn);
-
-			// Debug transport
-			static r2p::DebugTransport netdbgtra("netdbg", reinterpret_cast<BaseChannel *>(nsp), netdbgtra_namebuf);
-
-			r2p::Thread::set_priority(r2p::Thread::HIGHEST);
-
-			netdbgtra.initialize(wa_rx_netdbgtra, sizeof(wa_rx_netdbgtra), r2p::Thread::LOWEST + 11, wa_tx_netdbgtra,
-					sizeof(wa_tx_netdbgtra), r2p::Thread::LOWEST + 10);
-
-			r2p::Thread::set_priority(r2p::Thread::NORMAL);
-		}
-	}
-	return RDY_OK;
-}
 
 /*
  * Application entry point.
@@ -142,19 +87,11 @@ int main(void) {
 
 	/* Creates the LWIP thread (it changes priority internally).*/
 	chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE), NORMALPRIO + 1, lwip_thread, NULL);
-	/*
-	 * Creates the server thread.
-	 */
-	uint16_t port = 23;
-	chThdCreateFromHeap(NULL, 8192, NORMALPRIO, server_thread, &port);
 
 	r2p::Thread::set_priority(r2p::Thread::HIGHEST);
 	r2p::Middleware::instance.initialize(wa_info, sizeof(wa_info), r2p::Thread::IDLE);
 
 	chThdSleepMilliseconds(100);
-
-	dbgtra.initialize(wa_rx_dbgtra, sizeof(wa_rx_dbgtra), r2p::Thread::LOWEST + 11, wa_tx_dbgtra, sizeof(wa_tx_dbgtra),
-			r2p::Thread::LOWEST + 10);
 
 //	rtcantra.initialize(rtcan_config);
 
@@ -163,8 +100,11 @@ int main(void) {
 	chThdSleepMilliseconds(100);
 
 	uint8_t led = 1;
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledpub_node, (void *)&led);
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledpub_node, (void *) &led);
 	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledsub_node, NULL);
+
+	urosInit();
+	urosNodeCreateThread();
 
 	/*
 	 * Normal main() thread activity, in this demo it does nothing except

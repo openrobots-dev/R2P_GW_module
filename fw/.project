@@ -45,5 +45,10 @@
 			<type>2</type>
 			<location>/home/tino/workspace/openrobots/Middleware_v2/r2p</location>
 		</link>
+		<link>
+			<name>uROSnode</name>
+			<type>2</type>
+			<location>/home/tino/workspace/openrobots/uROSnode</location>
+		</link>
 	</linkedResources>
 </projectDescription>
