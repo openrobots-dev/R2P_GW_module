@@ -38,7 +38,6 @@
 #define LED1					10
 #define LED2_GPIO				GPIOC
 #define LED2					11
-
 #define LED3_GPIO				GPIOB
 #define LED3					8
 #define LED4_GPIO				GPIOB

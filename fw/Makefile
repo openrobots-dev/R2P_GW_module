@@ -53,7 +53,7 @@ ifeq ($(USE_FWLIB),)
 endif
 
 ifeq ($(R2P_USE_DEBUGTRANSPORT),)
-  R2P_USE_DEBUGTRANSPORT = yes
+  R2P_USE_DEBUGTRANSPORT = no
 endif
 
 ifeq ($(R2P_USE_RTCANTRANSPORT),)
@@ -87,6 +87,9 @@ include $(RTCAN)/platforms/STM32/platform.mk
 include $(RTCAN)/RTCAN.mk
 include $(R2P)/r2p.mk
 include $(R2P)/port/chibios/port.mk
+include $(UROS)/mk/uros.mk
+include $(UROS)/mk/chibios.mk
+include $(UROS)/mk/lwip.mk
 
 # Define linker script file here
 LDSCRIPT= $(PORTLD)/STM32F407xG.ld
@@ -107,7 +110,10 @@ CSRC = $(PORTSRC) \
        $(LWSRC) \
        $(RTCANSRC) \
        $(RTCANPLATFORMSRC) \
+       $(UROSSRC) $(UROSLLDSRC) \
        board.c \
+       ./src/urosUser.c \
+       ./src/urosMsgTypes.c \
        netstream.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
@@ -115,6 +121,7 @@ CSRC = $(PORTSRC) \
 CPPSRC = $(R2PSRC) \
          $(R2PNODES)/led.cpp \
          chnew.cpp \
+         ./src/urosHandlers.cpp \
          main.cpp
 
 # C sources to be compiled in ARM mode regardless of the global setting.
@@ -145,7 +152,8 @@ INCDIR = $(PORTINC) $(KERNINC) $(TESTINC) \
          $(CHIBIOS)/os/various \
          $(CHIBIOS)/os/various/cpp_wrappers \
          $(RTCANINC) $(RTCANPLATFORMINC) \
-         $(R2PINC)
+         $(R2PINC) \
+         $(UROSINC)
 
 #
 # Project, sources and paths
