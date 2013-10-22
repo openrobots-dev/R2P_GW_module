@@ -110,8 +110,10 @@ static msg_t Thread1(void *arg) {
 
   chRegSetThreadName("blinker");
   while (TRUE) {
-    palTogglePad(GPIOC, GPIOC_LED1);
-//    palTogglePad(GPIOC, GPIOC_LED2);
+    palTogglePad(LED1_GPIO, LED1);
+    palTogglePad(LED2_GPIO, LED2);
+    palTogglePad(LED3_GPIO, LED3);
+    palTogglePad(LED4_GPIO, LED4);
     chThdSleepMilliseconds(500);
   }
   return 0;
