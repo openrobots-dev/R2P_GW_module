@@ -89,28 +89,12 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/shell.c \
        $(CHIBIOS)/os/various/syscalls.c \
        $(LWSRC) \
-       board.c
+       board.c \
+       main.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
 CPPSRC =
-
-# Application sources
-ifeq ($(TEST),)
-  CSRC += main.c
-endif
-
-ifeq ($(TEST),blinking_led)
-  CSRC += main_blinking_led.c
-endif
-       
-ifeq ($(TEST),hardware_test)
-  CSRC += main_hardware_test.c
-endif
-
-ifeq ($(TEST),lwip_test)
-  CSRC += main_lwip_test.c
-endif
 
 # C sources to be compiled in ARM mode regardless of the global setting.
 # NOTE: Mixing ARM and THUMB mode enables the -mthumb-interwork compiler

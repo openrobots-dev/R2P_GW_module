@@ -25,6 +25,11 @@
 #include "chprintf.h"
 #include "shell.h"
 
+#include "lwip/opt.h"
+#include "lwip/arch.h"
+#include "lwip/api.h"
+
+#include "lwipthread.h"
 
 /*===========================================================================*/
 /* Command line related.                                                     */
@@ -146,6 +151,13 @@ int main(void) {
    * Creates the blinker thread.
    */
   chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
+
+  /* Make the PHY wake up.*/
+  palSetPad(GPIOC, GPIOC_ETH_NOT_PWRDN);
+
+  /* Creates the LWIP thread (it changes priority internally).*/
+  chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE),
+                  NORMALPRIO + 1, lwip_thread, NULL);
 
   /*
    * Normal main() thread activity, in this demo it does nothing except
