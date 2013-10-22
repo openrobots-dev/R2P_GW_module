@@ -111,7 +111,6 @@ static msg_t Thread1(void *arg) {
   chRegSetThreadName("blinker");
   while (TRUE) {
     palTogglePad(GPIOC, GPIOC_LED1);
-//    palTogglePad(GPIOC, GPIOC_LED2);
     chThdSleepMilliseconds(500);
   }
   return 0;

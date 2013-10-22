@@ -78,14 +78,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>ChibiOS</name>
+			<name>os</name>
 			<type>2</type>
-			<location>/home/tino/workspace/openrobots/ChibiOS-git</location>
-		</link>
-		<link>
-			<name>test</name>
-			<type>2</type>
-			<locationURI>CHIBIOS/test</locationURI>
+			<location>/opt/ChibiStudio/ChibiOS_2.6.0/os</location>
 		</link>
 	</linkedResources>
 </projectDescription>
