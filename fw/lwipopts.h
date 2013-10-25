@@ -63,13 +63,6 @@
 #define LWIP_THREAD_STACK_SIZE          4096
 #endif
 
-#define LWIP_ETHADDR_0 0xaa
-#define LWIP_ETHADDR_1 0xbb
-#define LWIP_ETHADDR_2 0xcc
-#define LWIP_ETHADDR_3 0xdd
-#define LWIP_ETHADDR_4 0xee
-#define LWIP_ETHADDR_5 0xff
-
 /*
    -----------------------------------------------
    ---------- Platform specific locking ----------

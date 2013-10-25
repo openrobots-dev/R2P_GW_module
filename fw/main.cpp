@@ -82,24 +82,18 @@ int main(void) {
 	 */
 	sdStart(&SERIAL_DRIVER, NULL);
 
+	r2p::Middleware::instance.initialize(wa_info, sizeof(wa_info), r2p::Thread::LOWEST);
+	rtcantra.initialize(rtcan_config);
+	r2p::Middleware::instance.start();
+
 	/* Make the PHY wake up.*/
 	palSetPad(GPIOC, GPIOC_ETH_NOT_PWRDN);
 
 	/* Creates the LWIP thread (it changes priority internally).*/
 	chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE), NORMALPRIO + 5, lwip_thread, NULL);
 
-	r2p::Thread::set_priority(r2p::Thread::HIGHEST);
-	r2p::Middleware::instance.initialize(wa_info, sizeof(wa_info), r2p::Thread::IDLE);
-
 	chThdSleepMilliseconds(100);
 
-	rtcantra.initialize(rtcan_config);
-
-	r2p::Thread::set_priority(r2p::Thread::NORMAL);
-
-	chThdSleepMilliseconds(100);
-
-	uint8_t led = 1;
 	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO + 1, r2p::ledsub_node, NULL);
 
 	urosInit();
