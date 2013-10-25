@@ -80,7 +80,7 @@
 		<link>
 			<name>os</name>
 			<type>2</type>
-			<location>/opt/ChibiStudio/ChibiOS_2.6.0/os</location>
+			<locationURI>$%7BPARENT-2-PROJECT_LOC%7D/ChibiOS/os</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
