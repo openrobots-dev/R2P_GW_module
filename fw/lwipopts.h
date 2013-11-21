@@ -60,7 +60,7 @@
 
 /** @brief MAC thread stack size. */
 #if !defined(LWIP_THREAD_STACK_SIZE) || defined(__DOXYGEN__)
-#define LWIP_THREAD_STACK_SIZE          4096
+#define LWIP_THREAD_STACK_SIZE          512
 #endif
 
 /*

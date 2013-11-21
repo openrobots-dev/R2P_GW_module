@@ -34,10 +34,6 @@ uros_err_t pub_tpc__tiltone__tilt(UrosTcpRosStatus *tcpstp);
 /* SUBSCRIBED TOPIC PROTOTYPES                                               */
 /*===========================================================================*/
 
-/*~~~ SUBSCRIBED TOPIC: /tiltone/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-uros_err_t sub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp);
-
 /*~~~ SUBSCRIBED TOPIC: /tiltone/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 uros_err_t sub_tpc__tiltone__velocity(UrosTcpRosStatus *tcpstp);

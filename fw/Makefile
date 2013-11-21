@@ -77,6 +77,7 @@ PROJECT = ch
 
 # Imported source files and paths
 include ../../paths.mk
+include ./board.mk
 include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
 include $(CHIBIOS)/os/hal/hal.mk
 include $(CHIBIOS)/os/ports/GCC/ARMCMx/STM32F4xx/port.mk
@@ -103,15 +104,12 @@ CSRC = $(PORTSRC) \
        $(HALSRC) \
        $(PLATFORMSRC) \
        $(BOARDSRC) \
-       $(CHIBIOS)/os/various/chprintf.c \
        $(CHIBIOS)/os/various/evtimer.c \
-       $(CHIBIOS)/os/various/shell.c \
        $(CHIBIOS)/os/various/syscalls.c \
        $(LWSRC) \
        $(RTCANSRC) \
        $(RTCANPLATFORMSRC) \
        $(UROSSRC) $(UROSLLDSRC) \
-       board.c \
        ./src/urosUser.c \
        ./src/urosMsgTypes.c \
        netstream.c

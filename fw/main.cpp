@@ -3,7 +3,6 @@
 #include "rtcan.h"
 
 #include "shell.h"
-#include "chprintf.h"
 #include "lwipthread.h"
 
 #include "lwip/opt.h"
