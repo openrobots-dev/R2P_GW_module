@@ -34,6 +34,8 @@ r2p::Subscriber<r2p::LedMsg> led_sub(sub_queue, 2);
 r2p::Node vel_node("uvelpub", false);
 r2p::Publisher<r2p::Velocity3Msg> vel_pub;
 
+extern int activity;
+
 /*===========================================================================*/
 /* PUBLISHED TOPIC FUNCTIONS                                                 */
 /*===========================================================================*/
@@ -193,6 +195,8 @@ uros_err_t sub_tpc__tiltone__velocity(UrosTcpRosStatus *tcpstp) {
 		}
 
 		vel_pub.publish(*msgp);
+
+		activity = 1;
 
 		/* Dispose the contents of the message.*/
 		clean_msg__r2p__Velocity(&msg);

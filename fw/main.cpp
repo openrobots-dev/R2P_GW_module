@@ -56,6 +56,8 @@ static r2p::RTCANTransport rtcantra(RTCAND1);
 
 RTCANConfig rtcan_config = { 1000000, 100, 60 };
 
+int activity = 0;
+
 /*===========================================================================*/
 /* Application threads.                                                      */
 /*===========================================================================*/
@@ -75,6 +77,16 @@ int main(void) {
 	 */
 	halInit();
 	chSysInit();
+
+	palClearPad(LED1_GPIO, LED1);
+	palClearPad(LED2_GPIO, LED2);
+	palClearPad(LED3_GPIO, LED3);
+	palClearPad(LED4_GPIO, LED4);
+	chThdSleepMilliseconds(500);
+	palSetPad(LED1_GPIO, LED1);
+	palSetPad(LED2_GPIO, LED2);
+	palSetPad(LED3_GPIO, LED3);
+	palSetPad(LED4_GPIO, LED4);
 
 	/*
 	 * Activates the serial driver 1 using the driver default configuration.
@@ -103,6 +115,10 @@ int main(void) {
 	 * sleeping in a loop and check the button state.
 	 */
 	while (TRUE) {
-		r2p::Thread::sleep(r2p::Time::ms(500));
+		r2p::Thread::sleep(r2p::Time::s(20));
+		if (activity == 0) {
+			NVIC_SystemReset();
+		}
+		activity = 0;
 	}
 }
