@@ -59,7 +59,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief Default ROS node name, C string.*/
-#define UROS_NODE_NAME                      "/tiltone"
+#define UROS_NODE_NAME                      "/robocom"
 
 /** @brief Node thread priorty.*/
 #define UROS_NODE_THREAD_PRIO               (LOWPRIO + 1)
@@ -83,10 +83,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief Default Master server IP address, little-endian dword.*/
-#define UROS_XMLRPC_MASTER_IP               urosIpDword(10, 0, 0, 31)
+#define UROS_XMLRPC_MASTER_IP               urosIpDword(10, 0, 0, 21)
 
 /** @brief Default Master server IP address, C string.*/
-#define UROS_XMLRPC_MASTER_IP_SZ            "10.0.0.31"
+#define UROS_XMLRPC_MASTER_IP_SZ            "10.0.0.21"
 
 /** @brief Default Master server port.*/
 #define UROS_XMLRPC_MASTER_PORT             11311
@@ -99,10 +99,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief Default XMLRPC listener IP address, little-endian dword.*/
-#define UROS_XMLRPC_LISTENER_IP             urosIpDword(10, 0, 0, 32)
+#define UROS_XMLRPC_LISTENER_IP             urosIpDword(10, 0, 0, 22)
 
 /** @brief Default XMLRPC listener IP address, C string.*/
-#define UROS_XMLRPC_LISTENER_IP_SZ          "10.0.0.32"
+#define UROS_XMLRPC_LISTENER_IP_SZ          "10.0.0.22"
 
 /** @brief Default XMLRPC listener port.*/
 #define UROS_XMLRPC_LISTENER_PORT           33333
@@ -186,7 +186,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief TCPROS Client thread pool size.*/
-#define UROS_TCPROS_CLIENT_POOLSIZE         4
+#define UROS_TCPROS_CLIENT_POOLSIZE         2
 
 /** @brief TCPROS Client thread priority.*/
 #define UROS_TCPROS_CLIENT_PRIO             (NORMALPRIO + 1)
@@ -247,7 +247,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief Default length of the reading buffer.*/
-#define UROS_RPCPARSER_RDBUFLEN             256
+#define UROS_RPCPARSER_RDBUFLEN             512
 
 /** @brief Reads the status message, instead of skipping it.*/
 #define UROS_RPCPARSER_USE_STATMSG          0
@@ -295,7 +295,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define UROS_USE_BUILTIN_MEMPOOL            0
 
 /** @brief Enables assertion evaluations.*/
-#define UROS_USE_ASSERT                     0
+#define UROS_USE_ASSERT                     1
 
 /** @brief Enables error messages.*/
 #define UROS_USE_ERROR_MSG                  0

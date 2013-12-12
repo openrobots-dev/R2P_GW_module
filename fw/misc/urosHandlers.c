@@ -22,20 +22,140 @@
 /** @addtogroup tcpros_pubtopic_funcs */
 /** @{ */
 
-/*~~~ PUBLISHED TOPIC: /tiltone/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /robocom/encoder1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/tiltone/led</tt> publisher */
+/** @name Topic <tt>/robocom/encoder1</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/tiltone/led</tt> published topic handler.
+ * @brief   TCPROS <tt>/robocom/encoder1</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__robocom__encoder1(UrosTcpRosStatus *tcpstp) {
+
+  /* Message allocation and initialization.*/
+  UROS_TPC_INIT_S(msg__r2p__EncoderStamped);
+
+  /* Published messages loop.*/
+  while (!urosTcpRosStatusCheckExit(tcpstp)) {
+    /* TODO: Generate the contents of the message.*/
+    urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
+
+    /* Send the message.*/
+    UROS_MSG_SEND_LENGTH(&msg, msg__r2p__EncoderStamped);
+    UROS_MSG_SEND_BODY(&msg, msg__r2p__EncoderStamped);
+
+    /* Dispose the contents of the message.*/
+    clean_msg__r2p__EncoderStamped(&msg);
+  }
+  tcpstp->err = UROS_OK;
+
+_finally:
+  /* Message deinitialization and deallocation.*/
+  UROS_TPC_UNINIT_S(msg__r2p__EncoderStamped);
+  return tcpstp->err;
+}
+
+/** @} */
+
+/*~~~ PUBLISHED TOPIC: /robocom/encoder2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/** @name Topic <tt>/robocom/encoder2</tt> publisher */
+/** @{ */
+
+/**
+ * @brief   TCPROS <tt>/robocom/encoder2</tt> published topic handler.
+ *
+ * @param[in,out] tcpstp
+ *          Pointer to a working @p UrosTcpRosStatus object.
+ * @return
+ *          Error code.
+ */
+uros_err_t pub_tpc__robocom__encoder2(UrosTcpRosStatus *tcpstp) {
+
+  /* Message allocation and initialization.*/
+  UROS_TPC_INIT_S(msg__r2p__EncoderStamped);
+
+  /* Published messages loop.*/
+  while (!urosTcpRosStatusCheckExit(tcpstp)) {
+    /* TODO: Generate the contents of the message.*/
+    urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
+
+    /* Send the message.*/
+    UROS_MSG_SEND_LENGTH(&msg, msg__r2p__EncoderStamped);
+    UROS_MSG_SEND_BODY(&msg, msg__r2p__EncoderStamped);
+
+    /* Dispose the contents of the message.*/
+    clean_msg__r2p__EncoderStamped(&msg);
+  }
+  tcpstp->err = UROS_OK;
+
+_finally:
+  /* Message deinitialization and deallocation.*/
+  UROS_TPC_UNINIT_S(msg__r2p__EncoderStamped);
+  return tcpstp->err;
+}
+
+/** @} */
+
+/*~~~ PUBLISHED TOPIC: /robocom/imu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/** @name Topic <tt>/robocom/imu</tt> publisher */
+/** @{ */
+
+/**
+ * @brief   TCPROS <tt>/robocom/imu</tt> published topic handler.
+ *
+ * @param[in,out] tcpstp
+ *          Pointer to a working @p UrosTcpRosStatus object.
+ * @return
+ *          Error code.
+ */
+uros_err_t pub_tpc__robocom__imu(UrosTcpRosStatus *tcpstp) {
+
+  /* Message allocation and initialization.*/
+  UROS_TPC_INIT_S(msg__r2p__ImuStamped);
+
+  /* Published messages loop.*/
+  while (!urosTcpRosStatusCheckExit(tcpstp)) {
+    /* TODO: Generate the contents of the message.*/
+    urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
+
+    /* Send the message.*/
+    UROS_MSG_SEND_LENGTH(&msg, msg__r2p__ImuStamped);
+    UROS_MSG_SEND_BODY(&msg, msg__r2p__ImuStamped);
+
+    /* Dispose the contents of the message.*/
+    clean_msg__r2p__ImuStamped(&msg);
+  }
+  tcpstp->err = UROS_OK;
+
+_finally:
+  /* Message deinitialization and deallocation.*/
+  UROS_TPC_UNINIT_S(msg__r2p__ImuStamped);
+  return tcpstp->err;
+}
+
+/** @} */
+
+/*~~~ PUBLISHED TOPIC: /robocom/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/** @name Topic <tt>/robocom/led</tt> publisher */
+/** @{ */
+
+/**
+ * @brief   TCPROS <tt>/robocom/led</tt> published topic handler.
+ *
+ * @param[in,out] tcpstp
+ *          Pointer to a working @p UrosTcpRosStatus object.
+ * @return
+ *          Error code.
+ */
+uros_err_t pub_tpc__robocom__led(UrosTcpRosStatus *tcpstp) {
 
   /* Message allocation and initialization.*/
   UROS_TPC_INIT_S(msg__r2p__Led);
@@ -62,46 +182,6 @@ _finally:
 
 /** @} */
 
-/*~~~ PUBLISHED TOPIC: /tiltone/tilt ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/** @name Topic <tt>/tiltone/tilt</tt> publisher */
-/** @{ */
-
-/**
- * @brief   TCPROS <tt>/tiltone/tilt</tt> published topic handler.
- *
- * @param[in,out] tcpstp
- *          Pointer to a working @p UrosTcpRosStatus object.
- * @return
- *          Error code.
- */
-uros_err_t pub_tpc__tiltone__tilt(UrosTcpRosStatus *tcpstp) {
-
-  /* Message allocation and initialization.*/
-  UROS_TPC_INIT_S(msg__tiltone__Tilt);
-
-  /* Published messages loop.*/
-  while (!urosTcpRosStatusCheckExit(tcpstp)) {
-    /* TODO: Generate the contents of the message.*/
-    urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
-
-    /* Send the message.*/
-    UROS_MSG_SEND_LENGTH(&msg, msg__tiltone__Tilt);
-    UROS_MSG_SEND_BODY(&msg, msg__tiltone__Tilt);
-
-    /* Dispose the contents of the message.*/
-    clean_msg__tiltone__Tilt(&msg);
-  }
-  tcpstp->err = UROS_OK;
-
-_finally:
-  /* Message deinitialization and deallocation.*/
-  UROS_TPC_UNINIT_S(msg__tiltone__Tilt);
-  return tcpstp->err;
-}
-
-/** @} */
-
 /** @} */
 
 /*===========================================================================*/
@@ -111,20 +191,20 @@ _finally:
 /** @addtogroup tcpros_subtopic_funcs */
 /** @{ */
 
-/*~~~ SUBSCRIBED TOPIC: /tiltone/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ SUBSCRIBED TOPIC: /robocom/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/tiltone/velocity</tt> subscriber */
+/** @name Topic <tt>/robocom/velocity</tt> subscriber */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/tiltone/velocity</tt> subscribed topic handler.
+ * @brief   TCPROS <tt>/robocom/velocity</tt> subscribed topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t sub_tpc__tiltone__velocity(UrosTcpRosStatus *tcpstp) {
+uros_err_t sub_tpc__robocom__velocity(UrosTcpRosStatus *tcpstp) {
 
   /* Message allocation and initialization.*/
   UROS_TPC_INIT_S(msg__r2p__Velocity);
@@ -187,19 +267,35 @@ _finally:
  */
 void urosHandlersPublishTopics(void) {
 
-  /* /tiltone/led */
+  /* /robocom/encoder1 */
   urosNodePublishTopicSZ(
-    "/tiltone/led",
-    "r2p/Led",
-    (uros_proc_f)pub_tpc__tiltone__led,
+    "/robocom/encoder1",
+    "r2p/EncoderStamped",
+    (uros_proc_f)pub_tpc__robocom__encoder1,
     uros_nulltopicflags
   );
 
-  /* /tiltone/tilt */
+  /* /robocom/encoder2 */
   urosNodePublishTopicSZ(
-    "/tiltone/tilt",
-    "tiltone/Tilt",
-    (uros_proc_f)pub_tpc__tiltone__tilt,
+    "/robocom/encoder2",
+    "r2p/EncoderStamped",
+    (uros_proc_f)pub_tpc__robocom__encoder2,
+    uros_nulltopicflags
+  );
+
+  /* /robocom/imu */
+  urosNodePublishTopicSZ(
+    "/robocom/imu",
+    "r2p/ImuStamped",
+    (uros_proc_f)pub_tpc__robocom__imu,
+    uros_nulltopicflags
+  );
+
+  /* /robocom/led */
+  urosNodePublishTopicSZ(
+    "/robocom/led",
+    "r2p/Led",
+    (uros_proc_f)pub_tpc__robocom__led,
     uros_nulltopicflags
   );
 }
@@ -210,14 +306,24 @@ void urosHandlersPublishTopics(void) {
  */
 void urosHandlersUnpublishTopics(void) {
 
-  /* /tiltone/led */
+  /* /robocom/encoder1 */
   urosNodeUnpublishTopicSZ(
-    "/tiltone/led"
+    "/robocom/encoder1"
   );
 
-  /* /tiltone/tilt */
+  /* /robocom/encoder2 */
   urosNodeUnpublishTopicSZ(
-    "/tiltone/tilt"
+    "/robocom/encoder2"
+  );
+
+  /* /robocom/imu */
+  urosNodeUnpublishTopicSZ(
+    "/robocom/imu"
+  );
+
+  /* /robocom/led */
+  urosNodeUnpublishTopicSZ(
+    "/robocom/led"
   );
 }
 
@@ -227,11 +333,11 @@ void urosHandlersUnpublishTopics(void) {
  */
 void urosHandlersSubscribeTopics(void) {
 
-  /* /tiltone/velocity */
+  /* /robocom/velocity */
   urosNodeSubscribeTopicSZ(
-    "/tiltone/velocity",
+    "/robocom/velocity",
     "r2p/Velocity",
-    (uros_proc_f)sub_tpc__tiltone__velocity,
+    (uros_proc_f)sub_tpc__robocom__velocity,
     uros_nulltopicflags
   );
 }
@@ -242,9 +348,9 @@ void urosHandlersSubscribeTopics(void) {
  */
 void urosHandlersUnsubscribeTopics(void) {
 
-  /* /tiltone/velocity */
+  /* /robocom/velocity */
   urosNodeUnsubscribeTopicSZ(
-    "/tiltone/velocity"
+    "/robocom/velocity"
   );
 }
 

@@ -2,14 +2,14 @@
 #include "hal.h"
 #include "rtcan.h"
 
-#include "shell.h"
-#include "lwipthread.h"
+//#include "shell.h"
+//#include "netstream.h"
 
-#include "lwip/opt.h"
-#include "lwip/arch.h"
-#include "lwip/api.h"
-
-#include "netstream.h"
+#include <urosconf.h>
+#include <urosBase.h>
+#include <urosUser.h>
+#include <urosNode.h>
+#include <lwipthread.h>
 
 #include <r2p/common.hpp>
 #include <r2p/Middleware.hpp>
@@ -23,10 +23,6 @@
 #include "r2p/transport/RTCANTransport.hpp"
 
 #include "r2p/node/led.hpp"
-
-#include <urosBase.h>
-#include <urosUser.h>
-#include <urosNode.h>
 
 extern "C" {
 void *__dso_handle;
@@ -66,7 +62,6 @@ int activity = 0;
  * Application entry point.
  */
 int main(void) {
-	Thread *shelltp = NULL;
 
 	/*
 	 * System initializations.
@@ -105,10 +100,12 @@ int main(void) {
 
 	chThdSleepMilliseconds(100);
 
+	int led = 1;
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO + 1, r2p::ledpub_node, &led);
 	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO + 1, r2p::ledsub_node, NULL);
 
-	urosInit();
-	urosNodeCreateThread();
+//	urosInit();
+//	urosNodeCreateThread();
 
 	/*
 	 * Normal main() thread activity, in this demo it does nothing except
@@ -116,6 +113,7 @@ int main(void) {
 	 */
 	while (TRUE) {
 		r2p::Thread::sleep(r2p::Time::s(20));
+		continue;
 		if (activity == 0) {
 			NVIC_SystemReset();
 		}

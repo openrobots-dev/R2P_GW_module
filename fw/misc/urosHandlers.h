@@ -22,21 +22,29 @@ extern "C" {
 /* PUBLISHED TOPIC PROTOTYPES                                                */
 /*===========================================================================*/
 
-/*~~~ PUBLISHED TOPIC: /tiltone/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /robocom/encoder1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp);
+uros_err_t pub_tpc__robocom__encoder1(UrosTcpRosStatus *tcpstp);
 
-/*~~~ PUBLISHED TOPIC: /tiltone/tilt ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /robocom/encoder2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t pub_tpc__tiltone__tilt(UrosTcpRosStatus *tcpstp);
+uros_err_t pub_tpc__robocom__encoder2(UrosTcpRosStatus *tcpstp);
+
+/*~~~ PUBLISHED TOPIC: /robocom/imu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+uros_err_t pub_tpc__robocom__imu(UrosTcpRosStatus *tcpstp);
+
+/*~~~ PUBLISHED TOPIC: /robocom/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+uros_err_t pub_tpc__robocom__led(UrosTcpRosStatus *tcpstp);
 
 /*===========================================================================*/
 /* SUBSCRIBED TOPIC PROTOTYPES                                               */
 /*===========================================================================*/
 
-/*~~~ SUBSCRIBED TOPIC: /tiltone/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ SUBSCRIBED TOPIC: /robocom/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t sub_tpc__tiltone__velocity(UrosTcpRosStatus *tcpstp);
+uros_err_t sub_tpc__robocom__velocity(UrosTcpRosStatus *tcpstp);
 
 /*===========================================================================*/
 /* PUBLISHED SERVICE PROTOTYPES                                              */
