@@ -19,7 +19,6 @@
 #include <r2p/Subscriber.hpp>
 #include <r2p/Mutex.hpp>
 #include <r2p/NamingTraits.hpp>
-#include "r2p/transport/DebugTransport.hpp"
 #include "r2p/transport/RTCANTransport.hpp"
 
 #include "r2p/node/led.hpp"
@@ -96,13 +95,11 @@ int main(void) {
 	palSetPad(GPIOC, GPIOC_ETH_NOT_PWRDN);
 
 	/* Creates the LWIP thread (it changes priority internally).*/
-	chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE), NORMALPRIO + 5, lwip_thread, NULL);
+//	chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE), NORMALPRIO + 5, lwip_thread, NULL);
 
 	chThdSleepMilliseconds(100);
 
-	int led = 1;
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO + 1, r2p::ledpub_node, &led);
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO + 1, r2p::ledsub_node, NULL);
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledsub_node, NULL);
 
 //	urosInit();
 //	urosNodeCreateThread();
