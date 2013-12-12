@@ -28,8 +28,7 @@
 /* GLOBAL VARIABLES                                                          */
 /*===========================================================================*/
 r2p::Node sub_node("uledpub", false);
-r2p::LedMsg sub_msgbuf[2], *sub_queue[2];
-r2p::Subscriber<r2p::LedMsg> led_sub(sub_queue, 2);
+r2p::Subscriber<r2p::LedMsg, 2> led_sub;
 
 r2p::Node vel_node("uvelpub", false);
 r2p::Publisher<r2p::Velocity3Msg> vel_pub;
@@ -61,7 +60,7 @@ uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp) {
 	static bool first_time = true;
 
 	if (first_time) {
-		sub_node.subscribe(led_sub, "leds", sub_msgbuf);
+		sub_node.subscribe(led_sub, "leds");
 		first_time = false;
 	}
 
