@@ -32,13 +32,13 @@ r2p::Node sub_node("uled", false);
 r2p::Subscriber<r2p::LedMsg, 2> led_sub;
 
 r2p::Node enc1_node("uenc1", false);
-r2p::Subscriber<r2p::tQEIMsg, 5> enc1_sub;
+r2p::Subscriber<r2p::tQEIMsg, 2> enc1_sub;
 
 r2p::Node enc2_node("uenc2", false);
-r2p::Subscriber<r2p::tQEIMsg, 5> enc2_sub;
+r2p::Subscriber<r2p::tQEIMsg, 2> enc2_sub;
 
 r2p::Node imu_node("uimu", false);
-r2p::Subscriber<r2p::tIMURaw9, 5> imu_sub;
+r2p::Subscriber<r2p::tIMURaw9, 2> imu_sub;
 
 r2p::Node vel_node("uvel", false);
 r2p::Publisher<r2p::Speed2Msg> vel_pub;

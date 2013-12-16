@@ -202,7 +202,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief TCPROS Server thread pool size.*/
-#define UROS_TCPROS_SERVER_POOLSIZE         8
+#define UROS_TCPROS_SERVER_POOLSIZE         6
 
 /** @brief TCPROS Server thread priority.*/
 #define UROS_TCPROS_SERVER_PRIO             (NORMALPRIO + 2)
@@ -295,7 +295,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define UROS_USE_BUILTIN_MEMPOOL            0
 
 /** @brief Enables assertion evaluations.*/
-#define UROS_USE_ASSERT                     1
+#define UROS_USE_ASSERT                     0
 
 /** @brief Enables error messages.*/
 #define UROS_USE_ERROR_MSG                  0

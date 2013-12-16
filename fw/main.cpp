@@ -95,14 +95,14 @@ int main(void) {
 	palSetPad(GPIOC, GPIOC_ETH_NOT_PWRDN);
 
 	/* Creates the LWIP thread (it changes priority internally).*/
-//	chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE), NORMALPRIO + 5, lwip_thread, NULL);
+	chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE), NORMALPRIO + 5, lwip_thread, NULL);
 
 	chThdSleepMilliseconds(100);
 
 	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledsub_node, NULL);
 
-//	urosInit();
-//	urosNodeCreateThread();
+	urosInit();
+	urosNodeCreateThread();
 
 	/*
 	 * Normal main() thread activity, in this demo it does nothing except

@@ -45,12 +45,12 @@
 
 /** @brief IP Address. */
 #if !defined(LWIP_IPADDR) || defined(__DOXYGEN__)
-#define LWIP_IPADDR(p)                  IP4_ADDR(p, 10, 0, 0, 32)
+#define LWIP_IPADDR(p)                  IP4_ADDR(p, 10, 0, 0, 22)
 #endif
 
 /** @brief IP Gateway. */
 #if !defined(LWIP_GATEWAY) || defined(__DOXYGEN__)
-#define LWIP_GATEWAY(p)                 IP4_ADDR(p, 10, 0, 0, 31)
+#define LWIP_GATEWAY(p)                 IP4_ADDR(p, 10, 0, 0, 21)
 #endif
 
 /** @brief IP netmask. */
