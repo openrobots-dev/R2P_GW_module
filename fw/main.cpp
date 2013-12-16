@@ -28,6 +28,15 @@
 #include <urosUser.h>
 #include <urosNode.h>
 
+#ifndef R2P_MODULE_NAME
+#define R2P_MODULE_NAME "GW"
+#endif
+
+#if R2P_USE_BRIDGE_MODE
+enum { PUBSUB_BUFFER_LENGTH = 16 };
+r2p::Middleware::PubSubStep pubsub_buf[PUBSUB_BUFFER_LENGTH];
+#endif
+
 extern "C" {
 void *__dso_handle;
 void __cxa_pure_virtual() {
@@ -49,7 +58,12 @@ int _getpid() {
 
 static WORKING_AREA(wa_info, 1024);
 
-r2p::Middleware r2p::Middleware::instance("GW_0", "BOOT_GW_0");
+r2p::Middleware r2p::Middleware::instance(
+  R2P_MODULE_NAME, "BOOT_"R2P_MODULE_NAME
+#if R2P_USE_BRIDGE_MODE
+, pubsub_buf, PUBSUB_BUFFER_LENGTH
+#endif
+);
 
 // RTCAN transport
 static r2p::RTCANTransport rtcantra(RTCAND1);
@@ -105,7 +119,7 @@ int main(void) {
 
 	chThdSleepMilliseconds(100);
 
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO + 1, r2p::ledsub_node, NULL);
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO, r2p::ledsub_node, NULL);
 
 	urosInit();
 	urosNodeCreateThread();
