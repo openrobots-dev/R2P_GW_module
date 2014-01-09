@@ -22,29 +22,33 @@ extern "C" {
 /* PUBLISHED TOPIC PROTOTYPES                                                */
 /*===========================================================================*/
 
-/*~~~ PUBLISHED TOPIC: /robocom/encoder1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /triskar/encoder1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t pub_tpc__robocom__encoder1(UrosTcpRosStatus *tcpstp);
+uros_err_t pub_tpc__triskar__encoder1(UrosTcpRosStatus *tcpstp);
 
-/*~~~ PUBLISHED TOPIC: /robocom/encoder2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /triskar/encoder2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t pub_tpc__robocom__encoder2(UrosTcpRosStatus *tcpstp);
+uros_err_t pub_tpc__triskar__encoder2(UrosTcpRosStatus *tcpstp);
 
-/*~~~ PUBLISHED TOPIC: /robocom/imu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /triskar/encoder3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t pub_tpc__robocom__imu(UrosTcpRosStatus *tcpstp);
+uros_err_t pub_tpc__triskar__encoder3(UrosTcpRosStatus *tcpstp);
 
-/*~~~ PUBLISHED TOPIC: /robocom/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /triskar/imu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t pub_tpc__robocom__led(UrosTcpRosStatus *tcpstp);
+uros_err_t pub_tpc__triskar__imu(UrosTcpRosStatus *tcpstp);
+
+/*~~~ PUBLISHED TOPIC: /triskar/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+uros_err_t pub_tpc__triskar__led(UrosTcpRosStatus *tcpstp);
 
 /*===========================================================================*/
 /* SUBSCRIBED TOPIC PROTOTYPES                                               */
 /*===========================================================================*/
 
-/*~~~ SUBSCRIBED TOPIC: /robocom/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ SUBSCRIBED TOPIC: /triskar/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t sub_tpc__robocom__velocity(UrosTcpRosStatus *tcpstp);
+uros_err_t sub_tpc__triskar__velocity(UrosTcpRosStatus *tcpstp);
 
 /*===========================================================================*/
 /* PUBLISHED SERVICE PROTOTYPES                                              */

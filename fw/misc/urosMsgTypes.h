@@ -25,16 +25,6 @@ extern "C" {
 /** @addtogroup tcpros_msg_types */
 /** @{ */
 
-/*~~~ MESSAGE: r2p/Encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
- * @brief   TCPROS <tt>r2p/Encoder</tt> message descriptor.
- * @details MD5 sum: <tt>b808a22d9acab1efdc64ddcf9bf82dfc</tt>.
- */
-struct msg__r2p__Encoder {
-  float delta;
-};
-
 /*~~~ MESSAGE: r2p/Vector3_32 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
@@ -59,15 +49,14 @@ struct msg__std_msgs__Header {
   UrosString    frame_id;
 };
 
-/*~~~ MESSAGE: r2p/EncoderStamped ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ MESSAGE: r2p/Encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
- * @brief   TCPROS <tt>r2p/EncoderStamped</tt> message descriptor.
- * @details MD5 sum: <tt>6d28db09933fa8a280e44044a6edf9c1</tt>.
+ * @brief   TCPROS <tt>r2p/Encoder</tt> message descriptor.
+ * @details MD5 sum: <tt>b808a22d9acab1efdc64ddcf9bf82dfc</tt>.
  */
-struct msg__r2p__EncoderStamped {
-  struct msg__std_msgs__Header  header;
-  struct msg__r2p__Encoder      encoder;
+struct msg__r2p__Encoder {
+  float delta;
 };
 
 /*~~~ MESSAGE: r2p/Imu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -80,6 +69,17 @@ struct msg__r2p__Imu {
   struct msg__r2p__Vector3_32   angular_velocity;
   struct msg__r2p__Vector3_32   linear_acceleration;
   struct msg__r2p__Vector3_32   magnetic_field;
+};
+
+/*~~~ MESSAGE: r2p/EncoderStamped ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+ * @brief   TCPROS <tt>r2p/EncoderStamped</tt> message descriptor.
+ * @details MD5 sum: <tt>6d28db09933fa8a280e44044a6edf9c1</tt>.
+ */
+struct msg__r2p__EncoderStamped {
+  struct msg__std_msgs__Header  header;
+  struct msg__r2p__Encoder      encoder;
 };
 
 /*~~~ MESSAGE: r2p/ImuStamped ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -155,26 +155,6 @@ struct msg__r2p__Velocity {
 /* MESSAGE PROTOTYPES                                                        */
 /*===========================================================================*/
 
-/*~~~ MESSAGE: r2p/Encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-size_t length_msg__r2p__Encoder(
-  struct msg__r2p__Encoder *objp
-);
-void init_msg__r2p__Encoder(
-  struct msg__r2p__Encoder *objp
-);
-void clean_msg__r2p__Encoder(
-  struct msg__r2p__Encoder *objp
-);
-uros_err_t recv_msg__r2p__Encoder(
-  UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__Encoder *objp
-);
-uros_err_t send_msg__r2p__Encoder(
-  UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__Encoder *objp
-);
-
 /*~~~ MESSAGE: r2p/Vector3_32 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 size_t length_msg__r2p__Vector3_32(
@@ -215,24 +195,24 @@ uros_err_t send_msg__std_msgs__Header(
   struct msg__std_msgs__Header *objp
 );
 
-/*~~~ MESSAGE: r2p/EncoderStamped ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ MESSAGE: r2p/Encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-size_t length_msg__r2p__EncoderStamped(
-  struct msg__r2p__EncoderStamped *objp
+size_t length_msg__r2p__Encoder(
+  struct msg__r2p__Encoder *objp
 );
-void init_msg__r2p__EncoderStamped(
-  struct msg__r2p__EncoderStamped *objp
+void init_msg__r2p__Encoder(
+  struct msg__r2p__Encoder *objp
 );
-void clean_msg__r2p__EncoderStamped(
-  struct msg__r2p__EncoderStamped *objp
+void clean_msg__r2p__Encoder(
+  struct msg__r2p__Encoder *objp
 );
-uros_err_t recv_msg__r2p__EncoderStamped(
+uros_err_t recv_msg__r2p__Encoder(
   UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__EncoderStamped *objp
+  struct msg__r2p__Encoder *objp
 );
-uros_err_t send_msg__r2p__EncoderStamped(
+uros_err_t send_msg__r2p__Encoder(
   UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__EncoderStamped *objp
+  struct msg__r2p__Encoder *objp
 );
 
 /*~~~ MESSAGE: r2p/Imu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -253,6 +233,26 @@ uros_err_t recv_msg__r2p__Imu(
 uros_err_t send_msg__r2p__Imu(
   UrosTcpRosStatus *tcpstp,
   struct msg__r2p__Imu *objp
+);
+
+/*~~~ MESSAGE: r2p/EncoderStamped ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+size_t length_msg__r2p__EncoderStamped(
+  struct msg__r2p__EncoderStamped *objp
+);
+void init_msg__r2p__EncoderStamped(
+  struct msg__r2p__EncoderStamped *objp
+);
+void clean_msg__r2p__EncoderStamped(
+  struct msg__r2p__EncoderStamped *objp
+);
+uros_err_t recv_msg__r2p__EncoderStamped(
+  UrosTcpRosStatus *tcpstp,
+  struct msg__r2p__EncoderStamped *objp
+);
+uros_err_t send_msg__r2p__EncoderStamped(
+  UrosTcpRosStatus *tcpstp,
+  struct msg__r2p__EncoderStamped *objp
 );
 
 /*~~~ MESSAGE: r2p/ImuStamped ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

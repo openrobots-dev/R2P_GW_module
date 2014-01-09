@@ -22,20 +22,20 @@
 /** @addtogroup tcpros_pubtopic_funcs */
 /** @{ */
 
-/*~~~ PUBLISHED TOPIC: /robocom/encoder1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /triskar/encoder1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/robocom/encoder1</tt> publisher */
+/** @name Topic <tt>/triskar/encoder1</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/robocom/encoder1</tt> published topic handler.
+ * @brief   TCPROS <tt>/triskar/encoder1</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__robocom__encoder1(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__triskar__encoder1(UrosTcpRosStatus *tcpstp) {
 
   /* Message allocation and initialization.*/
   UROS_TPC_INIT_S(msg__r2p__EncoderStamped);
@@ -62,20 +62,20 @@ _finally:
 
 /** @} */
 
-/*~~~ PUBLISHED TOPIC: /robocom/encoder2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /triskar/encoder2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/robocom/encoder2</tt> publisher */
+/** @name Topic <tt>/triskar/encoder2</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/robocom/encoder2</tt> published topic handler.
+ * @brief   TCPROS <tt>/triskar/encoder2</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__robocom__encoder2(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__triskar__encoder2(UrosTcpRosStatus *tcpstp) {
 
   /* Message allocation and initialization.*/
   UROS_TPC_INIT_S(msg__r2p__EncoderStamped);
@@ -102,20 +102,60 @@ _finally:
 
 /** @} */
 
-/*~~~ PUBLISHED TOPIC: /robocom/imu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /triskar/encoder3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/robocom/imu</tt> publisher */
+/** @name Topic <tt>/triskar/encoder3</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/robocom/imu</tt> published topic handler.
+ * @brief   TCPROS <tt>/triskar/encoder3</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__robocom__imu(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__triskar__encoder3(UrosTcpRosStatus *tcpstp) {
+
+  /* Message allocation and initialization.*/
+  UROS_TPC_INIT_S(msg__r2p__EncoderStamped);
+
+  /* Published messages loop.*/
+  while (!urosTcpRosStatusCheckExit(tcpstp)) {
+    /* TODO: Generate the contents of the message.*/
+    urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
+
+    /* Send the message.*/
+    UROS_MSG_SEND_LENGTH(&msg, msg__r2p__EncoderStamped);
+    UROS_MSG_SEND_BODY(&msg, msg__r2p__EncoderStamped);
+
+    /* Dispose the contents of the message.*/
+    clean_msg__r2p__EncoderStamped(&msg);
+  }
+  tcpstp->err = UROS_OK;
+
+_finally:
+  /* Message deinitialization and deallocation.*/
+  UROS_TPC_UNINIT_S(msg__r2p__EncoderStamped);
+  return tcpstp->err;
+}
+
+/** @} */
+
+/*~~~ PUBLISHED TOPIC: /triskar/imu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/** @name Topic <tt>/triskar/imu</tt> publisher */
+/** @{ */
+
+/**
+ * @brief   TCPROS <tt>/triskar/imu</tt> published topic handler.
+ *
+ * @param[in,out] tcpstp
+ *          Pointer to a working @p UrosTcpRosStatus object.
+ * @return
+ *          Error code.
+ */
+uros_err_t pub_tpc__triskar__imu(UrosTcpRosStatus *tcpstp) {
 
   /* Message allocation and initialization.*/
   UROS_TPC_INIT_S(msg__r2p__ImuStamped);
@@ -142,20 +182,20 @@ _finally:
 
 /** @} */
 
-/*~~~ PUBLISHED TOPIC: /robocom/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /triskar/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/robocom/led</tt> publisher */
+/** @name Topic <tt>/triskar/led</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/robocom/led</tt> published topic handler.
+ * @brief   TCPROS <tt>/triskar/led</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__robocom__led(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__triskar__led(UrosTcpRosStatus *tcpstp) {
 
   /* Message allocation and initialization.*/
   UROS_TPC_INIT_S(msg__r2p__Led);
@@ -191,20 +231,20 @@ _finally:
 /** @addtogroup tcpros_subtopic_funcs */
 /** @{ */
 
-/*~~~ SUBSCRIBED TOPIC: /robocom/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ SUBSCRIBED TOPIC: /triskar/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/robocom/velocity</tt> subscriber */
+/** @name Topic <tt>/triskar/velocity</tt> subscriber */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/robocom/velocity</tt> subscribed topic handler.
+ * @brief   TCPROS <tt>/triskar/velocity</tt> subscribed topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t sub_tpc__robocom__velocity(UrosTcpRosStatus *tcpstp) {
+uros_err_t sub_tpc__triskar__velocity(UrosTcpRosStatus *tcpstp) {
 
   /* Message allocation and initialization.*/
   UROS_TPC_INIT_S(msg__r2p__Velocity);
@@ -267,35 +307,43 @@ _finally:
  */
 void urosHandlersPublishTopics(void) {
 
-  /* /robocom/encoder1 */
+  /* /triskar/encoder1 */
   urosNodePublishTopicSZ(
-    "/robocom/encoder1",
+    "/triskar/encoder1",
     "r2p/EncoderStamped",
-    (uros_proc_f)pub_tpc__robocom__encoder1,
+    (uros_proc_f)pub_tpc__triskar__encoder1,
     uros_nulltopicflags
   );
 
-  /* /robocom/encoder2 */
+  /* /triskar/encoder2 */
   urosNodePublishTopicSZ(
-    "/robocom/encoder2",
+    "/triskar/encoder2",
     "r2p/EncoderStamped",
-    (uros_proc_f)pub_tpc__robocom__encoder2,
+    (uros_proc_f)pub_tpc__triskar__encoder2,
     uros_nulltopicflags
   );
 
-  /* /robocom/imu */
+  /* /triskar/encoder3 */
   urosNodePublishTopicSZ(
-    "/robocom/imu",
+    "/triskar/encoder3",
+    "r2p/EncoderStamped",
+    (uros_proc_f)pub_tpc__triskar__encoder3,
+    uros_nulltopicflags
+  );
+
+  /* /triskar/imu */
+  urosNodePublishTopicSZ(
+    "/triskar/imu",
     "r2p/ImuStamped",
-    (uros_proc_f)pub_tpc__robocom__imu,
+    (uros_proc_f)pub_tpc__triskar__imu,
     uros_nulltopicflags
   );
 
-  /* /robocom/led */
+  /* /triskar/led */
   urosNodePublishTopicSZ(
-    "/robocom/led",
+    "/triskar/led",
     "r2p/Led",
-    (uros_proc_f)pub_tpc__robocom__led,
+    (uros_proc_f)pub_tpc__triskar__led,
     uros_nulltopicflags
   );
 }
@@ -306,24 +354,29 @@ void urosHandlersPublishTopics(void) {
  */
 void urosHandlersUnpublishTopics(void) {
 
-  /* /robocom/encoder1 */
+  /* /triskar/encoder1 */
   urosNodeUnpublishTopicSZ(
-    "/robocom/encoder1"
+    "/triskar/encoder1"
   );
 
-  /* /robocom/encoder2 */
+  /* /triskar/encoder2 */
   urosNodeUnpublishTopicSZ(
-    "/robocom/encoder2"
+    "/triskar/encoder2"
   );
 
-  /* /robocom/imu */
+  /* /triskar/encoder3 */
   urosNodeUnpublishTopicSZ(
-    "/robocom/imu"
+    "/triskar/encoder3"
   );
 
-  /* /robocom/led */
+  /* /triskar/imu */
   urosNodeUnpublishTopicSZ(
-    "/robocom/led"
+    "/triskar/imu"
+  );
+
+  /* /triskar/led */
+  urosNodeUnpublishTopicSZ(
+    "/triskar/led"
   );
 }
 
@@ -333,11 +386,11 @@ void urosHandlersUnpublishTopics(void) {
  */
 void urosHandlersSubscribeTopics(void) {
 
-  /* /robocom/velocity */
+  /* /triskar/velocity */
   urosNodeSubscribeTopicSZ(
-    "/robocom/velocity",
+    "/triskar/velocity",
     "r2p/Velocity",
-    (uros_proc_f)sub_tpc__robocom__velocity,
+    (uros_proc_f)sub_tpc__triskar__velocity,
     uros_nulltopicflags
   );
 }
@@ -348,9 +401,9 @@ void urosHandlersSubscribeTopics(void) {
  */
 void urosHandlersUnsubscribeTopics(void) {
 
-  /* /robocom/velocity */
+  /* /triskar/velocity */
   urosNodeUnsubscribeTopicSZ(
-    "/robocom/velocity"
+    "/triskar/velocity"
   );
 }
 

@@ -40,119 +40,6 @@
 /** @addtogroup tcpros_msg_funcs */
 /** @{ */
 
-/*~~~ MESSAGE: r2p/Encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/** @name Message <tt>r2p/Encoder</tt> */
-/** @{ */
-
-/**
- * @brief   Content length of a TCPROS <tt>r2p/Encoder</tt> message.
- *
- * @param[in,out] objp
- *          Pointer to an initialized <code>struct msg__r2p__Encoder</code> object.
- * @return
- *          Length of the TCPROS message contents, in bytes.
- */
-size_t length_msg__r2p__Encoder(
-  struct msg__r2p__Encoder *objp
-) {
-  size_t length = 0;
-
-  urosAssert(objp != NULL);
-
-  length += sizeof(float);
-
-  (void)objp;
-  return length;
-}
-
-/**
- * @brief   Initializes a TCPROS <tt>r2p/Encoder</tt> message.
- *
- * @param[in,out] objp
- *          Pointer to an allocated <code>struct msg__r2p__Encoder</code> object.
- * @return
- *          Error code.
- */
-void init_msg__r2p__Encoder(
-  struct msg__r2p__Encoder *objp
-) {
-  urosAssert(objp != NULL);
-
-  /* Nothing to initialize.*/
-  (void)objp;
-}
-
-/**
- * @brief   Cleans a TCPROS <tt>r2p/Encoder</tt> message.
- *
- * @param[in,out] objp
- *          Pointer to an initialized <code>struct msg__r2p__Encoder</code> object, or @p NULL.
- * @return
- *          Error code.
- */
-void clean_msg__r2p__Encoder(
-  struct msg__r2p__Encoder *objp
-) {
-  /* Nothing to clean.*/
-  (void)objp;
-}
-
-/**
- * @brief   Receives a TCPROS <tt>r2p/Encoder</tt> message.
- *
- * @param[in,out] tcpstp
- *          Pointer to a working @p UrosTcpRosStatus object.
- * @param[out] objp
- *          Pointer to an initialized <code>struct msg__r2p__Encoder</code> object.
- * @return
- *          Error code.
- */
-uros_err_t recv_msg__r2p__Encoder(
-  UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__Encoder *objp
-) {
-  urosAssert(tcpstp != NULL);
-  urosAssert(urosConnIsValid(tcpstp->csp));
-  urosAssert(objp != NULL);
-#define _CHKOK { if (tcpstp->err != UROS_OK) { goto _error; } }
-
-  urosTcpRosRecvRaw(tcpstp, objp->delta); _CHKOK
-
-  return tcpstp->err = UROS_OK;
-_error:
-  clean_msg__r2p__Encoder(objp);
-  return tcpstp->err;
-#undef _CHKOK
-}
-
-/**
- * @brief   Sends a TCPROS <tt>r2p/Encoder</tt> message.
- *
- * @param[in,out] tcpstp
- *          Pointer to a working @p UrosTcpRosStatus object.
- * @param[in] objp
- *          Pointer to an initialized <code>struct msg__r2p__Encoder</code> object.
- * @return
- *          Error code.
- */
-uros_err_t send_msg__r2p__Encoder(
-  UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__Encoder *objp
-) {
-  urosAssert(tcpstp != NULL);
-  urosAssert(urosConnIsValid(tcpstp->csp));
-  urosAssert(objp != NULL);
-#define _CHKOK { if (tcpstp->err != UROS_OK) { return tcpstp->err; } }
-
-  urosTcpRosSendRaw(tcpstp, objp->delta); _CHKOK
-
-  return tcpstp->err = UROS_OK;
-#undef _CHKOK
-}
-
-/** @} */
-
 /*~~~ MESSAGE: r2p/Vector3_32 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /** @name Message <tt>r2p/Vector3_32</tt> */
@@ -390,116 +277,112 @@ uros_err_t send_msg__std_msgs__Header(
 
 /** @} */
 
-/*~~~ MESSAGE: r2p/EncoderStamped ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ MESSAGE: r2p/Encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Message <tt>r2p/EncoderStamped</tt> */
+/** @name Message <tt>r2p/Encoder</tt> */
 /** @{ */
 
 /**
- * @brief   Content length of a TCPROS <tt>r2p/EncoderStamped</tt> message.
+ * @brief   Content length of a TCPROS <tt>r2p/Encoder</tt> message.
  *
  * @param[in,out] objp
- *          Pointer to an initialized <code>struct msg__r2p__EncoderStamped</code> object.
+ *          Pointer to an initialized <code>struct msg__r2p__Encoder</code> object.
  * @return
  *          Length of the TCPROS message contents, in bytes.
  */
-size_t length_msg__r2p__EncoderStamped(
-  struct msg__r2p__EncoderStamped *objp
+size_t length_msg__r2p__Encoder(
+  struct msg__r2p__Encoder *objp
 ) {
   size_t length = 0;
 
   urosAssert(objp != NULL);
 
-  length += length_msg__std_msgs__Header(&objp->header);
-  length += length_msg__r2p__Encoder(&objp->encoder);
+  length += sizeof(float);
 
+  (void)objp;
   return length;
 }
 
 /**
- * @brief   Initializes a TCPROS <tt>r2p/EncoderStamped</tt> message.
+ * @brief   Initializes a TCPROS <tt>r2p/Encoder</tt> message.
  *
  * @param[in,out] objp
- *          Pointer to an allocated <code>struct msg__r2p__EncoderStamped</code> object.
+ *          Pointer to an allocated <code>struct msg__r2p__Encoder</code> object.
  * @return
  *          Error code.
  */
-void init_msg__r2p__EncoderStamped(
-  struct msg__r2p__EncoderStamped *objp
+void init_msg__r2p__Encoder(
+  struct msg__r2p__Encoder *objp
 ) {
   urosAssert(objp != NULL);
 
-  init_msg__std_msgs__Header(&objp->header);
-  init_msg__r2p__Encoder(&objp->encoder);
+  /* Nothing to initialize.*/
+  (void)objp;
 }
 
 /**
- * @brief   Cleans a TCPROS <tt>r2p/EncoderStamped</tt> message.
+ * @brief   Cleans a TCPROS <tt>r2p/Encoder</tt> message.
  *
  * @param[in,out] objp
- *          Pointer to an initialized <code>struct msg__r2p__EncoderStamped</code> object, or @p NULL.
+ *          Pointer to an initialized <code>struct msg__r2p__Encoder</code> object, or @p NULL.
  * @return
  *          Error code.
  */
-void clean_msg__r2p__EncoderStamped(
-  struct msg__r2p__EncoderStamped *objp
+void clean_msg__r2p__Encoder(
+  struct msg__r2p__Encoder *objp
 ) {
-  if (objp == NULL) { return; }
-
-  clean_msg__std_msgs__Header(&objp->header);
-  clean_msg__r2p__Encoder(&objp->encoder);
+  /* Nothing to clean.*/
+  (void)objp;
 }
 
 /**
- * @brief   Receives a TCPROS <tt>r2p/EncoderStamped</tt> message.
+ * @brief   Receives a TCPROS <tt>r2p/Encoder</tt> message.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @param[out] objp
- *          Pointer to an initialized <code>struct msg__r2p__EncoderStamped</code> object.
+ *          Pointer to an initialized <code>struct msg__r2p__Encoder</code> object.
  * @return
  *          Error code.
  */
-uros_err_t recv_msg__r2p__EncoderStamped(
+uros_err_t recv_msg__r2p__Encoder(
   UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__EncoderStamped *objp
+  struct msg__r2p__Encoder *objp
 ) {
   urosAssert(tcpstp != NULL);
   urosAssert(urosConnIsValid(tcpstp->csp));
   urosAssert(objp != NULL);
 #define _CHKOK { if (tcpstp->err != UROS_OK) { goto _error; } }
 
-  recv_msg__std_msgs__Header(tcpstp, &objp->header); _CHKOK
-  recv_msg__r2p__Encoder(tcpstp, &objp->encoder); _CHKOK
+  urosTcpRosRecvRaw(tcpstp, objp->delta); _CHKOK
 
   return tcpstp->err = UROS_OK;
 _error:
-  clean_msg__r2p__EncoderStamped(objp);
+  clean_msg__r2p__Encoder(objp);
   return tcpstp->err;
 #undef _CHKOK
 }
 
 /**
- * @brief   Sends a TCPROS <tt>r2p/EncoderStamped</tt> message.
+ * @brief   Sends a TCPROS <tt>r2p/Encoder</tt> message.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @param[in] objp
- *          Pointer to an initialized <code>struct msg__r2p__EncoderStamped</code> object.
+ *          Pointer to an initialized <code>struct msg__r2p__Encoder</code> object.
  * @return
  *          Error code.
  */
-uros_err_t send_msg__r2p__EncoderStamped(
+uros_err_t send_msg__r2p__Encoder(
   UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__EncoderStamped *objp
+  struct msg__r2p__Encoder *objp
 ) {
   urosAssert(tcpstp != NULL);
   urosAssert(urosConnIsValid(tcpstp->csp));
   urosAssert(objp != NULL);
 #define _CHKOK { if (tcpstp->err != UROS_OK) { return tcpstp->err; } }
 
-  send_msg__std_msgs__Header(tcpstp, &objp->header); _CHKOK
-  send_msg__r2p__Encoder(tcpstp, &objp->encoder); _CHKOK
+  urosTcpRosSendRaw(tcpstp, objp->delta); _CHKOK
 
   return tcpstp->err = UROS_OK;
 #undef _CHKOK
@@ -622,6 +505,123 @@ uros_err_t send_msg__r2p__Imu(
   send_msg__r2p__Vector3_32(tcpstp, &objp->angular_velocity); _CHKOK
   send_msg__r2p__Vector3_32(tcpstp, &objp->linear_acceleration); _CHKOK
   send_msg__r2p__Vector3_32(tcpstp, &objp->magnetic_field); _CHKOK
+
+  return tcpstp->err = UROS_OK;
+#undef _CHKOK
+}
+
+/** @} */
+
+/*~~~ MESSAGE: r2p/EncoderStamped ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/** @name Message <tt>r2p/EncoderStamped</tt> */
+/** @{ */
+
+/**
+ * @brief   Content length of a TCPROS <tt>r2p/EncoderStamped</tt> message.
+ *
+ * @param[in,out] objp
+ *          Pointer to an initialized <code>struct msg__r2p__EncoderStamped</code> object.
+ * @return
+ *          Length of the TCPROS message contents, in bytes.
+ */
+size_t length_msg__r2p__EncoderStamped(
+  struct msg__r2p__EncoderStamped *objp
+) {
+  size_t length = 0;
+
+  urosAssert(objp != NULL);
+
+  length += length_msg__std_msgs__Header(&objp->header);
+  length += length_msg__r2p__Encoder(&objp->encoder);
+
+  return length;
+}
+
+/**
+ * @brief   Initializes a TCPROS <tt>r2p/EncoderStamped</tt> message.
+ *
+ * @param[in,out] objp
+ *          Pointer to an allocated <code>struct msg__r2p__EncoderStamped</code> object.
+ * @return
+ *          Error code.
+ */
+void init_msg__r2p__EncoderStamped(
+  struct msg__r2p__EncoderStamped *objp
+) {
+  urosAssert(objp != NULL);
+
+  init_msg__std_msgs__Header(&objp->header);
+  init_msg__r2p__Encoder(&objp->encoder);
+}
+
+/**
+ * @brief   Cleans a TCPROS <tt>r2p/EncoderStamped</tt> message.
+ *
+ * @param[in,out] objp
+ *          Pointer to an initialized <code>struct msg__r2p__EncoderStamped</code> object, or @p NULL.
+ * @return
+ *          Error code.
+ */
+void clean_msg__r2p__EncoderStamped(
+  struct msg__r2p__EncoderStamped *objp
+) {
+  if (objp == NULL) { return; }
+
+  clean_msg__std_msgs__Header(&objp->header);
+  clean_msg__r2p__Encoder(&objp->encoder);
+}
+
+/**
+ * @brief   Receives a TCPROS <tt>r2p/EncoderStamped</tt> message.
+ *
+ * @param[in,out] tcpstp
+ *          Pointer to a working @p UrosTcpRosStatus object.
+ * @param[out] objp
+ *          Pointer to an initialized <code>struct msg__r2p__EncoderStamped</code> object.
+ * @return
+ *          Error code.
+ */
+uros_err_t recv_msg__r2p__EncoderStamped(
+  UrosTcpRosStatus *tcpstp,
+  struct msg__r2p__EncoderStamped *objp
+) {
+  urosAssert(tcpstp != NULL);
+  urosAssert(urosConnIsValid(tcpstp->csp));
+  urosAssert(objp != NULL);
+#define _CHKOK { if (tcpstp->err != UROS_OK) { goto _error; } }
+
+  recv_msg__std_msgs__Header(tcpstp, &objp->header); _CHKOK
+  recv_msg__r2p__Encoder(tcpstp, &objp->encoder); _CHKOK
+
+  return tcpstp->err = UROS_OK;
+_error:
+  clean_msg__r2p__EncoderStamped(objp);
+  return tcpstp->err;
+#undef _CHKOK
+}
+
+/**
+ * @brief   Sends a TCPROS <tt>r2p/EncoderStamped</tt> message.
+ *
+ * @param[in,out] tcpstp
+ *          Pointer to a working @p UrosTcpRosStatus object.
+ * @param[in] objp
+ *          Pointer to an initialized <code>struct msg__r2p__EncoderStamped</code> object.
+ * @return
+ *          Error code.
+ */
+uros_err_t send_msg__r2p__EncoderStamped(
+  UrosTcpRosStatus *tcpstp,
+  struct msg__r2p__EncoderStamped *objp
+) {
+  urosAssert(tcpstp != NULL);
+  urosAssert(urosConnIsValid(tcpstp->csp));
+  urosAssert(objp != NULL);
+#define _CHKOK { if (tcpstp->err != UROS_OK) { return tcpstp->err; } }
+
+  send_msg__std_msgs__Header(tcpstp, &objp->header); _CHKOK
+  send_msg__r2p__Encoder(tcpstp, &objp->encoder); _CHKOK
 
   return tcpstp->err = UROS_OK;
 #undef _CHKOK

@@ -37,14 +37,11 @@ r2p::Subscriber<r2p::tEncoderMsg, 5> enc1_sub;
 r2p::Node enc2_node("uenc2", false);
 r2p::Subscriber<r2p::tEncoderMsg, 5> enc2_sub;
 
-r2p::Node enc3_node("uenc3", false);
-r2p::Subscriber<r2p::tEncoderMsg, 5> enc3_sub;
-
 r2p::Node imu_node("uimu", false);
 r2p::Subscriber<r2p::tIMURaw9, 5> imu_sub;
 
 r2p::Node vel_node("uvel", false);
-r2p::Publisher<r2p::Speed3Msg> vel_pub;
+r2p::Publisher<r2p::Speed2Msg> vel_pub;
 
 extern int activity;
 
@@ -57,18 +54,17 @@ template<typename T> static inline T clamp(T min, T value, T max) {
 }
 
 /*
- *  //_______________________\\
- * //            x            \\
- *   \  2        ^        1  /
- *    \          |          /
- *     \         |         /
- *       \ y<----@       /
- *        \      z      /
- *         \           /
- *           \       /
- *            \  3  /
- *             \___/
- *             =====
+ *               y
+ *               ^
+ *               |
+ *               |
+ *   2           @---->x     1
+ *  ||                       ||  |
+ *  ||_______________________||  | R
+ *  ||                       ||
+ *  ||                       ||
+ *               L
+ *   <----------------------->
  *
  * Body frame velocity to wheel angular velocity:
  * R * dth1 = cos(60°) * dx - cos(30°) * dy - L * dgamma
@@ -83,17 +79,10 @@ template<typename T> static inline T clamp(T min, T value, T max) {
  */
 
 // Robot parameters
-#define _L        0.300f    // Wheel distance [m]
-#define _R        0.050f    // Wheel radius [m]
-#define _MAX_DTH  26.0f     // Maximum wheel angular speed [rad/s]
-
-#define _m1_R     (-1.0f / _R)
-#define _mL_R     (-_L / _R)
-#define _C60_R    (0.500000000f / _R)   // cos(60°) / R
-#define _C30_R    (0.866025404f / _R)   // cos(30°) / R
-
+#define _L        0.450f    // Wheel distance [m]
+#define _R        0.127f    // Wheel radius [m]
 #define _TICKS 2000.0f
-#define _RATIO 14.0f
+#define _RATIO 74.0f
 #define _PI 3.14159265359f
 
 #define R2T(r) (_TICKS * _RATIO)/(r * 2 * _PI)
@@ -103,21 +92,15 @@ template<typename T> static inline T clamp(T min, T value, T max) {
 #define T2M(t) (t / _M2TICK)
 
 static
-void velocity_to_setpoints(const struct msg__r2p__Velocity &velocity, r2p::Speed3Msg &setpoints) {
+void velocity_to_setpoints(const struct msg__r2p__Velocity &velocity, r2p::Speed2Msg &setpoints) {
 
-	  // Wheel angular speeds
-	  const float dthz123 = _mL_R * velocity.w;
-	  const float dx12 = _C60_R * velocity.y;
-	  const float dy12 = _C30_R * velocity.x;
-
-	  float dth1 = dx12 - dy12 + dthz123;
-	  float dth2 = dx12 + dy12 + dthz123;
-	  float dth3 = _m1_R * velocity.y + dthz123;
-
-	  // Motor setpoints
-	  setpoints.value[0] = (int16_t)clamp(-_MAX_DTH, dth1, _MAX_DTH);
-	  setpoints.value[1] = -(int16_t)clamp(-_MAX_DTH, dth2, _MAX_DTH);
-	  setpoints.value[2] = -(int16_t)clamp(-_MAX_DTH, dth3, _MAX_DTH);
+	// Motor setpoints
+	setpoints.value[0] = -(1 / _R) * (velocity.x - (_L / 2) * velocity.w);
+	setpoints.value[1] =  (1 / _R) * (velocity.x + (_L / 2) * velocity.w);
+	/*
+	setpoints.value[0] =  -velocity.x;
+	setpoints.value[1] =  velocity.x;
+	*/
 }
 
 static void imuraw_to_si(const r2p::tIMURaw9 &imuraw, struct msg__r2p__ImuStamped &imu) {
@@ -145,20 +128,20 @@ static void imuraw_to_si(const r2p::tIMURaw9 &imuraw, struct msg__r2p__ImuStampe
 /** @addtogroup tcpros_pubtopic_funcs */
 /** @{ */
 
-/*~~~ PUBLISHED TOPIC: /triskar/encoder1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /robocom/encoder1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/triskar/encoder1</tt> publisher */
+/** @name Topic <tt>/robocom/encoder1</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/triskar/encoder1</tt> published topic handler.
+ * @brief   TCPROS <tt>/robocom/encoder1</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__triskar__encoder1(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__robocom__encoder1(UrosTcpRosStatus *tcpstp) {
 	r2p::tEncoderMsg *msgp;
 	static bool first_time = true;
 	static uint32_t seq = 0;
@@ -211,26 +194,26 @@ uros_err_t pub_tpc__triskar__encoder1(UrosTcpRosStatus *tcpstp) {
 
 /** @} */
 
-/*~~~ PUBLISHED TOPIC: /triskar/encoder2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /robocom/encoder2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/triskar/encoder2</tt> publisher */
+/** @name Topic <tt>/robocom/encoder2</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/triskar/encoder2</tt> published topic handler.
+ * @brief   TCPROS <tt>/robocom/encoder2</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__triskar__encoder2(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__robocom__encoder2(UrosTcpRosStatus *tcpstp) {
 	r2p::tEncoderMsg *msgp;
 	static bool first_time = true;
 	static uint32_t seq = 0;
 
 	if (first_time) {
-		enc2_node.subscribe(enc2_sub, "encoder1");
+		enc2_node.subscribe(enc2_sub, "encoder2");
 		first_time = false;
 	}
 
@@ -277,86 +260,20 @@ uros_err_t pub_tpc__triskar__encoder2(UrosTcpRosStatus *tcpstp) {
 
 /** @} */
 
-/*~~~ PUBLISHED TOPIC: /triskar/encoder3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /robocom/imu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/triskar/encoder3</tt> publisher */
+/** @name Topic <tt>/robocom/imu</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/triskar/encoder3</tt> published topic handler.
+ * @brief   TCPROS <tt>/robocom/imu</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__triskar__encoder3(UrosTcpRosStatus *tcpstp) {
-	r2p::tEncoderMsg *msgp;
-	static bool first_time = true;
-	static uint32_t seq = 0;
-
-	if (first_time) {
-		enc3_node.subscribe(enc3_sub, "encoder1");
-		first_time = false;
-	}
-
-	enc3_node.set_enabled(true);
-
-	/* Message allocation and initialization.*/
-	UROS_TPC_INIT_S(msg__r2p__EncoderStamped);
-
-	/* Published messages loop.*/
-	while (!urosTcpRosStatusCheckExit(tcpstp)) {
-		if (enc3_node.spin(r2p::Time::ms(1000))) {
-			while (enc3_sub.fetch(msgp)) {
-				msg.header.seq = seq++;
-				msg.header.stamp.sec = msgp->timestamp.sec;
-				msg.header.stamp.nsec = msgp->timestamp.nsec;
-				msg.header.frame_id.length = 0;
-				msg.header.frame_id.datap = NULL;
-				msg.encoder.delta = msgp->delta;
-				enc3_sub.release(*msgp);
-
-				/* Send the message.*/
-				UROS_MSG_SEND_LENGTH(&msg, msg__r2p__EncoderStamped);
-				UROS_MSG_SEND_BODY(&msg, msg__r2p__EncoderStamped);
-
-				/* Dispose the contents of the message.*/
-				clean_msg__r2p__EncoderStamped(&msg);
-
-			}
-		}
-	}
-	tcpstp->err = UROS_OK;
-
-	_finally:
-	/* Fetch pending messages and disable r2p node. */
-	enc3_node.set_enabled(false);
-	while (enc3_sub.fetch(msgp)) {
-		enc3_sub.release(*msgp);
-	}
-
-	/* Message deinitialization and deallocation.*/
-	UROS_TPC_UNINIT_S(msg__r2p__EncoderStamped);
-	return tcpstp->err;
-}
-
-/** @} */
-
-/*~~~ PUBLISHED TOPIC: /triskar/imu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/** @name Topic <tt>/triskar/imu</tt> publisher */
-/** @{ */
-
-/**
- * @brief   TCPROS <tt>/triskar/imu</tt> published topic handler.
- *
- * @param[in,out] tcpstp
- *          Pointer to a working @p UrosTcpRosStatus object.
- * @return
- *          Error code.
- */
-uros_err_t pub_tpc__triskar__imu(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__robocom__imu(UrosTcpRosStatus *tcpstp) {
 	r2p::tIMURaw9 *msgp;
 	static bool first_time = true;
 	static uint32_t seq = 0;
@@ -410,20 +327,20 @@ uros_err_t pub_tpc__triskar__imu(UrosTcpRosStatus *tcpstp) {
 
 /** @} */
 
-/*~~~ PUBLISHED TOPIC: /triskar/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /robocom/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/triskar/led</tt> publisher */
+/** @name Topic <tt>/robocom/led</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/triskar/led</tt> published topic handler.
+ * @brief   TCPROS <tt>/robocom/led</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__triskar__led(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__robocom__led(UrosTcpRosStatus *tcpstp) {
 	r2p::LedMsg *msgp;
 	static bool first_time = true;
 
@@ -480,28 +397,28 @@ uros_err_t pub_tpc__triskar__led(UrosTcpRosStatus *tcpstp) {
 /** @addtogroup tcpros_subtopic_funcs */
 /** @{ */
 
-/*~~~ SUBSCRIBED TOPIC: /triskar/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ SUBSCRIBED TOPIC: /robocom/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/triskar/velocity</tt> subscriber */
+/** @name Topic <tt>/robocom/velocity</tt> subscriber */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/triskar/velocity</tt> subscribed topic handler.
+ * @brief   TCPROS <tt>/robocom/velocity</tt> subscribed topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t sub_tpc__triskar__velocity(UrosTcpRosStatus *tcpstp) {
-	r2p::Speed3Msg *msgp;
+uros_err_t sub_tpc__robocom__velocity(UrosTcpRosStatus *tcpstp) {
+	r2p::Speed2Msg *msgp;
 	static bool first_time = true;
 
 	/* Message allocation and initialization.*/
 	UROS_TPC_INIT_S(msg__r2p__Velocity);
 
 	if (first_time) {
-		vel_node.advertise(vel_pub, "speed3", r2p::Time::INFINITE);
+		vel_node.advertise(vel_pub, "speed2", r2p::Time::INFINITE);
 		first_time = false;
 	}
 
@@ -574,23 +491,19 @@ uros_err_t sub_tpc__triskar__velocity(UrosTcpRosStatus *tcpstp) {
  */
 void urosHandlersPublishTopics(void) {
 
-	/* /triskar/encoder1 */
-	urosNodePublishTopicSZ("/triskar/encoder1", "r2p/EncoderStamped", (uros_proc_f) pub_tpc__triskar__encoder1,
+	/* /robocom/encoder1 */
+	urosNodePublishTopicSZ("/robocom/encoder1", "r2p/EncoderStamped", (uros_proc_f) pub_tpc__robocom__encoder1,
 			uros_nulltopicflags);
 
-	/* /triskar/encoder2 */
-	urosNodePublishTopicSZ("/triskar/encoder2", "r2p/EncoderStamped", (uros_proc_f) pub_tpc__triskar__encoder2,
+	/* /robocom/encoder2 */
+	urosNodePublishTopicSZ("/robocom/encoder2", "r2p/EncoderStamped", (uros_proc_f) pub_tpc__robocom__encoder2,
 			uros_nulltopicflags);
 
-	/* /triskar/encoder3 */
-	urosNodePublishTopicSZ("/triskar/encoder3", "r2p/EncoderStamped", (uros_proc_f) pub_tpc__triskar__encoder3,
-			uros_nulltopicflags);
+	/* /robocom/imu */
+	urosNodePublishTopicSZ("/robocom/imu", "r2p/ImuStamped", (uros_proc_f) pub_tpc__robocom__imu, uros_nulltopicflags);
 
-	/* /triskar/imu */
-	urosNodePublishTopicSZ("/triskar/imu", "r2p/ImuStamped", (uros_proc_f) pub_tpc__triskar__imu, uros_nulltopicflags);
-
-	/* /triskar/led */
-	urosNodePublishTopicSZ("/triskar/led", "r2p/Led", (uros_proc_f) pub_tpc__triskar__led, uros_nulltopicflags);
+	/* /robocom/led */
+	urosNodePublishTopicSZ("/robocom/led", "r2p/Led", (uros_proc_f) pub_tpc__robocom__led, uros_nulltopicflags);
 }
 
 /**
@@ -599,20 +512,17 @@ void urosHandlersPublishTopics(void) {
  */
 void urosHandlersUnpublishTopics(void) {
 
-	/* /triskar/encoder1 */
-	urosNodeUnpublishTopicSZ("/triskar/encoder1");
+	/* /robocom/encoder1 */
+	urosNodeUnpublishTopicSZ("/robocom/encoder1");
 
-	/* /triskar/encoder2 */
-	urosNodeUnpublishTopicSZ("/triskar/encoder2");
+	/* /robocom/encoder2 */
+	urosNodeUnpublishTopicSZ("/robocom/encoder2");
 
-	/* /triskar/encoder3 */
-	urosNodeUnpublishTopicSZ("/triskar/encoder3");
+	/* /robocom/imu */
+	urosNodeUnpublishTopicSZ("/robocom/imu");
 
-	/* /triskar/imu */
-	urosNodeUnpublishTopicSZ("/triskar/imu");
-
-	/* /triskar/led */
-	urosNodeUnpublishTopicSZ("/triskar/led");
+	/* /robocom/led */
+	urosNodeUnpublishTopicSZ("/robocom/led");
 }
 
 /**
@@ -621,8 +531,8 @@ void urosHandlersUnpublishTopics(void) {
  */
 void urosHandlersSubscribeTopics(void) {
 
-	/* /triskar/velocity */
-	urosNodeSubscribeTopicSZ("/triskar/velocity", "r2p/Velocity", (uros_proc_f) sub_tpc__triskar__velocity,
+	/* /robocom/velocity */
+	urosNodeSubscribeTopicSZ("/robocom/velocity", "r2p/Velocity", (uros_proc_f) sub_tpc__robocom__velocity,
 			uros_nulltopicflags);
 }
 
@@ -632,8 +542,8 @@ void urosHandlersSubscribeTopics(void) {
  */
 void urosHandlersUnsubscribeTopics(void) {
 
-	/* /triskar/velocity */
-	urosNodeUnsubscribeTopicSZ("/triskar/velocity");
+	/* /robocom/velocity */
+	urosNodeUnsubscribeTopicSZ("/robocom/velocity");
 }
 
 /**

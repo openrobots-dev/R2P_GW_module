@@ -110,7 +110,6 @@ int main(void) {
 	 */
 	while (TRUE) {
 		r2p::Thread::sleep(r2p::Time::s(20));
-		continue;
 		if (activity == 0) {
 			NVIC_SystemReset();
 		}
