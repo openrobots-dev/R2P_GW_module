@@ -15,9 +15,6 @@
 #include <urosTcpRos.h>
 #include <urosUser.h>
 
-#include <ch.h>
-#include <hal.h>
-
 #include <r2p/common.hpp>
 #include <r2p/Middleware.hpp>
 #include <r2p/Node.hpp>
@@ -25,19 +22,15 @@
 #include <r2p/Subscriber.hpp>
 
 #include <r2p/msg/led.hpp>
-#include <r2p/msg/std_msgs.hpp>
 #include <r2p/msg/motor.hpp>
 
 /*===========================================================================*/
 /* GLOBAL VARIABLES                                                          */
 /*===========================================================================*/
-r2p::Node ledsub_node("uledsub", false);
-r2p::Subscriber<r2p::LedMsg, 1> led_sub;
+r2p::Node led_node("uledpub", false);
+r2p::Subscriber<r2p::LedMsg, 2> led_sub;
 
-r2p::Node steersub_node("usteersub", false);
-r2p::Subscriber<r2p::Float32Msg, 1> steer_sub;
-
-r2p::Node uvel_node("uvel", false);
+r2p::Node steer_node("usteerpub", false);
 r2p::Publisher<r2p::Velocity3Msg> vel_pub;
 
 extern int activity;
@@ -49,36 +42,36 @@ extern int activity;
 /** @addtogroup tcpros_pubtopic_funcs */
 /** @{ */
 
-/*~~~ PUBLISHED TOPIC: /r2p/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /tiltone/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/r2p/led</tt> publisher */
+/** @name Topic <tt>/tiltone/led</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/r2p/led</tt> published topic handler.
+ * @brief   TCPROS <tt>/tiltone/led</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__r2p__led(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp) {
 	r2p::LedMsg *msgp;
 	static bool first_time = true;
 
 	if (first_time) {
-		ledsub_node.subscribe(led_sub, "leds");
+		sub_node.subscribe(led_sub, "leds");
 		first_time = false;
 	}
 
-	ledsub_node.set_enabled(true);
+	sub_node.set_enabled(true);
 
 	/* Message allocation and initialization.*/
-	UROS_TPC_INIT_S (msg__r2p__Led);
+	UROS_TPC_INIT_S(msg__r2p__Led);
 
 	/* Published messages loop.*/
 	while (!urosTcpRosStatusCheckExit(tcpstp)) {
-		if (ledsub_node.spin(r2p::Time::ms(1000))) {
+		if (sub_node.spin(r2p::Time::ms(1000))) {
 			while (led_sub.fetch(msgp)) {
 				msg.led = msgp->led;
 				msg.value = msgp->value;
@@ -89,7 +82,7 @@ uros_err_t pub_tpc__r2p__led(UrosTcpRosStatus *tcpstp) {
 				UROS_MSG_SEND_BODY(&msg, msg__r2p__Led);
 
 				/* Dispose the contents of the message.*/
-				clean_msg__r2p__Led (&msg);
+				clean_msg__r2p__Led(&msg);
 
 			}
 		}
@@ -98,7 +91,7 @@ uros_err_t pub_tpc__r2p__led(UrosTcpRosStatus *tcpstp) {
 
 	_finally:
 	/* Fetch pending messages and disable r2p node. */
-	ledsub_node.set_enabled(false);
+	sub_node.set_enabled(false);
 	while (led_sub.fetch(msgp)) {
 		led_sub.release(*msgp);
 	}
@@ -110,55 +103,42 @@ uros_err_t pub_tpc__r2p__led(UrosTcpRosStatus *tcpstp) {
 
 /** @} */
 
-/*~~~ PUBLISHED TOPIC: /r2p/steer_pos ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /tiltone/tilt ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/r2p/steer_pos</tt> publisher */
+/** @name Topic <tt>/tiltone/tilt</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/r2p/steer_pos</tt> published topic handler.
+ * @brief   TCPROS <tt>/tiltone/tilt</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__r2p__steer_pos(UrosTcpRosStatus *tcpstp) {
-	r2p::Float32Msg *msgp;
-	static bool first_time = true;
-
-	if (first_time) {
-		steersub_node.subscribe(steer_sub, "steer_pos");
-		first_time = false;
-	}
-
-	steersub_node.set_enabled(true);
+uros_err_t pub_tpc__tiltone__tilt(UrosTcpRosStatus *tcpstp) {
 
 	/* Message allocation and initialization.*/
-	UROS_TPC_INIT_S (msg__std_msgs__Float32);
+	UROS_TPC_INIT_S(msg__tiltone__Tilt);
 
 	/* Published messages loop.*/
 	while (!urosTcpRosStatusCheckExit(tcpstp)) {
-		if (steersub_node.spin(r2p::Time::ms(1000))) {
-			while (steer_sub.fetch(msgp)) {
-				msg.data = msgp->data;
-				steer_sub.release(*msgp);
+		/* TODO: Generate the contents of the message.*/
+		urosThreadSleepSec(1);
+		continue; /* TODO: Remove this dummy line.*/
 
-				/* Send the message.*/
-				UROS_MSG_SEND_LENGTH(&msg, msg__std_msgs__Float32);
-				UROS_MSG_SEND_BODY(&msg, msg__std_msgs__Float32);
+		/* Send the message.*/
+		UROS_MSG_SEND_LENGTH(&msg, msg__tiltone__Tilt);
+		UROS_MSG_SEND_BODY(&msg, msg__tiltone__Tilt);
 
-				/* Dispose the contents of the message.*/
-				clean_msg__std_msgs__Float32 (&msg);
-			}
-		}
+		/* Dispose the contents of the message.*/
+		clean_msg__tiltone__Tilt(&msg);
 	}
-
 	tcpstp->err = UROS_OK;
 
 	_finally:
 	/* Message deinitialization and deallocation.*/
-	UROS_TPC_UNINIT_S(msg__std_msgs__Float32);
+	UROS_TPC_UNINIT_S(msg__tiltone__Tilt);
 	return tcpstp->err;
 }
 
@@ -173,59 +153,61 @@ uros_err_t pub_tpc__r2p__steer_pos(UrosTcpRosStatus *tcpstp) {
 /** @addtogroup tcpros_subtopic_funcs */
 /** @{ */
 
-/*~~~ SUBSCRIBED TOPIC: /cmd_vel ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ SUBSCRIBED TOPIC: /tiltone/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/cmd_vel</tt> subscriber */
+/** @name Topic <tt>/tiltone/velocity</tt> subscriber */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/cmd_vel</tt> subscribed topic handler.
+ * @brief   TCPROS <tt>/tiltone/velocity</tt> subscribed topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t sub_tpc__cmd_vel(UrosTcpRosStatus *tcpstp) {
+uros_err_t sub_tpc__tiltone__velocity(UrosTcpRosStatus *tcpstp) {
 	r2p::Velocity3Msg *msgp;
 	static bool first_time = true;
 
 	/* Message allocation and initialization.*/
-	UROS_TPC_INIT_S (msg__geometry_msgs__Twist);
+	UROS_TPC_INIT_S(msg__r2p__Velocity);
 
 	if (first_time) {
-		uvel_node.advertise(vel_pub, "vel_cmd", r2p::Time::INFINITE);
+		vel_node.advertise(vel_pub, "velocity", r2p::Time::INFINITE);
 		first_time = false;
 	}
 
-	uvel_node.set_enabled(true);
+	vel_node.set_enabled(true);
 
 	/* Subscribed messages loop.*/
 	while (!urosTcpRosStatusCheckExit(tcpstp)) {
 		/* Receive the next message.*/
-		UROS_MSG_RECV_LENGTH();
-		UROS_MSG_RECV_BODY(&msg, msg__geometry_msgs__Twist);
+		UROS_MSG_RECV_LENGTH()
+		;
+		UROS_MSG_RECV_BODY(&msg, msg__r2p__Velocity);
 
-		palTogglePad(LED2_GPIO, LED2);
 		if (vel_pub.alloc(msgp)) {
-			msgp->x = msg.linear.x;
-			msgp->w = msg.angular.z;
-			vel_pub.publish(*msgp);
+			msgp->w = msg.w;
+			msgp->x = msg.x;
+			msgp->y = msg.y;
 		}
+
+		vel_pub.publish(*msgp);
 
 		activity = 1;
 
 		/* Dispose the contents of the message.*/
-		clean_msg__geometry_msgs__Twist (&msg);
+		clean_msg__r2p__Velocity(&msg);
 	}
 	tcpstp->err = UROS_OK;
 
 	_finally:
 	/* Disable r2p node. */
-	uvel_node.set_enabled(false);
+	vel_node.set_enabled(false);
 
 	/* Message deinitialization and deallocation.*/
-	UROS_TPC_UNINIT_S(msg__geometry_msgs__Twist);
+	UROS_TPC_UNINIT_S(msg__r2p__Velocity);
 	return tcpstp->err;
 }
 
@@ -268,13 +250,11 @@ uros_err_t sub_tpc__cmd_vel(UrosTcpRosStatus *tcpstp) {
  */
 void urosHandlersPublishTopics(void) {
 
-	/* /r2p/led */
-	urosNodePublishTopicSZ("/r2p/led", "r2p/Led",
-			(uros_proc_f) pub_tpc__r2p__led, uros_nulltopicflags);
+	/* /tiltone/led */
+	urosNodePublishTopicSZ("/tiltone/led", "r2p/Led", (uros_proc_f) pub_tpc__tiltone__led, uros_nulltopicflags);
 
-	/* /r2p/steer_pos */
-	urosNodePublishTopicSZ("/r2p/steer_pos", "std_msgs/Float32",
-			(uros_proc_f) pub_tpc__r2p__steer_pos, uros_nulltopicflags);
+	/* /tiltone/tilt */
+	urosNodePublishTopicSZ("/tiltone/tilt", "tiltone/Tilt", (uros_proc_f) pub_tpc__tiltone__tilt, uros_nulltopicflags);
 }
 
 /**
@@ -283,11 +263,11 @@ void urosHandlersPublishTopics(void) {
  */
 void urosHandlersUnpublishTopics(void) {
 
-	/* /r2p/led */
-	urosNodeUnpublishTopicSZ("/r2p/led");
+	/* /tiltone/led */
+	urosNodeUnpublishTopicSZ("/tiltone/led");
 
-	/* /r2p/steer_pos */
-	urosNodeUnpublishTopicSZ("/r2p/steer_pos");
+	/* /tiltone/tilt */
+	urosNodeUnpublishTopicSZ("/tiltone/tilt");
 }
 
 /**
@@ -296,9 +276,9 @@ void urosHandlersUnpublishTopics(void) {
  */
 void urosHandlersSubscribeTopics(void) {
 
-	/* /cmd_vel */
-	urosNodeSubscribeTopicSZ("/cmd_vel", "geometry_msgs/Twist",
-			(uros_proc_f) sub_tpc__cmd_vel, uros_nulltopicflags);
+	/* /tiltone/velocity */
+	urosNodeSubscribeTopicSZ("/tiltone/velocity", "r2p/Velocity", (uros_proc_f) sub_tpc__tiltone__velocity,
+			uros_nulltopicflags);
 }
 
 /**
@@ -307,8 +287,8 @@ void urosHandlersSubscribeTopics(void) {
  */
 void urosHandlersUnsubscribeTopics(void) {
 
-	/* /cmd_vel */
-	urosNodeUnsubscribeTopicSZ("/cmd_vel");
+	/* /tiltone/velocity */
+	urosNodeUnsubscribeTopicSZ("/tiltone/velocity");
 }
 
 /**

@@ -25,6 +25,39 @@ extern "C" {
 /** @addtogroup tcpros_msg_types */
 /** @{ */
 
+/*~~~ MESSAGE: geometry_msgs/Vector3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+ * @brief   TCPROS <tt>geometry_msgs/Vector3</tt> message descriptor.
+ * @details MD5 sum: <tt>4a842b65f413084dc2b10fb484ea7f17</tt>.
+ */
+struct msg__geometry_msgs__Vector3 {
+  double    x;
+  double    y;
+  double    z;
+};
+
+/*~~~ MESSAGE: geometry_msgs/Twist ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+ * @brief   TCPROS <tt>geometry_msgs/Twist</tt> message descriptor.
+ * @details MD5 sum: <tt>9f195f881246fdfa2798d1d3eebca84a</tt>.
+ */
+struct msg__geometry_msgs__Twist {
+  struct msg__geometry_msgs__Vector3    linear;
+  struct msg__geometry_msgs__Vector3    angular;
+};
+
+/*~~~ MESSAGE: std_msgs/Float32 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+ * @brief   TCPROS <tt>std_msgs/Float32</tt> message descriptor.
+ * @details MD5 sum: <tt>73fcbf46b49191e672908e50842a83d4</tt>.
+ */
+struct msg__std_msgs__Float32 {
+  float data;
+};
+
 /*~~~ MESSAGE: r2p/Led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
@@ -34,28 +67,6 @@ extern "C" {
 struct msg__r2p__Led {
   uint8_t   led;
   uint8_t   value;
-};
-
-/*~~~ MESSAGE: tiltone/Tilt ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
- * @brief   TCPROS <tt>tiltone/Tilt</tt> message descriptor.
- * @details MD5 sum: <tt>2d11dcdbe5a6f73dd324353dc52315ab</tt>.
- */
-struct msg__tiltone__Tilt {
-  float angle;
-};
-
-/*~~~ MESSAGE: r2p/Velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
- * @brief   TCPROS <tt>r2p/Velocity</tt> message descriptor.
- * @details MD5 sum: <tt>fc16a6b45aaa44f2dd9023be467748ee</tt>.
- */
-struct msg__r2p__Velocity {
-  float x;
-  float y;
-  float w;
 };
 
 /** @} */
@@ -97,6 +108,66 @@ struct msg__r2p__Velocity {
 /* MESSAGE PROTOTYPES                                                        */
 /*===========================================================================*/
 
+/*~~~ MESSAGE: geometry_msgs/Vector3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+size_t length_msg__geometry_msgs__Vector3(
+  struct msg__geometry_msgs__Vector3 *objp
+);
+void init_msg__geometry_msgs__Vector3(
+  struct msg__geometry_msgs__Vector3 *objp
+);
+void clean_msg__geometry_msgs__Vector3(
+  struct msg__geometry_msgs__Vector3 *objp
+);
+uros_err_t recv_msg__geometry_msgs__Vector3(
+  UrosTcpRosStatus *tcpstp,
+  struct msg__geometry_msgs__Vector3 *objp
+);
+uros_err_t send_msg__geometry_msgs__Vector3(
+  UrosTcpRosStatus *tcpstp,
+  struct msg__geometry_msgs__Vector3 *objp
+);
+
+/*~~~ MESSAGE: geometry_msgs/Twist ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+size_t length_msg__geometry_msgs__Twist(
+  struct msg__geometry_msgs__Twist *objp
+);
+void init_msg__geometry_msgs__Twist(
+  struct msg__geometry_msgs__Twist *objp
+);
+void clean_msg__geometry_msgs__Twist(
+  struct msg__geometry_msgs__Twist *objp
+);
+uros_err_t recv_msg__geometry_msgs__Twist(
+  UrosTcpRosStatus *tcpstp,
+  struct msg__geometry_msgs__Twist *objp
+);
+uros_err_t send_msg__geometry_msgs__Twist(
+  UrosTcpRosStatus *tcpstp,
+  struct msg__geometry_msgs__Twist *objp
+);
+
+/*~~~ MESSAGE: std_msgs/Float32 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+size_t length_msg__std_msgs__Float32(
+  struct msg__std_msgs__Float32 *objp
+);
+void init_msg__std_msgs__Float32(
+  struct msg__std_msgs__Float32 *objp
+);
+void clean_msg__std_msgs__Float32(
+  struct msg__std_msgs__Float32 *objp
+);
+uros_err_t recv_msg__std_msgs__Float32(
+  UrosTcpRosStatus *tcpstp,
+  struct msg__std_msgs__Float32 *objp
+);
+uros_err_t send_msg__std_msgs__Float32(
+  UrosTcpRosStatus *tcpstp,
+  struct msg__std_msgs__Float32 *objp
+);
+
 /*~~~ MESSAGE: r2p/Led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 size_t length_msg__r2p__Led(
@@ -115,46 +186,6 @@ uros_err_t recv_msg__r2p__Led(
 uros_err_t send_msg__r2p__Led(
   UrosTcpRosStatus *tcpstp,
   struct msg__r2p__Led *objp
-);
-
-/*~~~ MESSAGE: tiltone/Tilt ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-size_t length_msg__tiltone__Tilt(
-  struct msg__tiltone__Tilt *objp
-);
-void init_msg__tiltone__Tilt(
-  struct msg__tiltone__Tilt *objp
-);
-void clean_msg__tiltone__Tilt(
-  struct msg__tiltone__Tilt *objp
-);
-uros_err_t recv_msg__tiltone__Tilt(
-  UrosTcpRosStatus *tcpstp,
-  struct msg__tiltone__Tilt *objp
-);
-uros_err_t send_msg__tiltone__Tilt(
-  UrosTcpRosStatus *tcpstp,
-  struct msg__tiltone__Tilt *objp
-);
-
-/*~~~ MESSAGE: r2p/Velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-size_t length_msg__r2p__Velocity(
-  struct msg__r2p__Velocity *objp
-);
-void init_msg__r2p__Velocity(
-  struct msg__r2p__Velocity *objp
-);
-void clean_msg__r2p__Velocity(
-  struct msg__r2p__Velocity *objp
-);
-uros_err_t recv_msg__r2p__Velocity(
-  UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__Velocity *objp
-);
-uros_err_t send_msg__r2p__Velocity(
-  UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__Velocity *objp
 );
 
 /*===========================================================================*/

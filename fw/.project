@@ -28,7 +28,7 @@
 		<link>
 			<name>RTCAN</name>
 			<type>2</type>
-			<location>/home/tino/workspace/openrobots/RTCAN</location>
+			<locationURI>R2P/RTCAN</locationURI>
 		</link>
 		<link>
 			<name>lwip</name>
@@ -38,17 +38,17 @@
 		<link>
 			<name>os</name>
 			<type>2</type>
-			<location>/home/tino/workspace/openrobots/ChibiOS-git/os</location>
+			<locationURI>R2P/ChibiOS</locationURI>
 		</link>
 		<link>
 			<name>r2p</name>
 			<type>2</type>
-			<location>/home/tino/workspace/openrobots/Middleware_v2/r2p</location>
+			<locationURI>R2P/Middleware</locationURI>
 		</link>
 		<link>
 			<name>uROSnode</name>
 			<type>2</type>
-			<location>/home/tino/workspace/openrobots/uROSnode</location>
+			<locationURI>R2P/uROSnode</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

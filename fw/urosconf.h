@@ -59,7 +59,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief Default ROS node name, C string.*/
-#define UROS_NODE_NAME                      "/tiltone"
+#define UROS_NODE_NAME                      "/r2p"
 
 /** @brief Node thread priorty.*/
 #define UROS_NODE_THREAD_PRIO               (LOWPRIO + 1)
@@ -83,10 +83,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief Default Master server IP address, little-endian dword.*/
-#define UROS_XMLRPC_MASTER_IP               urosIpDword(10, 0, 0, 31)
+#define UROS_XMLRPC_MASTER_IP               urosIpDword(192, 168, 1, 200)
 
 /** @brief Default Master server IP address, C string.*/
-#define UROS_XMLRPC_MASTER_IP_SZ            "10.0.0.31"
+#define UROS_XMLRPC_MASTER_IP_SZ            "192.168.1.200"
 
 /** @brief Default Master server port.*/
 #define UROS_XMLRPC_MASTER_PORT             11311
@@ -99,10 +99,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief Default XMLRPC listener IP address, little-endian dword.*/
-#define UROS_XMLRPC_LISTENER_IP             urosIpDword(10, 0, 0, 32)
+#define UROS_XMLRPC_LISTENER_IP             urosIpDword(192, 168, 1, 210)
 
 /** @brief Default XMLRPC listener IP address, C string.*/
-#define UROS_XMLRPC_LISTENER_IP_SZ          "10.0.0.32"
+#define UROS_XMLRPC_LISTENER_IP_SZ          "192.168.1.210"
 
 /** @brief Default XMLRPC listener port.*/
 #define UROS_XMLRPC_LISTENER_PORT           33333
