@@ -22,13 +22,17 @@ extern "C" {
 /* PUBLISHED TOPIC PROTOTYPES                                                */
 /*===========================================================================*/
 
-/*~~~ PUBLISHED TOPIC: /r2p/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /r2p/odometry ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t pub_tpc__r2p__led(UrosTcpRosStatus *tcpstp);
+uros_err_t pub_tpc__r2p__odometry(UrosTcpRosStatus *tcpstp);
 
-/*~~~ PUBLISHED TOPIC: /r2p/steer_pos ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /r2p/steer_encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t pub_tpc__r2p__steer_pos(UrosTcpRosStatus *tcpstp);
+uros_err_t pub_tpc__r2p__steer_encoder(UrosTcpRosStatus *tcpstp);
+
+/*~~~ PUBLISHED TOPIC: /r2p/wheel_encoders ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+uros_err_t pub_tpc__r2p__wheel_encoders(UrosTcpRosStatus *tcpstp);
 
 /*===========================================================================*/
 /* SUBSCRIBED TOPIC PROTOTYPES                                               */

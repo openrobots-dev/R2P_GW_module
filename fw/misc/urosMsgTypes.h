@@ -48,25 +48,25 @@ struct msg__geometry_msgs__Twist {
   struct msg__geometry_msgs__Vector3    angular;
 };
 
-/*~~~ MESSAGE: std_msgs/Float32 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ MESSAGE: r2p/Encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
- * @brief   TCPROS <tt>std_msgs/Float32</tt> message descriptor.
- * @details MD5 sum: <tt>73fcbf46b49191e672908e50842a83d4</tt>.
+ * @brief   TCPROS <tt>r2p/Encoder</tt> message descriptor.
+ * @details MD5 sum: <tt>b808a22d9acab1efdc64ddcf9bf82dfc</tt>.
  */
-struct msg__std_msgs__Float32 {
-  float data;
+struct msg__r2p__Encoder {
+  float delta;
 };
 
-/*~~~ MESSAGE: r2p/Led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ MESSAGE: r2p/Encoder2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
- * @brief   TCPROS <tt>r2p/Led</tt> message descriptor.
- * @details MD5 sum: <tt>21a32d72a04d37c1add2e9d9fe9b645e</tt>.
+ * @brief   TCPROS <tt>r2p/Encoder2</tt> message descriptor.
+ * @details MD5 sum: <tt>4acf5cfc85b53b1f9357f2a7f535ca66</tt>.
  */
-struct msg__r2p__Led {
-  uint8_t   led;
-  uint8_t   value;
+struct msg__r2p__Encoder2 {
+  float left_delta;
+  float right_delta;
 };
 
 /** @} */
@@ -148,44 +148,44 @@ uros_err_t send_msg__geometry_msgs__Twist(
   struct msg__geometry_msgs__Twist *objp
 );
 
-/*~~~ MESSAGE: std_msgs/Float32 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ MESSAGE: r2p/Encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-size_t length_msg__std_msgs__Float32(
-  struct msg__std_msgs__Float32 *objp
+size_t length_msg__r2p__Encoder(
+  struct msg__r2p__Encoder *objp
 );
-void init_msg__std_msgs__Float32(
-  struct msg__std_msgs__Float32 *objp
+void init_msg__r2p__Encoder(
+  struct msg__r2p__Encoder *objp
 );
-void clean_msg__std_msgs__Float32(
-  struct msg__std_msgs__Float32 *objp
+void clean_msg__r2p__Encoder(
+  struct msg__r2p__Encoder *objp
 );
-uros_err_t recv_msg__std_msgs__Float32(
+uros_err_t recv_msg__r2p__Encoder(
   UrosTcpRosStatus *tcpstp,
-  struct msg__std_msgs__Float32 *objp
+  struct msg__r2p__Encoder *objp
 );
-uros_err_t send_msg__std_msgs__Float32(
+uros_err_t send_msg__r2p__Encoder(
   UrosTcpRosStatus *tcpstp,
-  struct msg__std_msgs__Float32 *objp
+  struct msg__r2p__Encoder *objp
 );
 
-/*~~~ MESSAGE: r2p/Led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ MESSAGE: r2p/Encoder2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-size_t length_msg__r2p__Led(
-  struct msg__r2p__Led *objp
+size_t length_msg__r2p__Encoder2(
+  struct msg__r2p__Encoder2 *objp
 );
-void init_msg__r2p__Led(
-  struct msg__r2p__Led *objp
+void init_msg__r2p__Encoder2(
+  struct msg__r2p__Encoder2 *objp
 );
-void clean_msg__r2p__Led(
-  struct msg__r2p__Led *objp
+void clean_msg__r2p__Encoder2(
+  struct msg__r2p__Encoder2 *objp
 );
-uros_err_t recv_msg__r2p__Led(
+uros_err_t recv_msg__r2p__Encoder2(
   UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__Led *objp
+  struct msg__r2p__Encoder2 *objp
 );
-uros_err_t send_msg__r2p__Led(
+uros_err_t send_msg__r2p__Encoder2(
   UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__Led *objp
+  struct msg__r2p__Encoder2 *objp
 );
 
 /*===========================================================================*/

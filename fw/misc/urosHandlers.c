@@ -22,23 +22,23 @@
 /** @addtogroup tcpros_pubtopic_funcs */
 /** @{ */
 
-/*~~~ PUBLISHED TOPIC: /r2p/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /r2p/odometry ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/r2p/led</tt> publisher */
+/** @name Topic <tt>/r2p/odometry</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/r2p/led</tt> published topic handler.
+ * @brief   TCPROS <tt>/r2p/odometry</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__r2p__led(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__r2p__odometry(UrosTcpRosStatus *tcpstp) {
 
   /* Message allocation and initialization.*/
-  UROS_TPC_INIT_S(msg__r2p__Led);
+  UROS_TPC_INIT_S(msg__geometry_msgs__Twist);
 
   /* Published messages loop.*/
   while (!urosTcpRosStatusCheckExit(tcpstp)) {
@@ -46,39 +46,39 @@ uros_err_t pub_tpc__r2p__led(UrosTcpRosStatus *tcpstp) {
     urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
 
     /* Send the message.*/
-    UROS_MSG_SEND_LENGTH(&msg, msg__r2p__Led);
-    UROS_MSG_SEND_BODY(&msg, msg__r2p__Led);
+    UROS_MSG_SEND_LENGTH(&msg, msg__geometry_msgs__Twist);
+    UROS_MSG_SEND_BODY(&msg, msg__geometry_msgs__Twist);
 
     /* Dispose the contents of the message.*/
-    clean_msg__r2p__Led(&msg);
+    clean_msg__geometry_msgs__Twist(&msg);
   }
   tcpstp->err = UROS_OK;
 
 _finally:
   /* Message deinitialization and deallocation.*/
-  UROS_TPC_UNINIT_S(msg__r2p__Led);
+  UROS_TPC_UNINIT_S(msg__geometry_msgs__Twist);
   return tcpstp->err;
 }
 
 /** @} */
 
-/*~~~ PUBLISHED TOPIC: /r2p/steer_pos ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /r2p/steer_encoder ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/r2p/steer_pos</tt> publisher */
+/** @name Topic <tt>/r2p/steer_encoder</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/r2p/steer_pos</tt> published topic handler.
+ * @brief   TCPROS <tt>/r2p/steer_encoder</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__r2p__steer_pos(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__r2p__steer_encoder(UrosTcpRosStatus *tcpstp) {
 
   /* Message allocation and initialization.*/
-  UROS_TPC_INIT_S(msg__std_msgs__Float32);
+  UROS_TPC_INIT_S(msg__r2p__Encoder);
 
   /* Published messages loop.*/
   while (!urosTcpRosStatusCheckExit(tcpstp)) {
@@ -86,17 +86,57 @@ uros_err_t pub_tpc__r2p__steer_pos(UrosTcpRosStatus *tcpstp) {
     urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
 
     /* Send the message.*/
-    UROS_MSG_SEND_LENGTH(&msg, msg__std_msgs__Float32);
-    UROS_MSG_SEND_BODY(&msg, msg__std_msgs__Float32);
+    UROS_MSG_SEND_LENGTH(&msg, msg__r2p__Encoder);
+    UROS_MSG_SEND_BODY(&msg, msg__r2p__Encoder);
 
     /* Dispose the contents of the message.*/
-    clean_msg__std_msgs__Float32(&msg);
+    clean_msg__r2p__Encoder(&msg);
   }
   tcpstp->err = UROS_OK;
 
 _finally:
   /* Message deinitialization and deallocation.*/
-  UROS_TPC_UNINIT_S(msg__std_msgs__Float32);
+  UROS_TPC_UNINIT_S(msg__r2p__Encoder);
+  return tcpstp->err;
+}
+
+/** @} */
+
+/*~~~ PUBLISHED TOPIC: /r2p/wheel_encoders ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/** @name Topic <tt>/r2p/wheel_encoders</tt> publisher */
+/** @{ */
+
+/**
+ * @brief   TCPROS <tt>/r2p/wheel_encoders</tt> published topic handler.
+ *
+ * @param[in,out] tcpstp
+ *          Pointer to a working @p UrosTcpRosStatus object.
+ * @return
+ *          Error code.
+ */
+uros_err_t pub_tpc__r2p__wheel_encoders(UrosTcpRosStatus *tcpstp) {
+
+  /* Message allocation and initialization.*/
+  UROS_TPC_INIT_S(msg__r2p__Encoder2);
+
+  /* Published messages loop.*/
+  while (!urosTcpRosStatusCheckExit(tcpstp)) {
+    /* TODO: Generate the contents of the message.*/
+    urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
+
+    /* Send the message.*/
+    UROS_MSG_SEND_LENGTH(&msg, msg__r2p__Encoder2);
+    UROS_MSG_SEND_BODY(&msg, msg__r2p__Encoder2);
+
+    /* Dispose the contents of the message.*/
+    clean_msg__r2p__Encoder2(&msg);
+  }
+  tcpstp->err = UROS_OK;
+
+_finally:
+  /* Message deinitialization and deallocation.*/
+  UROS_TPC_UNINIT_S(msg__r2p__Encoder2);
   return tcpstp->err;
 }
 
@@ -187,19 +227,27 @@ _finally:
  */
 void urosHandlersPublishTopics(void) {
 
-  /* /r2p/led */
+  /* /r2p/odometry */
   urosNodePublishTopicSZ(
-    "/r2p/led",
-    "r2p/Led",
-    (uros_proc_f)pub_tpc__r2p__led,
+    "/r2p/odometry",
+    "geometry_msgs/Twist",
+    (uros_proc_f)pub_tpc__r2p__odometry,
     uros_nulltopicflags
   );
 
-  /* /r2p/steer_pos */
+  /* /r2p/steer_encoder */
   urosNodePublishTopicSZ(
-    "/r2p/steer_pos",
-    "std_msgs/Float32",
-    (uros_proc_f)pub_tpc__r2p__steer_pos,
+    "/r2p/steer_encoder",
+    "r2p/Encoder",
+    (uros_proc_f)pub_tpc__r2p__steer_encoder,
+    uros_nulltopicflags
+  );
+
+  /* /r2p/wheel_encoders */
+  urosNodePublishTopicSZ(
+    "/r2p/wheel_encoders",
+    "r2p/Encoder2",
+    (uros_proc_f)pub_tpc__r2p__wheel_encoders,
     uros_nulltopicflags
   );
 }
@@ -210,14 +258,19 @@ void urosHandlersPublishTopics(void) {
  */
 void urosHandlersUnpublishTopics(void) {
 
-  /* /r2p/led */
+  /* /r2p/odometry */
   urosNodeUnpublishTopicSZ(
-    "/r2p/led"
+    "/r2p/odometry"
   );
 
-  /* /r2p/steer_pos */
+  /* /r2p/steer_encoder */
   urosNodeUnpublishTopicSZ(
-    "/r2p/steer_pos"
+    "/r2p/steer_encoder"
+  );
+
+  /* /r2p/wheel_encoders */
+  urosNodeUnpublishTopicSZ(
+    "/r2p/wheel_encoders"
   );
 }
 
