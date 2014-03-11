@@ -45,12 +45,12 @@
 
 /** @brief IP Address. */
 #if !defined(LWIP_IPADDR) || defined(__DOXYGEN__)
-#define LWIP_IPADDR(p)                  IP4_ADDR(p, 10, 0, 0, 12)
+#define LWIP_IPADDR(p)                  IP4_ADDR(p, 192, 168, 0, 2)
 #endif
 
 /** @brief IP Gateway. */
 #if !defined(LWIP_GATEWAY) || defined(__DOXYGEN__)
-#define LWIP_GATEWAY(p)                 IP4_ADDR(p, 10, 0, 0, 11)
+#define LWIP_GATEWAY(p)                 IP4_ADDR(p, 192, 168, 0, 2)
 #endif
 
 /** @brief IP netmask. */
@@ -60,15 +60,8 @@
 
 /** @brief MAC thread stack size. */
 #if !defined(LWIP_THREAD_STACK_SIZE) || defined(__DOXYGEN__)
-#define LWIP_THREAD_STACK_SIZE          4096
+#define LWIP_THREAD_STACK_SIZE          512
 #endif
-
-#define LWIP_ETHADDR_0 0xaa
-#define LWIP_ETHADDR_1 0xbb
-#define LWIP_ETHADDR_2 0xcc
-#define LWIP_ETHADDR_3 0xdd
-#define LWIP_ETHADDR_4 0xee
-#define LWIP_ETHADDR_5 0xff
 
 /*
    -----------------------------------------------

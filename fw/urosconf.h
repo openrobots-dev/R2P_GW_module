@@ -59,7 +59,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief Default ROS node name, C string.*/
-#define UROS_NODE_NAME                      "/r2gw"
+#define UROS_NODE_NAME                      "/r2p"
 
 /** @brief Node thread priorty.*/
 #define UROS_NODE_THREAD_PRIO               (LOWPRIO + 1)
@@ -83,10 +83,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief Default Master server IP address, little-endian dword.*/
-#define UROS_XMLRPC_MASTER_IP               urosIpDword(10, 0, 0, 11)
+#define UROS_XMLRPC_MASTER_IP               urosIpDword(192, 168, 0, 100)
 
 /** @brief Default Master server IP address, C string.*/
-#define UROS_XMLRPC_MASTER_IP_SZ            "10.0.0.11"
+#define UROS_XMLRPC_MASTER_IP_SZ            "192.168.0.100"
 
 /** @brief Default Master server port.*/
 #define UROS_XMLRPC_MASTER_PORT             11311
@@ -99,10 +99,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief Default XMLRPC listener IP address, little-endian dword.*/
-#define UROS_XMLRPC_LISTENER_IP             urosIpDword(10, 0, 0, 12)
+#define UROS_XMLRPC_LISTENER_IP             urosIpDword(192, 168, 0, 2)
 
 /** @brief Default XMLRPC listener IP address, C string.*/
-#define UROS_XMLRPC_LISTENER_IP_SZ          "10.0.0.12"
+#define UROS_XMLRPC_LISTENER_IP_SZ          "192.168.0.2"
 
 /** @brief Default XMLRPC listener port.*/
 #define UROS_XMLRPC_LISTENER_PORT           33333
@@ -124,13 +124,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief XMLRPC Slave server thread pool size.*/
-#define UROS_XMLRPC_SLAVE_POOLSIZE          1
+#define UROS_XMLRPC_SLAVE_POOLSIZE          2
 
 /** @brief XMLRPC Slave server thread priority.*/
 #define UROS_XMLRPC_SLAVE_PRIO              (LOWPRIO + 4)
 
 /** @brief XMLRPC Slave server thread stack size.*/
-#define UROS_XMLRPC_SLAVE_STKSIZE           1024
+#define UROS_XMLRPC_SLAVE_STKSIZE           512
 
 /** @} */
 
@@ -186,7 +186,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief TCPROS Client thread pool size.*/
-#define UROS_TCPROS_CLIENT_POOLSIZE         2
+#define UROS_TCPROS_CLIENT_POOLSIZE         4
 
 /** @brief TCPROS Client thread priority.*/
 #define UROS_TCPROS_CLIENT_PRIO             (NORMALPRIO + 1)
@@ -202,7 +202,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief TCPROS Server thread pool size.*/
-#define UROS_TCPROS_SERVER_POOLSIZE         4
+#define UROS_TCPROS_SERVER_POOLSIZE         8
 
 /** @brief TCPROS Server thread priority.*/
 #define UROS_TCPROS_SERVER_PRIO             (NORMALPRIO + 2)
@@ -260,7 +260,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief Fixed Content-Length, when the message spans more packets.*/
-#define UROS_RPCSTREAMER_FIXLEN             4000
+#define UROS_RPCSTREAMER_FIXLEN             1024
 
 /** @} */
 /** @} */
@@ -397,13 +397,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /* msgargs as ("format", ...) */
 #define urosError(when, action, msgargs) \
   { if (when) { \
-      chprintf("Error at %s:%d\n" \
-               "  function: %s\n" \
-               "  reason:   %s\n" \
-               "  message:  ", \
-               __FILE__, __LINE__, __PRETTY_FUNCTION__, #when); \
-      /*chprintf msgargs ;*/ \
-      { action; } } }
+      { action; } \
+      chSysHalt(); } }
 
 #endif /* !defined(__DOXYGEN__) */
 

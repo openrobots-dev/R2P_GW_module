@@ -22,17 +22,25 @@ extern "C" {
 /* PUBLISHED TOPIC PROTOTYPES                                                */
 /*===========================================================================*/
 
-/*~~~ PUBLISHED TOPIC: /tiltone/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /ackermann_odometry ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp);
+uros_err_t pub_tpc__ackermann_odometry(UrosTcpRosStatus *tcpstp);
+
+/*~~~ PUBLISHED TOPIC: /heartbeat ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+uros_err_t pub_tpc__heartbeat(UrosTcpRosStatus *tcpstp);
 
 /*===========================================================================*/
 /* SUBSCRIBED TOPIC PROTOTYPES                                               */
 /*===========================================================================*/
 
-/*~~~ SUBSCRIBED TOPIC: /tiltone/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ SUBSCRIBED TOPIC: /setpoint ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t sub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp);
+uros_err_t sub_tpc__setpoint(UrosTcpRosStatus *tcpstp);
+
+/*~~~ SUBSCRIBED TOPIC: /state ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+uros_err_t sub_tpc__state(UrosTcpRosStatus *tcpstp);
 
 /*===========================================================================*/
 /* PUBLISHED SERVICE PROTOTYPES                                              */

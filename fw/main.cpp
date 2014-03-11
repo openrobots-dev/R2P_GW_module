@@ -3,7 +3,6 @@
 #include "rtcan.h"
 
 #include "shell.h"
-#include "chprintf.h"
 #include "lwipthread.h"
 
 #include "lwip/opt.h"
@@ -29,6 +28,15 @@
 #include <urosUser.h>
 #include <urosNode.h>
 
+#ifndef R2P_MODULE_NAME
+#define R2P_MODULE_NAME "GW"
+#endif
+
+#if R2P_USE_BRIDGE_MODE
+enum { PUBSUB_BUFFER_LENGTH = 16 };
+r2p::Middleware::PubSubStep pubsub_buf[PUBSUB_BUFFER_LENGTH];
+#endif
+
 extern "C" {
 void *__dso_handle;
 void __cxa_pure_virtual() {
@@ -50,12 +58,19 @@ int _getpid() {
 
 static WORKING_AREA(wa_info, 1024);
 
-r2p::Middleware r2p::Middleware::instance("GW_0", "BOOT_GW_0");
+r2p::Middleware r2p::Middleware::instance(
+  R2P_MODULE_NAME, "BOOT_"R2P_MODULE_NAME
+#if R2P_USE_BRIDGE_MODE
+, pubsub_buf, PUBSUB_BUFFER_LENGTH
+#endif
+);
 
 // RTCAN transport
 static r2p::RTCANTransport rtcantra(RTCAND1);
 
 RTCANConfig rtcan_config = { 1000000, 100, 60 };
+
+int activity = 0;
 
 /*===========================================================================*/
 /* Application threads.                                                      */
@@ -77,31 +92,36 @@ int main(void) {
 	halInit();
 	chSysInit();
 
+	palClearPad(LED1_GPIO, LED1);
+	palClearPad(LED2_GPIO, LED2);
+	palClearPad(LED3_GPIO, LED3);
+	palClearPad(LED4_GPIO, LED4);
+	chThdSleepMilliseconds(500);
+	palSetPad(LED1_GPIO, LED1);
+	palSetPad(LED2_GPIO, LED2);
+	palSetPad(LED3_GPIO, LED3);
+	palSetPad(LED4_GPIO, LED4);
+
 	/*
 	 * Activates the serial driver 1 using the driver default configuration.
 	 */
 	sdStart(&SERIAL_DRIVER, NULL);
 
+	r2p::Middleware::instance.initialize(wa_info, sizeof(wa_info), r2p::Thread::LOWEST);
+	rtcantra.initialize(rtcan_config);
+	r2p::Middleware::instance.start();
+
 	/* Make the PHY wake up.*/
 	palSetPad(GPIOC, GPIOC_ETH_NOT_PWRDN);
 
 	/* Creates the LWIP thread (it changes priority internally).*/
-	chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE), NORMALPRIO + 1, lwip_thread, NULL);
-
-	r2p::Thread::set_priority(r2p::Thread::HIGHEST);
-	r2p::Middleware::instance.initialize(wa_info, sizeof(wa_info), r2p::Thread::IDLE);
+	chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE), NORMALPRIO + 5, lwip_thread, NULL);
 
 	chThdSleepMilliseconds(100);
 
-//	rtcantra.initialize(rtcan_config);
-
-	r2p::Thread::set_priority(r2p::Thread::NORMAL);
-
-	chThdSleepMilliseconds(100);
-
-	uint8_t led = 1;
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledpub_node, (void *) &led);
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledsub_node, NULL);
+	uint32_t led = 1;
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO, r2p::ledpub_node, &led);
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO, r2p::ledsub_node, NULL);
 
 	urosInit();
 	urosNodeCreateThread();
@@ -111,6 +131,10 @@ int main(void) {
 	 * sleeping in a loop and check the button state.
 	 */
 	while (TRUE) {
-		r2p::Thread::sleep(r2p::Time::ms(500));
+		r2p::Thread::sleep(r2p::Time::s(20));
+		if (activity == 0) {
+			NVIC_SystemReset();
+		}
+		activity = 0;
 	}
 }

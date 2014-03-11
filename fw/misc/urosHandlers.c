@@ -22,23 +22,23 @@
 /** @addtogroup tcpros_pubtopic_funcs */
 /** @{ */
 
-/*~~~ PUBLISHED TOPIC: /tiltone/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /ackermann_odometry ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/tiltone/led</tt> publisher */
+/** @name Topic <tt>/ackermann_odometry</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/tiltone/led</tt> published topic handler.
+ * @brief   TCPROS <tt>/ackermann_odometry</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__ackermann_odometry(UrosTcpRosStatus *tcpstp) {
 
   /* Message allocation and initialization.*/
-  UROS_TPC_INIT_S(msg__r2p__Led);
+  UROS_TPC_INIT_S(msg__roamros_msgs__SingleTrackAckermannOdometry);
 
   /* Published messages loop.*/
   while (!urosTcpRosStatusCheckExit(tcpstp)) {
@@ -46,17 +46,57 @@ uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp) {
     urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
 
     /* Send the message.*/
-    UROS_MSG_SEND_LENGTH(&msg, msg__r2p__Led);
-    UROS_MSG_SEND_BODY(&msg, msg__r2p__Led);
+    UROS_MSG_SEND_LENGTH(&msg, msg__roamros_msgs__SingleTrackAckermannOdometry);
+    UROS_MSG_SEND_BODY(&msg, msg__roamros_msgs__SingleTrackAckermannOdometry);
 
     /* Dispose the contents of the message.*/
-    clean_msg__r2p__Led(&msg);
+    clean_msg__roamros_msgs__SingleTrackAckermannOdometry(&msg);
   }
   tcpstp->err = UROS_OK;
 
 _finally:
   /* Message deinitialization and deallocation.*/
-  UROS_TPC_UNINIT_S(msg__r2p__Led);
+  UROS_TPC_UNINIT_S(msg__roamros_msgs__SingleTrackAckermannOdometry);
+  return tcpstp->err;
+}
+
+/** @} */
+
+/*~~~ PUBLISHED TOPIC: /heartbeat ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/** @name Topic <tt>/heartbeat</tt> publisher */
+/** @{ */
+
+/**
+ * @brief   TCPROS <tt>/heartbeat</tt> published topic handler.
+ *
+ * @param[in,out] tcpstp
+ *          Pointer to a working @p UrosTcpRosStatus object.
+ * @return
+ *          Error code.
+ */
+uros_err_t pub_tpc__heartbeat(UrosTcpRosStatus *tcpstp) {
+
+  /* Message allocation and initialization.*/
+  UROS_TPC_INIT_S(msg__heartbeat__Heartbeat);
+
+  /* Published messages loop.*/
+  while (!urosTcpRosStatusCheckExit(tcpstp)) {
+    /* TODO: Generate the contents of the message.*/
+    urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
+
+    /* Send the message.*/
+    UROS_MSG_SEND_LENGTH(&msg, msg__heartbeat__Heartbeat);
+    UROS_MSG_SEND_BODY(&msg, msg__heartbeat__Heartbeat);
+
+    /* Dispose the contents of the message.*/
+    clean_msg__heartbeat__Heartbeat(&msg);
+  }
+  tcpstp->err = UROS_OK;
+
+_finally:
+  /* Message deinitialization and deallocation.*/
+  UROS_TPC_UNINIT_S(msg__heartbeat__Heartbeat);
   return tcpstp->err;
 }
 
@@ -71,40 +111,79 @@ _finally:
 /** @addtogroup tcpros_subtopic_funcs */
 /** @{ */
 
-/*~~~ SUBSCRIBED TOPIC: /tiltone/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ SUBSCRIBED TOPIC: /setpoint ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/tiltone/led</tt> subscriber */
+/** @name Topic <tt>/setpoint</tt> subscriber */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/tiltone/led</tt> subscribed topic handler.
+ * @brief   TCPROS <tt>/setpoint</tt> subscribed topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t sub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp) {
+uros_err_t sub_tpc__setpoint(UrosTcpRosStatus *tcpstp) {
 
   /* Message allocation and initialization.*/
-  UROS_TPC_INIT_S(msg__r2p__Led);
+  UROS_TPC_INIT_S(msg__quadrivio_msgs__SetPoint);
 
   /* Subscribed messages loop.*/
   while (!urosTcpRosStatusCheckExit(tcpstp)) {
     /* Receive the next message.*/
     UROS_MSG_RECV_LENGTH();
-    UROS_MSG_RECV_BODY(&msg, msg__r2p__Led);
+    UROS_MSG_RECV_BODY(&msg, msg__quadrivio_msgs__SetPoint);
 
     /* TODO: Process the received message.*/
 
     /* Dispose the contents of the message.*/
-    clean_msg__r2p__Led(&msg);
+    clean_msg__quadrivio_msgs__SetPoint(&msg);
   }
   tcpstp->err = UROS_OK;
 
 _finally:
   /* Message deinitialization and deallocation.*/
-  UROS_TPC_UNINIT_S(msg__r2p__Led);
+  UROS_TPC_UNINIT_S(msg__quadrivio_msgs__SetPoint);
+  return tcpstp->err;
+}
+
+/** @} */
+
+/*~~~ SUBSCRIBED TOPIC: /state ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/** @name Topic <tt>/state</tt> subscriber */
+/** @{ */
+
+/**
+ * @brief   TCPROS <tt>/state</tt> subscribed topic handler.
+ *
+ * @param[in,out] tcpstp
+ *          Pointer to a working @p UrosTcpRosStatus object.
+ * @return
+ *          Error code.
+ */
+uros_err_t sub_tpc__state(UrosTcpRosStatus *tcpstp) {
+
+  /* Message allocation and initialization.*/
+  UROS_TPC_INIT_S(msg__heartbeat__State);
+
+  /* Subscribed messages loop.*/
+  while (!urosTcpRosStatusCheckExit(tcpstp)) {
+    /* Receive the next message.*/
+    UROS_MSG_RECV_LENGTH();
+    UROS_MSG_RECV_BODY(&msg, msg__heartbeat__State);
+
+    /* TODO: Process the received message.*/
+
+    /* Dispose the contents of the message.*/
+    clean_msg__heartbeat__State(&msg);
+  }
+  tcpstp->err = UROS_OK;
+
+_finally:
+  /* Message deinitialization and deallocation.*/
+  UROS_TPC_UNINIT_S(msg__heartbeat__State);
   return tcpstp->err;
 }
 
@@ -147,11 +226,19 @@ _finally:
  */
 void urosHandlersPublishTopics(void) {
 
-  /* /tiltone/led */
+  /* /ackermann_odometry */
   urosNodePublishTopicSZ(
-    "/tiltone/led",
-    "r2p/Led",
-    (uros_proc_f)pub_tpc__tiltone__led,
+    "/ackermann_odometry",
+    "roamros_msgs/SingleTrackAckermannOdometry",
+    (uros_proc_f)pub_tpc__ackermann_odometry,
+    uros_nulltopicflags
+  );
+
+  /* /heartbeat */
+  urosNodePublishTopicSZ(
+    "/heartbeat",
+    "heartbeat/Heartbeat",
+    (uros_proc_f)pub_tpc__heartbeat,
     uros_nulltopicflags
   );
 }
@@ -162,9 +249,14 @@ void urosHandlersPublishTopics(void) {
  */
 void urosHandlersUnpublishTopics(void) {
 
-  /* /tiltone/led */
+  /* /ackermann_odometry */
   urosNodeUnpublishTopicSZ(
-    "/tiltone/led"
+    "/ackermann_odometry"
+  );
+
+  /* /heartbeat */
+  urosNodeUnpublishTopicSZ(
+    "/heartbeat"
   );
 }
 
@@ -174,11 +266,19 @@ void urosHandlersUnpublishTopics(void) {
  */
 void urosHandlersSubscribeTopics(void) {
 
-  /* /tiltone/led */
+  /* /setpoint */
   urosNodeSubscribeTopicSZ(
-    "/tiltone/led",
-    "r2p/Led",
-    (uros_proc_f)sub_tpc__tiltone__led,
+    "/setpoint",
+    "quadrivio_msgs/SetPoint",
+    (uros_proc_f)sub_tpc__setpoint,
+    uros_nulltopicflags
+  );
+
+  /* /state */
+  urosNodeSubscribeTopicSZ(
+    "/state",
+    "heartbeat/State",
+    (uros_proc_f)sub_tpc__state,
     uros_nulltopicflags
   );
 }
@@ -189,9 +289,14 @@ void urosHandlersSubscribeTopics(void) {
  */
 void urosHandlersUnsubscribeTopics(void) {
 
-  /* /tiltone/led */
+  /* /setpoint */
   urosNodeUnsubscribeTopicSZ(
-    "/tiltone/led"
+    "/setpoint"
+  );
+
+  /* /state */
+  urosNodeUnsubscribeTopicSZ(
+    "/state"
   );
 }
 
