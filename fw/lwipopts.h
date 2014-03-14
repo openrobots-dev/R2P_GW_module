@@ -50,7 +50,7 @@
 
 /** @brief IP Gateway. */
 #if !defined(LWIP_GATEWAY) || defined(__DOXYGEN__)
-#define LWIP_GATEWAY(p)                 IP4_ADDR(p, 192, 168, 0, 2)
+#define LWIP_GATEWAY(p)                 IP4_ADDR(p, 192, 168, 0, 100)
 #endif
 
 /** @brief IP netmask. */

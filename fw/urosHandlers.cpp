@@ -32,6 +32,10 @@
 r2p::Node uvel_node("uvel", false);
 r2p::Publisher<r2p::Velocity3Msg> vel_pub;
 
+r2p::Node uodo_node("uodo", false);
+r2p::Subscriber<r2p::EncoderMsg, 5> speed_sub;
+r2p::Subscriber<r2p::AbsoluteEncoder, 5> steer_sub;
+
 extern int activity;
 
 /*===========================================================================*/
@@ -55,19 +59,41 @@ extern int activity;
  *          Error code.
  */
 uros_err_t pub_tpc__ackermann_odometry(UrosTcpRosStatus *tcpstp) {
+	r2p::EncoderMsg *speed_msgp;
+	r2p::AbsoluteEncoder *steer_msgp;
+	static bool first_time = true;
+	float steer_position = 0.0f;
+
+	if (first_time) {
+		uodo_node.subscribe(steer_sub, "steer_encoder");
+		chThdSleepMilliseconds(100);
+		uodo_node.subscribe(speed_sub, "encoder1");
+		first_time = false;
+	}
+
+	uodo_node.set_enabled(true);
 
 	/* Message allocation and initialization.*/
 	UROS_TPC_INIT_S(msg__roamros_msgs__SingleTrackAckermannOdometry);
 
 	/* Published messages loop.*/
 	while (!urosTcpRosStatusCheckExit(tcpstp)) {
-		/* TODO: Generate the contents of the message.*/
-		urosThreadSleepSec(1);
-		continue; /* TODO: Remove this dummy line.*/
+		uodo_node.spin(r2p::Time::ms(1000));
 
-		/* Send the message.*/
-		UROS_MSG_SEND_LENGTH(&msg, msg__roamros_msgs__SingleTrackAckermannOdometry);
-		UROS_MSG_SEND_BODY(&msg, msg__roamros_msgs__SingleTrackAckermannOdometry);
+		while (steer_sub.fetch(steer_msgp)) {
+			steer_position = steer_msgp->position;
+			steer_sub.release(*steer_msgp);
+		}
+
+		while (speed_sub.fetch(speed_msgp)) {
+			msg.speed = speed_msgp->delta;
+			msg.steer = steer_position;
+			speed_sub.release(*speed_msgp);
+
+			/* Send the message.*/
+			UROS_MSG_SEND_LENGTH(&msg, msg__roamros_msgs__SingleTrackAckermannOdometry);
+			UROS_MSG_SEND_BODY(&msg, msg__roamros_msgs__SingleTrackAckermannOdometry);
+		}
 
 		/* Dispose the contents of the message.*/
 		clean_msg__roamros_msgs__SingleTrackAckermannOdometry(&msg);
@@ -167,13 +193,13 @@ uros_err_t sub_tpc__setpoint(UrosTcpRosStatus *tcpstp) {
 		UROS_MSG_RECV_BODY(&msg, msg__quadrivio_msgs__SetPoint);
 
 		palTogglePad(LED2_GPIO, LED2);
+		activity = 1;
+
 		if (vel_pub.alloc(msgp)) {
 			msgp->x = msg.speed;
 			msgp->w = msg.steer;
 			vel_pub.publish(*msgp);
 		}
-
-		activity = 1;
 
 		/* Dispose the contents of the message.*/
 		clean_msg__quadrivio_msgs__SetPoint(&msg);
