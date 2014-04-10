@@ -230,7 +230,7 @@ uros_err_t pub_tpc__triskar__encoder2(UrosTcpRosStatus *tcpstp) {
 	static uint32_t seq = 0;
 
 	if (first_time) {
-		enc2_node.subscribe(enc2_sub, "encoder1");
+		enc2_node.subscribe(enc2_sub, "encoder2");
 		first_time = false;
 	}
 
@@ -296,7 +296,7 @@ uros_err_t pub_tpc__triskar__encoder3(UrosTcpRosStatus *tcpstp) {
 	static uint32_t seq = 0;
 
 	if (first_time) {
-		enc3_node.subscribe(enc3_sub, "encoder1");
+		enc3_node.subscribe(enc3_sub, "encoder3");
 		first_time = false;
 	}
 
