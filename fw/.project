@@ -28,7 +28,7 @@
 		<link>
 			<name>RTCAN</name>
 			<type>2</type>
-			<location>/home/tino/workspace/openrobots/RTCAN</location>
+			<location>/home/tino/workspace/r2p/RTCAN</location>
 		</link>
 		<link>
 			<name>lwip</name>
