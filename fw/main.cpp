@@ -110,9 +110,9 @@ int main(void) {
 	 */
 	while (TRUE) {
 		r2p::Thread::sleep(r2p::Time::s(20));
-		if (activity == 0) {
-			NVIC_SystemReset();
-		}
+//		if (activity == 0) {
+//			NVIC_SystemReset();
+//		}
 		activity = 0;
 	}
 }
