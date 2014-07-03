@@ -48,15 +48,16 @@ int _getpid() {
 }
 } // extern "C"
 
+#ifndef R2P_MODULE_NAME
+#define R2P_MODULE_NAME "IR"
+#endif
+
 static WORKING_AREA(wa_info, 1024);
-
-r2p::Middleware r2p::Middleware::instance("GW_0", "BOOT_GW_0");
-
-// RTCAN transport
 static r2p::RTCANTransport rtcantra(RTCAND1);
 
 RTCANConfig rtcan_config = { 1000000, 100, 60 };
 
+r2p::Middleware r2p::Middleware::instance(R2P_MODULE_NAME, "BOOT_"R2P_MODULE_NAME);
 /*===========================================================================*/
 /* Application threads.                                                      */
 /*===========================================================================*/
@@ -82,26 +83,26 @@ int main(void) {
 	 */
 	sdStart(&SERIAL_DRIVER, NULL);
 
+	r2p::Middleware::instance.initialize(wa_info, sizeof(wa_info), r2p::Thread::LOWEST);
+	rtcantra.initialize(rtcan_config);
+	r2p::Middleware::instance.start();
+
 	/* Make the PHY wake up.*/
 	palSetPad(GPIOC, GPIOC_ETH_NOT_PWRDN);
 
 	/* Creates the LWIP thread (it changes priority internally).*/
 	chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE), NORMALPRIO + 1, lwip_thread, NULL);
 
-	r2p::Thread::set_priority(r2p::Thread::HIGHEST);
-	r2p::Middleware::instance.initialize(wa_info, sizeof(wa_info), r2p::Thread::IDLE);
-
 	chThdSleepMilliseconds(100);
 
-//	rtcantra.initialize(rtcan_config);
+	r2p::ledpub_conf ledpub_conf = {"led2", 2};
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledpub_node, (void *) &ledpub_conf, "led2sub");
 
-	r2p::Thread::set_priority(r2p::Thread::NORMAL);
+	r2p::ledsub_conf ledsub_conf = {"led2"};
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledsub_node, (void *) &ledsub_conf, "led2pub");
 
-	chThdSleepMilliseconds(100);
-
-	uint8_t led = 1;
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledpub_node, (void *) &led);
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledsub_node, NULL);
+	ledsub_conf.topic = "led3";
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledsub_node, (void *) &ledsub_conf, "led2pub");
 
 	urosInit();
 	urosNodeCreateThread();
@@ -111,6 +112,7 @@ int main(void) {
 	 * sleeping in a loop and check the button state.
 	 */
 	while (TRUE) {
+		palTogglePad(LED1_GPIO, LED1);
 		r2p::Thread::sleep(r2p::Time::ms(500));
 	}
 }
