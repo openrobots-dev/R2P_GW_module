@@ -14,6 +14,28 @@
 #include <urosNode.h>
 #include <urosTcpRos.h>
 #include <urosUser.h>
+#include <r2p/common.hpp>
+#include <r2p/Middleware.hpp>
+#include <r2p/Node.hpp>
+#include <r2p/Publisher.hpp>
+#include <r2p/Subscriber.hpp>
+
+#include <r2p/msg/led.hpp>
+
+/*===========================================================================*/
+/* GLOBAL VARIABLES                                                          */
+/*===========================================================================*/
+r2p::Node led2sub_node("uled2sub", false);
+r2p::Subscriber<r2p::LedMsg, 2> led2_sub;
+
+r2p::Node led3sub_node("uled3sub", false);
+r2p::Subscriber<r2p::LedMsg, 2> led3_sub;
+
+r2p::Node led2pub_node("uled2pub", false);
+r2p::Publisher<r2p::LedMsg> led2_pub;
+
+r2p::Node led3pub_node("uled3pub", false);
+r2p::Publisher<r2p::LedMsg> led3_pub;
 
 /*===========================================================================*/
 /* PUBLISHED TOPIC FUNCTIONS                                                 */
@@ -36,28 +58,47 @@
  *          Error code.
  */
 uros_err_t pub_tpc__r2p__led2(UrosTcpRosStatus *tcpstp) {
+	r2p::LedMsg *msgp;
+	static bool first_time = true;
 
-  /* Message allocation and initialization.*/
-  UROS_TPC_INIT_S(msg__r2p__Led);
+	/* Message allocation and initialization.*/
+	UROS_TPC_INIT_S(msg__r2p__Led);
 
-  /* Published messages loop.*/
-  while (!urosTcpRosStatusCheckExit(tcpstp)) {
-    /* TODO: Generate the contents of the message.*/
-    urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
+	if (first_time) {
+		led2sub_node.subscribe(led2_sub, "led2");
+		led2sub_node.set_enabled(true);
+	}
 
-    /* Send the message.*/
-    UROS_MSG_SEND_LENGTH(&msg, msg__r2p__Led);
-    UROS_MSG_SEND_BODY(&msg, msg__r2p__Led);
 
-    /* Dispose the contents of the message.*/
-    clean_msg__r2p__Led(&msg);
-  }
-  tcpstp->err = UROS_OK;
+	/* Published messages loop.*/
+	while (!urosTcpRosStatusCheckExit(tcpstp)) {
+		if (led2sub_node.spin(r2p::Time::ms(1000))) {
+			while (led2_sub.fetch(msgp)) {
+				msg.led = msgp->led;
+				msg.value = msgp->value;
+				led2_sub.release(*msgp);
 
-_finally:
-  /* Message deinitialization and deallocation.*/
-  UROS_TPC_UNINIT_S(msg__r2p__Led);
-  return tcpstp->err;
+				/* Send the message.*/
+				UROS_MSG_SEND_LENGTH(&msg, msg__r2p__Led);
+				UROS_MSG_SEND_BODY(&msg, msg__r2p__Led);
+
+				/* Dispose the contents of the message.*/
+				clean_msg__r2p__Led(&msg);
+			}
+		}
+	}
+
+	tcpstp->err = UROS_OK;
+
+	_finally:
+	/* Fetch pending messages and disable r2p node. */
+	led2sub_node.set_enabled(false);
+	while (led2_sub.fetch(msgp)) {
+		led2_sub.release(*msgp);
+	}
+	/* Message deinitialization and deallocation.*/
+	UROS_TPC_UNINIT_S(msg__r2p__Led);
+	return tcpstp->err;
 }
 
 /** @} */
@@ -76,28 +117,49 @@ _finally:
  *          Error code.
  */
 uros_err_t pub_tpc__r2p__led3(UrosTcpRosStatus *tcpstp) {
+	r2p::LedMsg *msgp;
+	static bool first_time = true;
 
-  /* Message allocation and initialization.*/
-  UROS_TPC_INIT_S(msg__r2p__Led);
+	/* Message allocation and initialization.*/
+	UROS_TPC_INIT_S(msg__r2p__Led);
 
-  /* Published messages loop.*/
-  while (!urosTcpRosStatusCheckExit(tcpstp)) {
-    /* TODO: Generate the contents of the message.*/
-    urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
+	if (first_time) {
+		led3sub_node.subscribe(led3_sub, "led3");
+		first_time = false;
+	}
 
-    /* Send the message.*/
-    UROS_MSG_SEND_LENGTH(&msg, msg__r2p__Led);
-    UROS_MSG_SEND_BODY(&msg, msg__r2p__Led);
+	led3sub_node.set_enabled(true);
 
-    /* Dispose the contents of the message.*/
-    clean_msg__r2p__Led(&msg);
-  }
-  tcpstp->err = UROS_OK;
+	/* Published messages loop.*/
+	while (!urosTcpRosStatusCheckExit(tcpstp)) {
+		if (led3sub_node.spin(r2p::Time::ms(1000))) {
+			while (led3_sub.fetch(msgp)) {
+				msg.led = msgp->led;
+				msg.value = msgp->value;
+				led3_sub.release(*msgp);
 
-_finally:
-  /* Message deinitialization and deallocation.*/
-  UROS_TPC_UNINIT_S(msg__r2p__Led);
-  return tcpstp->err;
+				/* Send the message.*/
+				UROS_MSG_SEND_LENGTH(&msg, msg__r2p__Led);
+				UROS_MSG_SEND_BODY(&msg, msg__r2p__Led);
+
+				/* Dispose the contents of the message.*/
+				clean_msg__r2p__Led(&msg);
+
+			}
+		}
+	}
+
+	tcpstp->err = UROS_OK;
+
+	_finally:
+	/* Fetch pending messages and disable r2p node. */
+	led3sub_node.set_enabled(false);
+	while (led3_sub.fetch(msgp)) {
+		led3_sub.release(*msgp);
+	}
+	/* Message deinitialization and deallocation.*/
+	UROS_TPC_UNINIT_S(msg__r2p__Led);
+	return tcpstp->err;
 }
 
 /** @} */
@@ -125,27 +187,45 @@ _finally:
  *          Error code.
  */
 uros_err_t sub_tpc__r2p__led2(UrosTcpRosStatus *tcpstp) {
+	r2p::LedMsg *msgp;
+	static bool first_time = true;
 
-  /* Message allocation and initialization.*/
-  UROS_TPC_INIT_S(msg__r2p__Led);
+	/* Message allocation and initialization.*/
+	UROS_TPC_INIT_S(msg__r2p__Led);
 
-  /* Subscribed messages loop.*/
-  while (!urosTcpRosStatusCheckExit(tcpstp)) {
-    /* Receive the next message.*/
-    UROS_MSG_RECV_LENGTH();
-    UROS_MSG_RECV_BODY(&msg, msg__r2p__Led);
+	if (first_time) {
+		led2pub_node.advertise(led2_pub, "led2", r2p::Time::INFINITE);
+		led2pub_node.set_enabled(true);
+	}
 
-    /* TODO: Process the received message.*/
+	/* Subscribed messages loop.*/
+	while (!urosTcpRosStatusCheckExit(tcpstp)) {
+		/* Receive the next message.*/
+		UROS_MSG_RECV_LENGTH()
+		;
+		UROS_MSG_RECV_BODY(&msg, msg__r2p__Led);
 
-    /* Dispose the contents of the message.*/
-    clean_msg__r2p__Led(&msg);
-  }
-  tcpstp->err = UROS_OK;
+		/* TODO: Process the received message.*/
 
-_finally:
-  /* Message deinitialization and deallocation.*/
-  UROS_TPC_UNINIT_S(msg__r2p__Led);
-  return tcpstp->err;
+		if (led2_pub.alloc(msgp)) {
+			msgp->led = msg.led;
+			msgp->value = msg.value;
+		}
+
+		led2_pub.publish(*msgp);
+
+		/* Dispose the contents of the message.*/
+		clean_msg__r2p__Led(&msg);
+	}
+	tcpstp->err = UROS_OK;
+
+	_finally:
+	/* Disable r2p node. */
+	led2pub_node.set_enabled(false);
+
+	/* Message deinitialization and deallocation.*/
+	UROS_TPC_UNINIT_S(msg__r2p__Led);
+	return tcpstp->err;
 }
 
 /** @} */
@@ -164,27 +244,45 @@ _finally:
  *          Error code.
  */
 uros_err_t sub_tpc__r2p__led3(UrosTcpRosStatus *tcpstp) {
+	r2p::LedMsg *msgp;
+	static bool first_time = true;
 
-  /* Message allocation and initialization.*/
-  UROS_TPC_INIT_S(msg__r2p__Led);
+	/* Message allocation and initialization.*/
+	UROS_TPC_INIT_S(msg__r2p__Led);
 
-  /* Subscribed messages loop.*/
-  while (!urosTcpRosStatusCheckExit(tcpstp)) {
-    /* Receive the next message.*/
-    UROS_MSG_RECV_LENGTH();
-    UROS_MSG_RECV_BODY(&msg, msg__r2p__Led);
+	if (first_time) {
+		led3pub_node.advertise(led3_pub, "led3", r2p::Time::INFINITE);
+		led3pub_node.set_enabled(true);
+	}
 
-    /* TODO: Process the received message.*/
+	/* Subscribed messages loop.*/
+	while (!urosTcpRosStatusCheckExit(tcpstp)) {
+		/* Receive the next message.*/
+		UROS_MSG_RECV_LENGTH()
+		;
+		UROS_MSG_RECV_BODY(&msg, msg__r2p__Led);
 
-    /* Dispose the contents of the message.*/
-    clean_msg__r2p__Led(&msg);
-  }
-  tcpstp->err = UROS_OK;
+		/* TODO: Process the received message.*/
 
-_finally:
-  /* Message deinitialization and deallocation.*/
-  UROS_TPC_UNINIT_S(msg__r2p__Led);
-  return tcpstp->err;
+		if (led3_pub.alloc(msgp)) {
+			msgp->led = msg.led;
+			msgp->value = msg.value;
+		}
+
+		led3_pub.publish(*msgp);
+
+		/* Dispose the contents of the message.*/
+		clean_msg__r2p__Led(&msg);
+	}
+	tcpstp->err = UROS_OK;
+
+	_finally:
+	/* Disable r2p node. */
+	led3pub_node.set_enabled(false);
+
+	/* Message deinitialization and deallocation.*/
+	UROS_TPC_UNINIT_S(msg__r2p__Led);
+	return tcpstp->err;
 }
 
 /** @} */
@@ -226,21 +324,11 @@ _finally:
  */
 void urosHandlersPublishTopics(void) {
 
-  /* /r2p/led2 */
-  urosNodePublishTopicSZ(
-    "/r2p/led2",
-    "r2p/Led",
-    (uros_proc_f)pub_tpc__r2p__led2,
-    uros_nulltopicflags
-  );
+	/* /r2p/led2 */
+	urosNodePublishTopicSZ("/r2p/led2", "r2p/Led", (uros_proc_f) pub_tpc__r2p__led2, uros_nulltopicflags);
 
-  /* /r2p/led3 */
-  urosNodePublishTopicSZ(
-    "/r2p/led3",
-    "r2p/Led",
-    (uros_proc_f)pub_tpc__r2p__led3,
-    uros_nulltopicflags
-  );
+	/* /r2p/led3 */
+	urosNodePublishTopicSZ("/r2p/led3", "r2p/Led", (uros_proc_f) pub_tpc__r2p__led3, uros_nulltopicflags);
 }
 
 /**
@@ -249,15 +337,11 @@ void urosHandlersPublishTopics(void) {
  */
 void urosHandlersUnpublishTopics(void) {
 
-  /* /r2p/led2 */
-  urosNodeUnpublishTopicSZ(
-    "/r2p/led2"
-  );
+	/* /r2p/led2 */
+	urosNodeUnpublishTopicSZ("/r2p/led2");
 
-  /* /r2p/led3 */
-  urosNodeUnpublishTopicSZ(
-    "/r2p/led3"
-  );
+	/* /r2p/led3 */
+	urosNodeUnpublishTopicSZ("/r2p/led3");
 }
 
 /**
@@ -266,21 +350,11 @@ void urosHandlersUnpublishTopics(void) {
  */
 void urosHandlersSubscribeTopics(void) {
 
-  /* /r2p/led2 */
-  urosNodeSubscribeTopicSZ(
-    "/r2p/led2",
-    "r2p/Led",
-    (uros_proc_f)sub_tpc__r2p__led2,
-    uros_nulltopicflags
-  );
+	/* /r2p/led2 */
+	urosNodeSubscribeTopicSZ("/r2p/led2", "r2p/Led", (uros_proc_f) sub_tpc__r2p__led2, uros_nulltopicflags);
 
-  /* /r2p/led3 */
-  urosNodeSubscribeTopicSZ(
-    "/r2p/led3",
-    "r2p/Led",
-    (uros_proc_f)sub_tpc__r2p__led3,
-    uros_nulltopicflags
-  );
+	/* /r2p/led3 */
+	urosNodeSubscribeTopicSZ("/r2p/led3", "r2p/Led", (uros_proc_f) sub_tpc__r2p__led3, uros_nulltopicflags);
 }
 
 /**
@@ -289,15 +363,11 @@ void urosHandlersSubscribeTopics(void) {
  */
 void urosHandlersUnsubscribeTopics(void) {
 
-  /* /r2p/led2 */
-  urosNodeUnsubscribeTopicSZ(
-    "/r2p/led2"
-  );
+	/* /r2p/led2 */
+	urosNodeUnsubscribeTopicSZ("/r2p/led2");
 
-  /* /r2p/led3 */
-  urosNodeUnsubscribeTopicSZ(
-    "/r2p/led3"
-  );
+	/* /r2p/led3 */
+	urosNodeUnsubscribeTopicSZ("/r2p/led3");
 }
 
 /**
@@ -306,7 +376,7 @@ void urosHandlersUnsubscribeTopics(void) {
  */
 void urosHandlersPublishServices(void) {
 
-  /* No services to publish.*/
+	/* No services to publish.*/
 }
 
 /**
@@ -315,7 +385,7 @@ void urosHandlersPublishServices(void) {
  */
 void urosHandlersUnpublishServices(void) {
 
-  /* No services to unpublish.*/
+	/* No services to unpublish.*/
 }
 
 /** @} */

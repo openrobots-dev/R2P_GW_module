@@ -50,7 +50,7 @@
 
 /** @brief IP Gateway. */
 #if !defined(LWIP_GATEWAY) || defined(__DOXYGEN__)
-#define LWIP_GATEWAY(p)                 IP4_ADDR(p, 10, 0, 0, 1)
+#define LWIP_GATEWAY(p)                 IP4_ADDR(p, 10, 0, 0, 11)
 #endif
 
 /** @brief IP netmask. */
@@ -60,7 +60,7 @@
 
 /** @brief MAC thread stack size. */
 #if !defined(LWIP_THREAD_STACK_SIZE) || defined(__DOXYGEN__)
-#define LWIP_THREAD_STACK_SIZE          4096
+#define LWIP_THREAD_STACK_SIZE          1024
 #endif
 
 /*

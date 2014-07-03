@@ -91,10 +91,10 @@ int main(void) {
 	palSetPad(GPIOC, GPIOC_ETH_NOT_PWRDN);
 
 	/* Creates the LWIP thread (it changes priority internally).*/
-	chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE), NORMALPRIO + 1, lwip_thread, NULL);
+	chThdCreateStatic(wa_lwip_thread, THD_WA_SIZE(LWIP_THREAD_STACK_SIZE), NORMALPRIO + 5, lwip_thread, NULL);
 
 	chThdSleepMilliseconds(100);
-
+/*
 	r2p::ledpub_conf ledpub_conf = {"led2", 2};
 	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO + 1, r2p::ledpub_node, (void *) &ledpub_conf, "led2sub");
 
@@ -103,9 +103,9 @@ int main(void) {
 
 	ledsub_conf.topic = "led3";
 	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO + 1, r2p::ledsub_node, (void *) &ledsub_conf, "led3pub");
-
-//	urosInit();
-//	urosNodeCreateThread();
+*/
+	urosInit();
+	urosNodeCreateThread();
 
 	/*
 	 * Normal main() thread activity, in this demo it does nothing except
