@@ -96,16 +96,16 @@ int main(void) {
 	chThdSleepMilliseconds(100);
 
 	r2p::ledpub_conf ledpub_conf = {"led2", 2};
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledpub_node, (void *) &ledpub_conf, "led2sub");
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO + 1, r2p::ledpub_node, (void *) &ledpub_conf, "led2sub");
 
 	r2p::ledsub_conf ledsub_conf = {"led2"};
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledsub_node, (void *) &ledsub_conf, "led2pub");
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO + 1, r2p::ledsub_node, (void *) &ledsub_conf, "led2pub");
 
 	ledsub_conf.topic = "led3";
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(1024), NORMALPRIO + 1, r2p::ledsub_node, (void *) &ledsub_conf, "led2pub");
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO + 1, r2p::ledsub_node, (void *) &ledsub_conf, "led3pub");
 
-	urosInit();
-	urosNodeCreateThread();
+//	urosInit();
+//	urosNodeCreateThread();
 
 	/*
 	 * Normal main() thread activity, in this demo it does nothing except
