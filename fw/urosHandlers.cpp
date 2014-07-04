@@ -428,7 +428,7 @@ uros_err_t pub_tpc__triskar__led(UrosTcpRosStatus *tcpstp) {
 	static bool first_time = true;
 
 	if (first_time) {
-		sub_node.subscribe(led_sub, "leds");
+		sub_node.subscribe(led_sub, "led2");
 		first_time = false;
 	}
 
