@@ -247,7 +247,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /** @{ */
 
 /** @brief Default length of the reading buffer.*/
-#define UROS_RPCPARSER_RDBUFLEN             1024
+#define UROS_RPCPARSER_RDBUFLEN             512
 
 /** @brief Reads the status message, instead of skipping it.*/
 #define UROS_RPCPARSER_USE_STATMSG          0

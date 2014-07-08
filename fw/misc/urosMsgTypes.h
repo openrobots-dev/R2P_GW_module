@@ -25,6 +25,16 @@ extern "C" {
 /** @addtogroup tcpros_msg_types */
 /** @{ */
 
+/*~~~ MESSAGE: std_msgs/Float32 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+ * @brief   TCPROS <tt>std_msgs/Float32</tt> message descriptor.
+ * @details MD5 sum: <tt>73fcbf46b49191e672908e50842a83d4</tt>.
+ */
+struct msg__std_msgs__Float32 {
+  float data;
+};
+
 /*~~~ MESSAGE: r2p/Led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
@@ -74,6 +84,26 @@ struct msg__r2p__Led {
 /*===========================================================================*/
 /* MESSAGE PROTOTYPES                                                        */
 /*===========================================================================*/
+
+/*~~~ MESSAGE: std_msgs/Float32 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+size_t length_msg__std_msgs__Float32(
+  struct msg__std_msgs__Float32 *objp
+);
+void init_msg__std_msgs__Float32(
+  struct msg__std_msgs__Float32 *objp
+);
+void clean_msg__std_msgs__Float32(
+  struct msg__std_msgs__Float32 *objp
+);
+uros_err_t recv_msg__std_msgs__Float32(
+  UrosTcpRosStatus *tcpstp,
+  struct msg__std_msgs__Float32 *objp
+);
+uros_err_t send_msg__std_msgs__Float32(
+  UrosTcpRosStatus *tcpstp,
+  struct msg__std_msgs__Float32 *objp
+);
 
 /*~~~ MESSAGE: r2p/Led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 

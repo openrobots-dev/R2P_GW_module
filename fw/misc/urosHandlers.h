@@ -22,21 +22,21 @@ extern "C" {
 /* PUBLISHED TOPIC PROTOTYPES                                                */
 /*===========================================================================*/
 
+/*~~~ PUBLISHED TOPIC: /r2p/ir ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+uros_err_t pub_tpc__r2p__ir(UrosTcpRosStatus *tcpstp);
+
 /*~~~ PUBLISHED TOPIC: /r2p/led2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 uros_err_t pub_tpc__r2p__led2(UrosTcpRosStatus *tcpstp);
 
-/*~~~ PUBLISHED TOPIC: /r2p/led3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /r2p/sonar ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t pub_tpc__r2p__led3(UrosTcpRosStatus *tcpstp);
+uros_err_t pub_tpc__r2p__sonar(UrosTcpRosStatus *tcpstp);
 
 /*===========================================================================*/
 /* SUBSCRIBED TOPIC PROTOTYPES                                               */
 /*===========================================================================*/
-
-/*~~~ SUBSCRIBED TOPIC: /r2p/led2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-uros_err_t sub_tpc__r2p__led2(UrosTcpRosStatus *tcpstp);
 
 /*~~~ SUBSCRIBED TOPIC: /r2p/led3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 

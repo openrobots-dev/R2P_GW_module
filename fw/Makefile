@@ -5,7 +5,7 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16
+  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16
 endif
 
 # C specific options here (added to USE_OPT).
@@ -76,7 +76,8 @@ endif
 PROJECT = ch
 
 # Imported source files and paths
-include ./paths.mk
+include ../../paths.mk
+include ./board.mk
 include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
 include $(CHIBIOS)/os/hal/hal.mk
 include $(CHIBIOS)/os/ports/GCC/ARMCMx/STM32F4xx/port.mk
@@ -103,18 +104,15 @@ CSRC = $(PORTSRC) \
        $(HALSRC) \
        $(PLATFORMSRC) \
        $(BOARDSRC) \
-       $(CHIBIOS)/os/various/chprintf.c \
        $(CHIBIOS)/os/various/evtimer.c \
-       $(CHIBIOS)/os/various/shell.c \
        $(CHIBIOS)/os/various/syscalls.c \
        $(LWSRC) \
        $(RTCANSRC) \
        $(RTCANPLATFORMSRC) \
        $(UROSSRC) $(UROSLLDSRC) \
-       board.c \
        ./src/urosUser.c \
        ./src/urosMsgTypes.c \
-       netstream.c
+       stubs.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -224,7 +222,7 @@ DLIBS =
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS += -DR2P_ITERATE_PUBSUB=1 -DR2P_USE_BRIDGE_MODE=0 -DR2P_MESSAGE_TRACKS_SOURCE=0 -DR2P_USE_BOOTLOADER=0
+UDEFS = -DR2P_USE_BOOTLOADER=0 #-DRTCAN_ISMASTER
 
 # Define ASM defines here
 UADEFS =

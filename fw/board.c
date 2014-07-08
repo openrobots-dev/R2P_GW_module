@@ -104,8 +104,9 @@ bool_t mmc_lld_is_write_protected(MMCDriver *mmcp) {
 }
 #endif
 
-/*
- * Board-specific initialization code.
+/**
+ * @brief   Board-specific initialization code.
+ * @todo    Add your board-specific code, if any.
  */
 void boardInit(void) {
 
@@ -119,4 +120,3 @@ void boardInit(void) {
 	palSetPad(LED3_GPIO, LED3);
 	palSetPad(LED4_GPIO, LED4);
 }
-
