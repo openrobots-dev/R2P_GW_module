@@ -9,6 +9,8 @@
 /* HEADER FILES                                                              */
 /*===========================================================================*/
 
+#include <math.h>
+
 #include "urosHandlers.h"
 
 #include <urosNode.h>
@@ -36,8 +38,14 @@ r2p::Subscriber<r2p::EncoderMsg, 5> steer_sub;
 r2p::Node uwheel_node("uwheel", false);
 r2p::Subscriber<r2p::Encoder2Msg, 5> wheel_sub;
 
-r2p::Node uodo_node("uodo", false);
-r2p::Subscriber<r2p::Velocity3Msg, 5> odo_sub;
+r2p::Node uodo_vel_node("uodovel", false);
+r2p::Subscriber<r2p::tVelocity3Msg, 5> odo_vel_sub;
+
+r2p::Node uodo_diff_node("uododiff", false);
+r2p::Subscriber<r2p::tPose3Msg, 5> odo_diff_sub;
+
+r2p::Node uodo_ack_node("uodoack", false);
+r2p::Subscriber<r2p::tPose3Msg, 5> odo_ack_sub;
 
 r2p::Node uvel_node("uvel", false);
 r2p::Publisher<r2p::Velocity3Msg> vel_pub;
@@ -51,62 +59,131 @@ extern int activity;
 /** @addtogroup tcpros_pubtopic_funcs */
 /** @{ */
 
-/*~~~ PUBLISHED TOPIC: /r2p/odometry ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /r2p/odometry_ackermann ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/r2p/odometry</tt> publisher */
+/** @name Topic <tt>/r2p/odometry_ackermann</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/r2p/odometry</tt> published topic handler.
+ * @brief   TCPROS <tt>/r2p/odometry_ackermann</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__r2p__odometry(UrosTcpRosStatus *tcpstp) {
-	r2p::Velocity3Msg *msgp;
+uros_err_t pub_tpc__r2p__odometry_ackermann(UrosTcpRosStatus *tcpstp) {
+	r2p::tPose3Msg *msgp;
 	static bool first_time = true;
+	static uint32_t seq = 0;
 
 	if (first_time) {
-		uodo_node.subscribe(odo_sub, "odometry");
+		uodo_ack_node.subscribe(odo_ack_sub, "delta_pose_ack");
 		first_time = false;
 	}
 
-	uodo_node.set_enabled(true);
+	uodo_ack_node.set_enabled(true);
 
 	/* Message allocation and initialization.*/
-	UROS_TPC_INIT_S(msg__geometry_msgs__Twist);
+	UROS_TPC_INIT_S(msg__geometry_msgs__PoseStamped);
 
 	/* Published messages loop.*/
 	while (!urosTcpRosStatusCheckExit(tcpstp)) {
-		uodo_node.spin(r2p::Time::ms(1000));
-		while (odo_sub.fetch(msgp)) {
-			msg.linear.x = msgp->x;
-			msg.linear.y = 0;
-			msg.linear.z = 0;
-			msg.angular.x = 0;
-			msg.angular.y = 0;
-			msg.angular.z = msgp->w;
-			odo_sub.release(*msgp);
+		uodo_ack_node.spin(r2p::Time::ms(1000));
+		while (odo_ack_sub.fetch(msgp)) {
+			msg.header.seq = seq++;
+			msg.header.stamp.sec = msgp->timestamp.sec;
+			msg.header.stamp.nsec = msgp->timestamp.nsec;
+			msg.pose.position.x = msgp->x;
+			msg.pose.position.y = msgp->y;
+			msg.pose.position.z = 0;
+			msg.pose.orientation.x = msgp->w;
+			msg.pose.orientation.y = 0;
+			msg.pose.orientation.z = sin(msgp->w / 2.0f);
+			msg.pose.orientation.w = cos(msgp->w / 2.0f);
+			odo_ack_sub.release(*msgp);
 
 			/* Send the message.*/
-			UROS_MSG_SEND_LENGTH(&msg, msg__geometry_msgs__Twist);
-			UROS_MSG_SEND_BODY(&msg, msg__geometry_msgs__Twist);
+			UROS_MSG_SEND_LENGTH(&msg, msg__geometry_msgs__PoseStamped);
+			UROS_MSG_SEND_BODY(&msg, msg__geometry_msgs__PoseStamped);
 
 			/* Dispose the contents of the message.*/
-			clean_msg__geometry_msgs__Twist(&msg);
+			clean_msg__geometry_msgs__PoseStamped(&msg);
 		}
-
 	}
 	tcpstp->err = UROS_OK;
 
 	_finally:
 	/* Disable r2p node. */
-	uodo_node.set_enabled(false);
+	uodo_ack_node.set_enabled(false);
 
 	/* Message deinitialization and deallocation.*/
-	UROS_TPC_UNINIT_S(msg__geometry_msgs__Twist);
+	UROS_TPC_UNINIT_S(msg__geometry_msgs__PoseStamped);
+	return tcpstp->err;
+}
+
+/** @} */
+
+/*~~~ PUBLISHED TOPIC: /r2p/odometry_differential ~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/** @name Topic <tt>/r2p/odometry_differential</tt> publisher */
+/** @{ */
+
+/**
+ * @brief   TCPROS <tt>/r2p/odometry_differential</tt> published topic handler.
+ *
+ * @param[in,out] tcpstp
+ *          Pointer to a working @p UrosTcpRosStatus object.
+ * @return
+ *          Error code.
+ */
+uros_err_t pub_tpc__r2p__odometry_differential(UrosTcpRosStatus *tcpstp) {
+	r2p::tPose3Msg *msgp;
+	static bool first_time = true;
+	static uint32_t seq = 0;
+
+	if (first_time) {
+		uodo_diff_node.subscribe(odo_diff_sub, "delta_pose_diff");
+		first_time = false;
+	}
+
+	uodo_diff_node.set_enabled(true);
+
+	/* Message allocation and initialization.*/
+	UROS_TPC_INIT_S(msg__geometry_msgs__PoseStamped);
+
+	/* Published messages loop.*/
+	while (!urosTcpRosStatusCheckExit(tcpstp)) {
+		uodo_diff_node.spin(r2p::Time::ms(1000));
+		while (odo_diff_sub.fetch(msgp)) {
+			msg.header.seq = seq++;
+			msg.header.stamp.sec = msgp->timestamp.sec;
+			msg.header.stamp.nsec = msgp->timestamp.nsec;
+			msg.pose.position.x = msgp->x;
+			msg.pose.position.y = msgp->y;
+			msg.pose.position.z = 0;
+			msg.pose.orientation.x = msgp->w;
+			msg.pose.orientation.y = 0;
+			msg.pose.orientation.z = sin(msgp->w / 2.0f);
+			msg.pose.orientation.w = cos(msgp->w / 2.0f);
+			odo_diff_sub.release(*msgp);
+
+			/* Send the message.*/
+			UROS_MSG_SEND_LENGTH(&msg, msg__geometry_msgs__PoseStamped);
+			UROS_MSG_SEND_BODY(&msg, msg__geometry_msgs__PoseStamped);
+
+			/* Dispose the contents of the message.*/
+			clean_msg__geometry_msgs__PoseStamped(&msg);
+		}
+	}
+	tcpstp->err = UROS_OK;
+
+	_finally:
+	/* Disable r2p node. */
+	uodo_diff_node.set_enabled(false);
+
+	/* Message deinitialization and deallocation.*/
+	UROS_TPC_UNINIT_S(msg__geometry_msgs__PoseStamped);
 	return tcpstp->err;
 }
 
@@ -163,6 +240,71 @@ uros_err_t pub_tpc__r2p__steer_encoder(UrosTcpRosStatus *tcpstp) {
 
 	/* Message deinitialization and deallocation.*/
 	UROS_TPC_UNINIT_S(msg__r2p__Encoder);
+	return tcpstp->err;
+}
+
+/** @} */
+
+/*~~~ PUBLISHED TOPIC: /r2p/velocity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/** @name Topic <tt>/r2p/velocity</tt> publisher */
+/** @{ */
+
+/**
+ * @brief   TCPROS <tt>/r2p/velocity</tt> published topic handler.
+ *
+ * @param[in,out] tcpstp
+ *          Pointer to a working @p UrosTcpRosStatus object.
+ * @return
+ *          Error code.
+ */
+uros_err_t pub_tpc__r2p__velocity(UrosTcpRosStatus *tcpstp) {
+	r2p::tVelocity3Msg *msgp;
+	static bool first_time = true;
+	static uint32_t seq = 0;
+
+	if (first_time) {
+		uodo_vel_node.subscribe(odo_vel_sub, "velocity");
+		first_time = false;
+	}
+
+	uodo_vel_node.set_enabled(true);
+
+	/* Message allocation and initialization.*/
+	UROS_TPC_INIT_S(msg__geometry_msgs__TwistStamped);
+
+	/* Published messages loop.*/
+	while (!urosTcpRosStatusCheckExit(tcpstp)) {
+		uodo_vel_node.spin(r2p::Time::ms(1000));
+		while (odo_vel_sub.fetch(msgp)) {
+			msg.header.seq = seq++;
+			msg.header.stamp.sec = msgp->timestamp.sec;
+			msg.header.stamp.nsec = msgp->timestamp.nsec;
+			msg.twist.linear.x = msgp->x;
+			msg.twist.linear.y = 0;
+			msg.twist.linear.z = 0;
+			msg.twist.angular.x = 0;
+			msg.twist.angular.y = 0;
+			msg.twist.angular.z = msgp->w;
+			odo_vel_sub.release(*msgp);
+
+			/* Send the message.*/
+			UROS_MSG_SEND_LENGTH(&msg, msg__geometry_msgs__TwistStamped);
+			UROS_MSG_SEND_BODY(&msg, msg__geometry_msgs__TwistStamped);
+
+			/* Dispose the contents of the message.*/
+			clean_msg__geometry_msgs__TwistStamped(&msg);
+		}
+
+	}
+	tcpstp->err = UROS_OK;
+
+	_finally:
+	/* Disable r2p node. */
+	uodo_vel_node.set_enabled(false);
+
+	/* Message deinitialization and deallocation.*/
+	UROS_TPC_UNINIT_S(msg__geometry_msgs__TwistStamped);
 	return tcpstp->err;
 }
 
@@ -328,13 +470,25 @@ uros_err_t sub_tpc__cmd_vel(UrosTcpRosStatus *tcpstp) {
  */
 void urosHandlersPublishTopics(void) {
 
-	/* /r2p/odometry */
-	urosNodePublishTopicSZ("/r2p/odometry", "geometry_msgs/Twist",
-			(uros_proc_f) pub_tpc__r2p__odometry, uros_nulltopicflags);
+	/* /r2p/odometry_ackermann */
+	urosNodePublishTopicSZ("/r2p/odometry_ackermann",
+			"geometry_msgs/PoseStamped",
+			(uros_proc_f) pub_tpc__r2p__odometry_ackermann,
+			uros_nulltopicflags);
+
+	/* /r2p/odometry_differential */
+	urosNodePublishTopicSZ("/r2p/odometry_differential",
+			"geometry_msgs/PoseStamped",
+			(uros_proc_f) pub_tpc__r2p__odometry_differential,
+			uros_nulltopicflags);
 
 	/* /r2p/steer_encoder */
 	urosNodePublishTopicSZ("/r2p/steer_encoder", "r2p/Encoder",
 			(uros_proc_f) pub_tpc__r2p__steer_encoder, uros_nulltopicflags);
+
+	/* /r2p/velocity */
+	urosNodePublishTopicSZ("/r2p/velocity", "geometry_msgs/TwistStamped",
+			(uros_proc_f) pub_tpc__r2p__velocity, uros_nulltopicflags);
 
 	/* /r2p/wheel_encoders */
 	urosNodePublishTopicSZ("/r2p/wheel_encoders", "r2p/Encoder2",
@@ -347,11 +501,17 @@ void urosHandlersPublishTopics(void) {
  */
 void urosHandlersUnpublishTopics(void) {
 
-	/* /r2p/odometry */
-	urosNodeUnpublishTopicSZ("/r2p/odometry");
+	/* /r2p/odometry_ackermann */
+	urosNodeUnpublishTopicSZ("/r2p/odometry_ackermann");
+
+	/* /r2p/odometry_differential */
+	urosNodeUnpublishTopicSZ("/r2p/odometry_differential");
 
 	/* /r2p/steer_encoder */
 	urosNodeUnpublishTopicSZ("/r2p/steer_encoder");
+
+	/* /r2p/velocity */
+	urosNodeUnpublishTopicSZ("/r2p/velocity");
 
 	/* /r2p/wheel_encoders */
 	urosNodeUnpublishTopicSZ("/r2p/wheel_encoders");
