@@ -22,23 +22,23 @@
 /** @addtogroup tcpros_pubtopic_funcs */
 /** @{ */
 
-/*~~~ PUBLISHED TOPIC: /tiltone/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /tiltone/odometry ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** @name Topic <tt>/tiltone/led</tt> publisher */
+/** @name Topic <tt>/tiltone/odometry</tt> publisher */
 /** @{ */
 
 /**
- * @brief   TCPROS <tt>/tiltone/led</tt> published topic handler.
+ * @brief   TCPROS <tt>/tiltone/odometry</tt> published topic handler.
  *
  * @param[in,out] tcpstp
  *          Pointer to a working @p UrosTcpRosStatus object.
  * @return
  *          Error code.
  */
-uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp) {
+uros_err_t pub_tpc__tiltone__odometry(UrosTcpRosStatus *tcpstp) {
 
   /* Message allocation and initialization.*/
-  UROS_TPC_INIT_S(msg__r2p__Led);
+  UROS_TPC_INIT_S(msg__r2p__Velocity);
 
   /* Published messages loop.*/
   while (!urosTcpRosStatusCheckExit(tcpstp)) {
@@ -46,17 +46,17 @@ uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp) {
     urosThreadSleepSec(1); continue; /* TODO: Remove this dummy line.*/
 
     /* Send the message.*/
-    UROS_MSG_SEND_LENGTH(&msg, msg__r2p__Led);
-    UROS_MSG_SEND_BODY(&msg, msg__r2p__Led);
+    UROS_MSG_SEND_LENGTH(&msg, msg__r2p__Velocity);
+    UROS_MSG_SEND_BODY(&msg, msg__r2p__Velocity);
 
     /* Dispose the contents of the message.*/
-    clean_msg__r2p__Led(&msg);
+    clean_msg__r2p__Velocity(&msg);
   }
   tcpstp->err = UROS_OK;
 
 _finally:
   /* Message deinitialization and deallocation.*/
-  UROS_TPC_UNINIT_S(msg__r2p__Led);
+  UROS_TPC_UNINIT_S(msg__r2p__Velocity);
   return tcpstp->err;
 }
 
@@ -187,11 +187,11 @@ _finally:
  */
 void urosHandlersPublishTopics(void) {
 
-  /* /tiltone/led */
+  /* /tiltone/odometry */
   urosNodePublishTopicSZ(
-    "/tiltone/led",
-    "r2p/Led",
-    (uros_proc_f)pub_tpc__tiltone__led,
+    "/tiltone/odometry",
+    "r2p/Velocity",
+    (uros_proc_f)pub_tpc__tiltone__odometry,
     uros_nulltopicflags
   );
 
@@ -210,9 +210,9 @@ void urosHandlersPublishTopics(void) {
  */
 void urosHandlersUnpublishTopics(void) {
 
-  /* /tiltone/led */
+  /* /tiltone/odometry */
   urosNodeUnpublishTopicSZ(
-    "/tiltone/led"
+    "/tiltone/odometry"
   );
 
   /* /tiltone/tilt */

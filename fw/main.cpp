@@ -119,7 +119,8 @@ int main(void) {
 
 	chThdSleepMilliseconds(100);
 
-	r2p::Thread::create_heap(NULL, THD_WA_SIZE(512), NORMALPRIO, r2p::ledsub_node, NULL);
+	r2p::ledsub_conf ledsub_conf = { "leds" };
+	r2p::Thread::create_heap(NULL, THD_WA_SIZE(256), NORMALPRIO, r2p::ledsub_node, &ledsub_conf);
 
 	urosInit();
 	urosNodeCreateThread();

@@ -41,7 +41,6 @@
 #define STM32_HSI_ENABLED                   TRUE
 #define STM32_LSI_ENABLED                   TRUE
 #define STM32_HSE_ENABLED                   TRUE
-//#define STM32_HSE_ENABLED                   FALSE
 #define STM32_LSE_ENABLED                   FALSE
 #define STM32_CLOCK48_REQUIRED              TRUE
 #define STM32_SW                            STM32_SW_PLL
@@ -51,14 +50,6 @@
 #define STM32_PLLN_VALUE                    336
 #define STM32_PLLP_VALUE                    2
 #define STM32_PLLQ_VALUE                    7
-
-/*
-#define STM32_PLLSRC                        STM32_PLLSRC_HSI
-#define STM32_PLLM_VALUE                    16
-#define STM32_PLLN_VALUE                    336
-#define STM32_PLLP_VALUE                    2
-#define STM32_PLLQ_VALUE                    7
-*/
 
 #define STM32_HPRE                          STM32_HPRE_DIV1
 #define STM32_PPRE1                         STM32_PPRE1_DIV4
@@ -72,7 +63,7 @@
 #define STM32_I2SSRC                        STM32_I2SSRC_CKIN
 #define STM32_PLLI2SN_VALUE                 192
 #define STM32_PLLI2SR_VALUE                 5
-#define STM32_VOS                           STM32_VOS_HIGH
+//#define STM32_VOS                           STM32_VOS_HIGH
 #define STM32_PVD_ENABLE                    FALSE
 #define STM32_PLS                           STM32_PLS_LEV0
 
@@ -264,4 +255,3 @@
 #define STM32_USB_OTG_THREAD_PRIO           LOWPRIO
 #define STM32_USB_OTG_THREAD_STACK_SIZE     128
 #define STM32_USB_OTGFIFO_FILL_BASEPRI      0
-

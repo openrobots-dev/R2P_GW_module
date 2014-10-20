@@ -22,9 +22,9 @@ extern "C" {
 /* PUBLISHED TOPIC PROTOTYPES                                                */
 /*===========================================================================*/
 
-/*~~~ PUBLISHED TOPIC: /tiltone/led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*~~~ PUBLISHED TOPIC: /tiltone/odometry ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp);
+uros_err_t pub_tpc__tiltone__odometry(UrosTcpRosStatus *tcpstp);
 
 /*~~~ PUBLISHED TOPIC: /tiltone/tilt ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 

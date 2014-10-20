@@ -21,14 +21,18 @@
 #include <r2p/Publisher.hpp>
 #include <r2p/Subscriber.hpp>
 
+#include <r2p/msg/imu.hpp>
 #include <r2p/msg/led.hpp>
 #include <r2p/msg/motor.hpp>
 
 /*===========================================================================*/
 /* GLOBAL VARIABLES                                                          */
 /*===========================================================================*/
-r2p::Node sub_node("uledpub", false);
+r2p::Node led_node("uledpub", false);
 r2p::Subscriber<r2p::LedMsg, 2> led_sub;
+
+r2p::Node tilt_node("utiltpub", false);
+r2p::Subscriber<r2p::TiltMsg, 2> tilt_sub;
 
 r2p::Node vel_node("uvelpub", false);
 r2p::Publisher<r2p::Velocity3Msg> vel_pub;
@@ -60,18 +64,18 @@ uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp) {
 	static bool first_time = true;
 
 	if (first_time) {
-		sub_node.subscribe(led_sub, "leds");
+		led_node.subscribe(led_sub, "leds");
 		first_time = false;
 	}
 
-	sub_node.set_enabled(true);
+	led_node.set_enabled(true);
 
 	/* Message allocation and initialization.*/
 	UROS_TPC_INIT_S(msg__r2p__Led);
 
 	/* Published messages loop.*/
 	while (!urosTcpRosStatusCheckExit(tcpstp)) {
-		if (sub_node.spin(r2p::Time::ms(1000))) {
+		if (led_node.spin(r2p::Time::ms(1000))) {
 			while (led_sub.fetch(msgp)) {
 				msg.led = msgp->led;
 				msg.value = msgp->value;
@@ -91,7 +95,7 @@ uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp) {
 
 	_finally:
 	/* Fetch pending messages and disable r2p node. */
-	sub_node.set_enabled(false);
+	led_node.set_enabled(false);
 	while (led_sub.fetch(msgp)) {
 		led_sub.release(*msgp);
 	}
@@ -117,26 +121,44 @@ uros_err_t pub_tpc__tiltone__led(UrosTcpRosStatus *tcpstp) {
  *          Error code.
  */
 uros_err_t pub_tpc__tiltone__tilt(UrosTcpRosStatus *tcpstp) {
+	r2p::TiltMsg *msgp;
+	static bool first_time = true;
+
+	if (first_time) {
+		tilt_node.subscribe(tilt_sub, "tilt");
+		first_time = false;
+	}
+
+	tilt_node.set_enabled(true);
 
 	/* Message allocation and initialization.*/
 	UROS_TPC_INIT_S(msg__tiltone__Tilt);
 
 	/* Published messages loop.*/
 	while (!urosTcpRosStatusCheckExit(tcpstp)) {
-		/* TODO: Generate the contents of the message.*/
-		urosThreadSleepSec(1);
-		continue; /* TODO: Remove this dummy line.*/
+		if (tilt_node.spin(r2p::Time::ms(1000))) {
+			while (tilt_sub.fetch(msgp)) {
+				msg.angle = msgp->angle;
+				tilt_sub.release(*msgp);
 
-		/* Send the message.*/
-		UROS_MSG_SEND_LENGTH(&msg, msg__tiltone__Tilt);
-		UROS_MSG_SEND_BODY(&msg, msg__tiltone__Tilt);
+				/* Send the message.*/
+				UROS_MSG_SEND_LENGTH(&msg, msg__tiltone__Tilt);
+				UROS_MSG_SEND_BODY(&msg, msg__tiltone__Tilt);
 
-		/* Dispose the contents of the message.*/
-		clean_msg__tiltone__Tilt(&msg);
+				/* Dispose the contents of the message.*/
+				clean_msg__tiltone__Tilt(&msg);
+			}
+		}
 	}
 	tcpstp->err = UROS_OK;
 
 	_finally:
+	/* Fetch pending messages and disable r2p node. */
+	tilt_node.set_enabled(false);
+	while (tilt_sub.fetch(msgp)) {
+		tilt_sub.release(*msgp);
+	}
+
 	/* Message deinitialization and deallocation.*/
 	UROS_TPC_UNINIT_S(msg__tiltone__Tilt);
 	return tcpstp->err;

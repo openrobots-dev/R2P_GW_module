@@ -25,17 +25,6 @@ extern "C" {
 /** @addtogroup tcpros_msg_types */
 /** @{ */
 
-/*~~~ MESSAGE: r2p/Led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
- * @brief   TCPROS <tt>r2p/Led</tt> message descriptor.
- * @details MD5 sum: <tt>21a32d72a04d37c1add2e9d9fe9b645e</tt>.
- */
-struct msg__r2p__Led {
-  uint8_t   led;
-  uint8_t   value;
-};
-
 /*~~~ MESSAGE: tiltone/Tilt ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
@@ -96,26 +85,6 @@ struct msg__r2p__Velocity {
 /*===========================================================================*/
 /* MESSAGE PROTOTYPES                                                        */
 /*===========================================================================*/
-
-/*~~~ MESSAGE: r2p/Led ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-size_t length_msg__r2p__Led(
-  struct msg__r2p__Led *objp
-);
-void init_msg__r2p__Led(
-  struct msg__r2p__Led *objp
-);
-void clean_msg__r2p__Led(
-  struct msg__r2p__Led *objp
-);
-uros_err_t recv_msg__r2p__Led(
-  UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__Led *objp
-);
-uros_err_t send_msg__r2p__Led(
-  UrosTcpRosStatus *tcpstp,
-  struct msg__r2p__Led *objp
-);
 
 /*~~~ MESSAGE: tiltone/Tilt ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
